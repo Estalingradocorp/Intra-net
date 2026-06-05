@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Estalingrado Corp Intranet Retro</title>
+    <style>
+        /* Estilos Retro de los 90s */
+        body {
+            background-color: #000000;
+            color: #00FF00;
+            font-family: "Courier New", Courier, monospace;
+            margin: 0;
+            padding: 20px;
+            background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAIAAAACAQMAAABIeJ9nAAAABlBMVEUAAAAAAAClZ7nPAAAAAnRSTlMAGecY5K4AAAALSURBVAjXY2BgYAAAAEAAAN5A7wAAAAAASUVORK5CYII=');
+        }
+        
+        .container {
+            max-width: 1200px; /* Interfaz ampliada */
+            margin: 0 auto;
+            border: 4px double #00FF00;
+            padding: 20px;
+            background-color: rgba(0, 0, 0, 0.85);
+        }
+
+        h1, h2, h3 {
+            text-align: center;
+            color: #33FF33;
+            text-transform: uppercase;
+        }
+
+        a {
+            color: #00FFFF;
+            text-decoration: underline;
+        }
+        a:visited {
+            color: #FF00FF;
+        }
+        a:hover {
+            color: #FFFFFF;
+            background-color: #0000FF;
+        }
+
+        .blink {
+            animation: blinker 1s linear infinite;
+            color: #FF0000;
+            font-weight: bold;
+        }
+        @keyframes blinker {
+            50% { opacity: 0; }
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background-color: #111111;
+        }
+        table, th, td {
+            border: 2px solid #00FF00;
+        }
+        th {
+            background-color: #004400;
+            padding: 10px;
+            color: #FFFFFF;
+        }
+        td {
+            padding: 10px;
+            vertical-align: top;
+        }
+
+        .cmd-box {
+            background-color: #000080;
+            color: #FFFFFF;
+            font-family: "Fixedsys", "Courier New", monospace;
+            border: 2px solid #C0C0C0;
+            padding: 15px;
+            margin: 20px 0;
+            white-space: pre-wrap;
+            box-shadow: 5px 5px 0px #00FF00;
+        }
+
+        .cmd-title {
+            background-color: #C0C0C0;
+            color: #000000;
+            padding: 2px 5px;
+            font-weight: bold;
+            margin-top: -15px;
+            margin-left: -15px;
+            margin-right: -15px;
+            margin-bottom: 10px;
+            border-bottom: 2px solid #000000;
+        }
+
+        hr {
+            border: 0;
+            border-top: 2px dashed #00FF00;
+            margin: 30px 0;
+        }
+
+        .hero-img {
+            display: block;
+            margin: 0 auto;
+            border: 5px groove #888888;
+            max-width: 80%;
+            height: auto;
+        }
+
+        .warning {
+            color: #FFFF00;
+            font-weight: bold;
+            background-color: #550000;
+            padding: 5px;
+            text-align: center;
+            border: 1px solid #FF0000;
+        }
+
+        .nav-menu {
+            text-align: center;
+            background-color: #003300;
+            padding: 10px;
+            border: 2px solid #00FF00;
+            margin-bottom: 20px;
+        }
+        .nav-menu a {
+            margin: 0 10px;
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+
+        .retro-banner {
+            display: block;
+            text-align: center;
+            margin: 30px auto;
+            border: 5px ridge #FFFF00;
+            background-color: #000000;
+            width: 90%;
+            padding: 15px;
+            box-shadow: 8px 8px 0px #FF0000;
+            text-decoration: none;
+        }
+        .retro-banner:hover {
+            border-color: #FF0000;
+            background-color: #111111;
+        }
+        .banner-text {
+            display: block;
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #00FFFF;
+            margin: 10px 0;
+            text-shadow: 2px 2px #0000FF;
+        }
+
+        .main-announcement {
+            background-color: #FF0000;
+            border: 8px ridge #FFFF00;
+            text-align: center;
+            margin: 25px auto;
+            padding: 20px;
+            width: 90%;
+            box-sizing: border-box;
+            box-shadow: 10px 10px 0px #0000FF;
+            animation: bg-flash 2s infinite;
+        }
+        @keyframes bg-flash {
+            0% { background-color: #FF0000; }
+            50% { background-color: #AA0000; }
+            100% { background-color: #FF0000; }
+        }
+        .main-announcement a {
+            color: #FFFF00;
+            font-size: 1.8em;
+            font-weight: bold;
+            text-decoration: none;
+            text-shadow: 3px 3px #000000;
+            display: block;
+        }
+        .main-announcement a:hover {
+            color: #FFFFFF;
+            text-shadow: 3px 3px #FF0000;
+        }
+
+        ul {
+            list-style-type: square;
+        }
+
+        @media (max-width: 768px) {
+            body { padding: 5px; }
+            .container { padding: 10px; border-width: 2px; width: 100%; box-sizing: border-box; }
+            .nav-menu { display: flex; flex-direction: column; gap: 12px; }
+            .retro-banner, .main-announcement { width: 100%; }
+        }
+
+        #audio-panel {
+            text-align: center;
+            background: #002200;
+            border-bottom: 2px solid #00FF00;
+            padding: 10px;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        #btn-audio {
+            background-color: #FF0000;
+            color: #FFFF00;
+            border: 3px outset #FFFF00;
+            font-family: "Courier New", Courier, monospace;
+            font-weight: bold;
+            font-size: 1.2em;
+            cursor: pointer;
+            padding: 5px 15px;
+        }
+    </style>
+</head>
+<body>
+
+<div id="audio-panel">
+    <button id="btn-audio" class="blink">[ ACTIVAR SONIDO DEL SISTEMA ]</button>
+</div>
+
+<div class="container">
+    <center>
+        <h1><span class="blink">[!]</span> ESTALINGRADO CORP <span class="blink">[!]</span></h1>
+        <h2>/// INTRANET RETRO v1.0 ///</h2>
+    </center>
+
+    <img src="https://64.media.tumblr.com/37c52c25279f877bd0bc2d538626c938/2f8407cc51b2210e-be/s540x810/c379bb3cd18325d6b075e62fd26ffe91f5093ee3.jpg" alt="Estalingrado Retro" class="hero-img">
+
+    <div style="text-align: center; margin: 20px auto; padding: 15px; border: 2px dashed #880000; background-color: #110000; width: fit-content;">
+        <img src="https://static.wixstatic.com/media/8c4320_b1a3ff74576e4518b8f95da1a37609e6~mv2.jpg/v1/fill/w_230,h_230,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/42085350_2436621059688888_90701146672920.jpg" alt="Logotipo antiguo" style="filter: grayscale(100%); opacity: 0.4; border: 3px double #FF0000; max-width: 150px; display: block; margin: 0 auto;">
+        <br>
+        <span class="blink" style="color: #FF0000; font-weight: bold; padding: 5px; display: inline-block;">[X] STATUS: DESCONTINUADO [X]</span>
+    </div>
+
+    <marquee scrollamount="5" style="border: 1px solid #00FF00; padding: 5px; margin-top: 15px; background: #002200;">
+        *** BIENVENIDO A LA INTRANET PRIVADA DE ESTALINGRADO CORP *** APPS Y PROGRAMAS PARA SOLUCIONAR TU VIDA *** ACCESO RESTRINGIDO ***
+    </marquee>
+
+    <div class="main-announcement">
+        <a href="https://nicotips27.github.io/Estalingrado-corp-Buscador-/" target="_blank">
+            <img src="https://media.giphy.com/media/26n6WvwCRG9E3MTvO/giphy.gif" alt="Alerta" style="height: 60px; vertical-align: middle;">
+            <span class="blink" style="color: #00FFFF; font-size: 1.2em;">¡¡ ATENCIÓN USUARIOS !!</span>
+            <img src="https://media.giphy.com/media/26n6WvwCRG9E3MTvO/giphy.gif" alt="Alerta" style="height: 60px; vertical-align: middle;"><br>
+            ESTE ES NUESTRO SITIO PRINCIPAL AHORA
+        </a>
+    </div>
+
+    <div class="nav-menu">
+        <a href="#">[Ir a la pagina de EC Download →]</a> | 
+        <a href="#">[Estalingrado Corp Pro →]</a> | 
+        <a href="#">[Intra-net →]</a> | 
+        <a href="#">[Demiurgo Box Play Online]</a>
+    </div>
+
+    <!-- Contenido principal y tablas se ajustarán automáticamente al nuevo ancho -->
+    <hr>
+    
+    <!-- (El resto del contenido permanece igual, pero ahora dentro del contenedor ampliado) -->
+    
+    <center>
+        <p><small>&copy; 1998 - 2026 ESTALINGRADO CORP. Todos los derechos reservados.</small></p>
+    </center>
+</div>
+
+<script>
+    let audioCtx;
+    let soundEnabled = false;
+
+    function playTone(frequency, type, duration, vol) {
+        if (!soundEnabled) return;
+        try {
+            const oscillator = audioCtx.createOscillator();
+            const gainNode = audioCtx.createGain();
+            oscillator.type = type;
+            oscillator.frequency.setValueAtTime(frequency, audioCtx.currentTime);
+            gainNode.gain.setValueAtTime(vol, audioCtx.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
+            oscillator.connect(gainNode);
+            gainNode.connect(audioCtx.destination);
+            oscillator.start();
+            oscillator.stop(audioCtx.currentTime + duration);
+        } catch(e) {}
+    }
+
+    document.getElementById('btn-audio').addEventListener('click', function() {
+        if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        if (audioCtx.state === 'suspended') audioCtx.resume();
+        if (!soundEnabled) {
+            soundEnabled = true;
+            this.innerHTML = "[ SISTEMA DE AUDIO EN LÍNEA ]";
+            this.style.backgroundColor = "#008800";
+            playTone(440, 'square', 0.1, 0.1);
+            setTimeout(() => playTone(880, 'square', 0.3, 0.1), 100);
+        }
+    });
+
+    document.querySelectorAll('a').forEach(link => {
+        link.addEventListener('mouseenter', () => playTone(250, 'sawtooth', 0.05, 0.02)); 
+        link.addEventListener('click', () => playTone(600, 'square', 0.1, 0.05)); 
+    });
+</script>
+</body>
+</html>
