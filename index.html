@@ -8,19 +8,19 @@
         /* Estilos Retro de los 90s */
         body {
             background-color: #000000;
-            color: #00FF00;
+            color: #00FF00; /* Verde terminal */
             font-family: "Courier New", Courier, monospace;
             margin: 0;
             padding: 20px;
-            background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAIAAAACAQMAAABIeJ9nAAAABlBMVEUAAAAAAAClZ7nPAAAAAnRSTlMAGecY5K4AAAALSURBVAjXY2BgYAAAAEAAAN5A7wAAAAAASUVORK5CYII=');
+            background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAIAAAACAQMAAABIeJ9nAAAABlBMVEUAAAAAAAClZ7nPAAAAAnRSTlMAGecY5K4AAAALSURBVAjXY2BgYAAAAEAAAN5A7wAAAAAASUVORK5CYII='); /* Patrón de puntos tenue */
         }
         
         .container {
-            max-width: 1200px; /* Interfaz ampliada */
+            max-width: 900px;
             margin: 0 auto;
             border: 4px double #00FF00;
-            padding: 20px;
-            background-color: rgba(0, 0, 0, 0.85);
+            padding: 15px;
+            background-color: rgba(0, 0, 0, 0.8);
         }
 
         h1, h2, h3 {
@@ -29,18 +29,20 @@
             text-transform: uppercase;
         }
 
+        /* Enlaces estilo 90s */
         a {
-            color: #00FFFF;
+            color: #00FFFF; /* Cyan */
             text-decoration: underline;
         }
         a:visited {
-            color: #FF00FF;
+            color: #FF00FF; /* Magenta */
         }
         a:hover {
             color: #FFFFFF;
             background-color: #0000FF;
         }
 
+        /* Animación de parpadeo (reemplazo CSS para la etiqueta <blink>) */
         .blink {
             animation: blinker 1s linear infinite;
             color: #FF0000;
@@ -50,6 +52,7 @@
             50% { opacity: 0; }
         }
 
+        /* Tablas retro */
         table {
             width: 100%;
             border-collapse: collapse;
@@ -65,12 +68,13 @@
             color: #FFFFFF;
         }
         td {
-            padding: 10px;
+            padding: 8px;
             vertical-align: top;
         }
 
+        /* Bloque tipo consola CMD */
         .cmd-box {
-            background-color: #000080;
+            background-color: #000080; /* Azul oscuro clásico de DOS/BIOS */
             color: #FFFFFF;
             font-family: "Fixedsys", "Courier New", monospace;
             border: 2px solid #C0C0C0;
@@ -92,6 +96,7 @@
             border-bottom: 2px solid #000000;
         }
 
+        /* Separadores */
         hr {
             border: 0;
             border-top: 2px dashed #00FF00;
@@ -102,12 +107,12 @@
             display: block;
             margin: 0 auto;
             border: 5px groove #888888;
-            max-width: 80%;
+            max-width: 100%;
             height: auto;
         }
 
         .warning {
-            color: #FFFF00;
+            color: #FFFF00; /* Amarillo alerta */
             font-weight: bold;
             background-color: #550000;
             padding: 5px;
@@ -128,13 +133,14 @@
             font-size: 1.1em;
         }
 
+        /* Banner Publicitario Retro */
         .retro-banner {
             display: block;
             text-align: center;
             margin: 30px auto;
             border: 5px ridge #FFFF00;
             background-color: #000000;
-            width: 90%;
+            width: 95%;
             padding: 15px;
             box-shadow: 8px 8px 0px #FF0000;
             text-decoration: none;
@@ -152,13 +158,14 @@
             text-shadow: 2px 2px #0000FF;
         }
 
+        /* Anuncio Principal / Nuevo Sitio */
         .main-announcement {
             background-color: #FF0000;
             border: 8px ridge #FFFF00;
             text-align: center;
             margin: 25px auto;
             padding: 20px;
-            width: 90%;
+            width: 95%;
             box-sizing: border-box;
             box-shadow: 10px 10px 0px #0000FF;
             animation: bg-flash 2s infinite;
@@ -181,17 +188,102 @@
             text-shadow: 3px 3px #FF0000;
         }
 
+        /* Listas estilo 90s */
         ul {
             list-style-type: square;
         }
 
+        /* --- ADAPTACIÓN PARA MÓVILES (RESPONSIVE) --- */
         @media (max-width: 768px) {
-            body { padding: 5px; }
-            .container { padding: 10px; border-width: 2px; width: 100%; box-sizing: border-box; }
-            .nav-menu { display: flex; flex-direction: column; gap: 12px; }
-            .retro-banner, .main-announcement { width: 100%; }
+            body {
+                padding: 5px;
+            }
+            .container {
+                padding: 10px;
+                border-width: 2px;
+                width: 100%;
+                box-sizing: border-box;
+            }
+            h1 { font-size: 1.5em; }
+            h2 { font-size: 1.2em; }
+            h3 { font-size: 1.1em; text-align: center; }
+
+            /* Menú apilado */
+            .nav-menu {
+                display: flex;
+                flex-direction: column;
+                gap: 12px;
+            }
+            .nav-menu a {
+                border-bottom: 1px dotted #00FF00;
+                padding-bottom: 5px;
+                margin: 0;
+            }
+
+            /* Tablas adaptables (se vuelven bloques apilados) */
+            table, thead, tbody, th, td, tr {
+                display: block;
+                width: 100%;
+                box-sizing: border-box;
+            }
+            th {
+                margin-top: 15px;
+                border-bottom: none;
+                text-align: center;
+            }
+            td {
+                border-top: none;
+                border-bottom: 2px solid #00FF00;
+                padding: 10px 5px;
+            }
+
+            /* Forzar que las columnas Flexbox en línea se apilen */
+            div[style*="display: flex"] {
+                flex-direction: column !important;
+            }
+            div[style*="flex: 1"] {
+                min-width: 100% !important;
+                padding-right: 0 !important;
+                margin-bottom: 15px;
+                box-sizing: border-box;
+            }
+
+            /* Iframes (Videos) responsivos */
+            iframe {
+                max-width: 100% !important;
+                height: auto !important;
+                aspect-ratio: 4/3;
+            }
+
+            /* Banners adaptados */
+            .retro-banner, .main-announcement {
+                width: 100%;
+                padding: 10px;
+                box-sizing: border-box;
+            }
+            .banner-text {
+                font-size: 1.1em;
+            }
+            .main-announcement a {
+                font-size: 1.3em;
+            }
+            .retro-banner img {
+                height: 35px !important;
+            }
+
+            /* Cajas CMD con scroll horizontal táctil */
+            .cmd-box {
+                font-size: 12px;
+                overflow-x: auto;
+                padding: 10px;
+                white-space: pre; /* Mantiene el formato de consola, pero permite hacer scroll */
+            }
+            .cmd-title {
+                font-size: 14px;
+            }
         }
 
+        /* Botón de Audio del Sistema */
         #audio-panel {
             text-align: center;
             background: #002200;
@@ -211,6 +303,10 @@
             cursor: pointer;
             padding: 5px 15px;
         }
+        #btn-audio:active {
+            border-style: inset;
+            background-color: #CC0000;
+        }
     </style>
 </head>
 <body>
@@ -220,6 +316,7 @@
 </div>
 
 <div class="container">
+    <!-- CABECERA -->
     <center>
         <h1><span class="blink">[!]</span> ESTALINGRADO CORP <span class="blink">[!]</span></h1>
         <h2>/// INTRANET RETRO v1.0 ///</h2>
@@ -227,8 +324,9 @@
 
     <img src="https://64.media.tumblr.com/37c52c25279f877bd0bc2d538626c938/2f8407cc51b2210e-be/s540x810/c379bb3cd18325d6b075e62fd26ffe91f5093ee3.jpg" alt="Estalingrado Retro" class="hero-img">
 
+    <!-- Logotipo descontinuado engadido -->
     <div style="text-align: center; margin: 20px auto; padding: 15px; border: 2px dashed #880000; background-color: #110000; width: fit-content;">
-        <img src="https://static.wixstatic.com/media/8c4320_b1a3ff74576e4518b8f95da1a37609e6~mv2.jpg/v1/fill/w_230,h_230,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/42085350_2436621059688888_90701146672920.jpg" alt="Logotipo antiguo" style="filter: grayscale(100%); opacity: 0.4; border: 3px double #FF0000; max-width: 150px; display: block; margin: 0 auto;">
+        <img src="https://static.wixstatic.com/media/8c4320_b1a3ff74576e4518b8f95da1a37609e6~mv2.jpg/v1/fill/w_230,h_230,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/42085350_2436621059688888_90701146672920.jpg" alt="" style="filter: grayscale(100%); opacity: 0.4; border: 3px double #FF0000; max-width: 150px; display: block; margin: 0 auto;">
         <br>
         <span class="blink" style="color: #FF0000; font-weight: bold; padding: 5px; display: inline-block;">[X] STATUS: DESCONTINUADO [X]</span>
     </div>
@@ -237,15 +335,18 @@
         *** BIENVENIDO A LA INTRANET PRIVADA DE ESTALINGRADO CORP *** APPS Y PROGRAMAS PARA SOLUCIONAR TU VIDA *** ACCESO RESTRINGIDO ***
     </marquee>
 
+    <!-- GRAN ANUNCIO DE NUEVO SITIO -->
     <div class="main-announcement">
         <a href="https://nicotips27.github.io/Estalingrado-corp-Buscador-/" target="_blank">
             <img src="https://media.giphy.com/media/26n6WvwCRG9E3MTvO/giphy.gif" alt="Alerta" style="height: 60px; vertical-align: middle;">
             <span class="blink" style="color: #00FFFF; font-size: 1.2em;">¡¡ ATENCIÓN USUARIOS !!</span>
             <img src="https://media.giphy.com/media/26n6WvwCRG9E3MTvO/giphy.gif" alt="Alerta" style="height: 60px; vertical-align: middle;"><br>
-            ESTE ES NUESTRO SITIO PRINCIPAL AHORA
+            ESTE ES NUESTRO SITIO PRINCIPAL AHORA<br>
+            <span style="font-size: 0.7em; color: #FFFFFF; text-decoration: underline;">[ CLIC AQUÍ PARA IR AL NUEVO PORTAL ]</span>
         </a>
     </div>
 
+    <!-- MENÚ PRINCIPAL -->
     <div class="nav-menu">
         <a href="#">[Ir a la pagina de EC Download →]</a> | 
         <a href="#">[Estalingrado Corp Pro →]</a> | 
@@ -253,52 +354,573 @@
         <a href="#">[Demiurgo Box Play Online]</a>
     </div>
 
-    <!-- Contenido principal y tablas se ajustarán automáticamente al nuevo ancho -->
+    <!-- PUBLICIDAD 1 -->
+    <a href="https://nicotips27.github.io/Estalingrado-corp-Buscador-/" target="_blank" class="retro-banner">
+        <img src="https://media.giphy.com/media/26n6WvwCRG9E3MTvO/giphy.gif" alt="Alerta" style="height: 50px; vertical-align: middle;">
+        <span class="banner-text blink">*** ¡NUEVO! *** DESCUBRE EL BUSCADOR PRIVADO ESTALINGRADO CORP</span>
+        <img src="https://media.giphy.com/media/26n6WvwCRG9E3MTvO/giphy.gif" alt="Alerta" style="height: 50px; vertical-align: middle;">
+        <div style="color: #FF00FF; font-size: 1.2em;">[ CLIC AQUÍ PARA ENTRAR ]</div>
+    </a>
+
+    <!-- SECCIÓN DE PRODUCTIVIDAD Y UTILIDADES -->
+    <h3>:: Apps y programas para solucionar tu vida ::</h3>
+    <table>
+        <tr>
+            <th>Categoría</th>
+            <th>Recursos y Enlaces</th>
+        </tr>
+        <tr>
+            <td><strong>[Productividad & Programación]</strong><br>Aprende a programar</td>
+            <td>
+                <ul>
+                    <li><a href="https://coddy.tech/" target="_blank">Coddy Tech</a></li>
+                    <li><a href="https://learn-anything.xyz/" target="_blank">Learn Anything XYZ</a></li>
+                </ul>
+            </td>
+        </tr>
+        <tr>
+            <td><strong>[Biología]</strong></td>
+            <td>
+                <ul>
+                    <li><a href="https://human.biodigital.com/" target="_blank">Human BioDigital</a></li>
+                </ul>
+            </td>
+        </tr>
+        <tr>
+            <td><strong>[Empleo ONline]</strong></td>
+            <td>
+                <ul>
+                    <li><a href="https://remote.co/" target="_blank">Remote.co</a></li>
+                </ul>
+            </td>
+        </tr>
+        <tr>
+            <td><strong>[Salud Digital]</strong></td>
+            <td>
+                <ul>
+                    <li><a href="https://musclewiki.com/es-es" target="_blank">MuscleWiki (ES)</a></li>
+                </ul>
+            </td>
+        </tr>
+        <tr>
+            <td><strong>[Educación]</strong></td>
+            <td>
+                <ul>
+                    <li><a href="https://es.symbolab.com/" target="_blank">Symbolab (ES)</a></li>
+                    <li><a href="https://chemequations.com/en/" target="_blank">ChemEquations</a></li>
+                </ul>
+            </td>
+        </tr>
+        <tr>
+            <td><strong>[Inteligencia]</strong></td>
+            <td>
+                <ul>
+                    <li><a href="https://github.com/qeeqbox/social-analyzer" target="_blank">Qeeqbox Social-Analyzer (GitHub)</a></li>
+                </ul>
+            </td>
+        </tr>
+        <tr>
+            <td><strong>[Biblioteca Digital]</strong></td>
+            <td>
+                <ul>
+                    <li><a href="https://archive.org" target="_blank">Internet Archive Digital Library (IR A LA WEB)</a></li>
+                </ul>
+            </td>
+        </tr>
+    </table>
+
     <hr>
+
+    <!-- SECCIÓN DE HERRAMIENTAS WEB AVANZADAS -->
+    <h3>:: HERRAMIENTAS WEB AVANZADAS & SERVIDORES ::</h3>
+    <table>
+        <tr>
+            <th>Categoría</th>
+            <th>Recursos y Enlaces</th>
+        </tr>
+        <tr>
+            <td><strong>[Diseño y Fotos]</strong></td>
+            <td>
+                <ul>
+                    <li><a href="https://getpaidstock.com" target="_blank">GetPaidStock</a></li>
+                    <li><a href="https://www.glorify.com" target="_blank">Glorify</a></li>
+                    <li><a href="https://pixelsurplus.com" target="_blank">Pixel Surplus</a></li>
+                    <li><a href="https://dronestock.com" target="_blank">Drone Stock</a></li>
+                </ul>
+            </td>
+        </tr>
+        <tr>
+            <td><strong>[Oficina & Productividad]</strong></td>
+            <td>
+                <ul>
+                    <li><a href="https://www.generadordegraficos.com/graph?selected_graph=bar_line" target="_blank">Generador de Gráficos</a></li>
+                    <li><a href="https://www.docracy.com" target="_blank">Docracy</a></li>
+                </ul>
+            </td>
+        </tr>
+        <tr>
+            <td><strong>[Gana Dinero $$$]</strong></td>
+            <td>
+                <ul class="blink" style="color: #00FF00;">
+                    <li><a href="https://adf.ly/" target="_blank">Adf.ly</a></li>
+                    <li><a href="https://www.rev.com" target="_blank">Rev</a></li>
+                    <li><a href="https://www.freelancer.com" target="_blank">Freelancer</a></li>
+                </ul>
+            </td>
+        </tr>
+        <tr>
+            <td><strong>[Contenido & SEO]</strong></td>
+            <td>
+                <ul>
+                    <li><a href="https://snazzy.ai" target="_blank">Snazzy.ai</a></li>
+                    <li><a href="https://www.social-searcher.com" target="_blank">Social Searcher</a></li>
+                    <li><a href="https://lorcaeditor.com" target="_blank">Lorca Editor</a></li>
+                    <li><a href="https://turboscribe.ai/es/downloader/youtube/mp4" target="_blank">TurboScribe YT Downloader</a></li>
+                    <li><a href="https://www.geoimgr.com" target="_blank">GeoImgr (SEO)</a></li>
+                </ul>
+            </td>
+        </tr>
+        <tr>
+            <td><strong>[Servidores & Hosting]</strong></td>
+            <td>
+                <ul>
+                    <li><a href="https://www.mediafire.com/login/" target="_blank">Mediafire</a></li>
+                    <li><a href="https://mega.nz/" target="_blank">Mega.nz</a></li>
+                    <li><a href="https://es.wix.com/" target="_blank">Wix</a></li>
+                    <li><a href="https://www.freenom.com/es" target="_blank">Freenom</a></li>
+                    <li><a href="https://3pod.io/" target="_blank">3pod.io</a></li>
+                </ul>
+            </td>
+        </tr>
+        <tr>
+            <td><strong>[Bots & IA]</strong></td>
+            <td>
+                <ul>
+                    <li><a href="https://dashboard.chatfuel.com/login" target="_blank">Chatfuel</a></li>
+                    <li><a href="https://www.deepword.co" target="_blank">Deepword</a></li>
+                    <li><a href="https://whimsical.com" target="_blank">Whimsical</a></li>
+                    <li><a href="https://landbot.io" target="_blank">Landbot</a></li>
+                    <li>Bot Millonario 0.1 - <a href="#">[Descargar]</a> <span class="blink" style="color: yellow;">[NUEVO]</span></li>
+                </ul>
+            </td>
+        </tr>
+        <tr>
+            <td><strong>[Desarrollo & Corporativo]</strong></td>
+            <td>
+                <ul>
+                    <li><a href="https://bubble.io" target="_blank">Bubble.io (Desarrollo de Apk)</a></li>
+                    <li><a href="https://www.zoho.com/es-xl/mail/" target="_blank">Zoho Mail (Email Corporativo)</a></li>
+                </ul>
+            </td>
+        </tr>
+        <tr>
+            <td><strong>[Otros & Curiosidades]</strong></td>
+            <td>
+                <ul>
+                    <li><a href="https://www.playphrase.me" target="_blank">PlayPhrase.me (Interesante)</a></li>
+                    <li><a href="https://www.deepl.com/translator" target="_blank">DeepL Translator</a></li>
+                    <li><a href="https://www.flightradar24.com" target="_blank">FlightRadar24</a></li>
+                    <li><a href="https://playback.fm" target="_blank">Playback.fm</a></li>
+                    <li><a href="https://iplogger.org/es/" target="_blank">IPLogger</a></li>
+                    <li><a href="https://writeaprisoner.com" target="_blank">Write A Prisoner</a></li>
+                </ul>
+            </td>
+        </tr>
+    </table>
+
+    <hr>
+
+    <!-- SECCIÓN DE DESCARGAS Y SEGURIDAD -->
+    <h3>:: SEGURIDAD Y HERRAMIENTAS PC ::</h3>
+    <table>
+        <tr>
+            <th>Software / Herramienta</th>
+            <th>Acción / Estado</th>
+        </tr>
+        <tr>
+            <td><strong>MICROSOFT SAFETY SCANNER</strong></td>
+            <td>
+                <a href="#">[Ir Pagina de descarga]</a> | <a href="#">[Descargar]</a><br>
+                <span class="warning blink">Vulnerabilidad Encontrado!</span>
+            </td>
+        </tr>
+        <tr>
+            <td><strong>Infecciones controladas S-2420</strong><br><small>(CONTROLADO)</small></td>
+            <td>
+                <a href="#">[Descargar Hosts Block]</a><br>
+                <a href="#">[Descargar S-2420 !]</a><br>
+                <span style="color: yellow;">Contraseña de Zip: ( 2772 )</span>
+            </td>
+        </tr>
+        <tr>
+            <td><strong>Game Cheat</strong></td>
+            <td>
+                Cheat-engine<br>
+                <a href="#">[Ir Pagina de descarga]</a> | <a href="#">[Descargar]</a>
+            </td>
+        </tr>
+        <tr>
+            <td><strong>Utilidades PC</strong></td>
+            <td>
+                Protector de Pantalla Windows 98<br>
+                <a href="#">[Ir Pagina de descarga]</a> | <a href="#">[Descargar]</a>
+            </td>
+        </tr>
+        <tr>
+            <td><strong>Brave Navegador</strong></td>
+            <td>
+                <a href="#">[Ir a la pagina]</a><br>
+                <a href="#">[Descargar Brave para windows 7 y 8]</a>
+            </td>
+        </tr>
+    </table>
+
+    <hr>
+
+    <!-- SECCIÓN HACKING / SISTEMA -->
+    <h3>:: CONSOLA DEL SISTEMA & ACTIVADORES ::</h3>
     
-    <!-- (El resto del contenido permanece igual, pero ahora dentro del contenedor ampliado) -->
+    <div class="cmd-box">
+<div class="cmd-title">C:\Windows\System32\cmd.exe</div>Microsoft Windows [Versión 6.1.7601]
+(c) Copyright 1985-2001 Microsoft Corp.
+
+C:\EstalingradoCorp> <b>Comando CMD (Activación Automática Win 7)</b>
+C:\EstalingradoCorp> <span style="color: #00FF00;">slmgr -rearm</span>
+
+<b>Datos del sistema donde se probo el comando:</b>
+Nombre del sistema operativo:          Microsoft Windows 7 Professional
+Versión del sistema operativo:         6.1.7601 Service Pack 1 Compilación 601
+Fabricante del sistema operativo:      Microsoft Corporation
+Configuración del sistema operativo:   Estación de trabajo independiente
+Tipo de compilación del SO:            ------------
+Propiedad de:                          ----------
+    </div>
+
+    <div class="cmd-box">
+<div class="cmd-title">ACTIVACIÓN WINDOWS 10 (MÉTODO CMD)</div><b>Instrucciones de Activación (Cualquier versión):</b>
+Códigos de Activación:  
+> slmgr /ipk ******************
+> slmgr /skms kms.digiboy.ir   o   kms.msguides.com 
+> slmgr /ato
+
+<b>[CLAVES DISPONIBLES]</b>
+<u>Windows 10 Home:</u>
+Home:                  TX9XD-98N7V-6WMQ6-BX7FG-H8Q99
+Home N:                3KHY7-WNT83-DGQKR-F7HPR-844BM 
+Home Single Language:  7HNRX-D7KGG-3K4RQ-4WPJ4-YTDFH 
+Home Country Specific: PVMJN-6DFY6-9CCP6-7BKTT-D3WVR 
+
+<u>Windows 10 Professional:</u>
+Professional:          W269N-WFGWX-YVC9B-4J6C9-T83GX
+Professional N:        MH37W-N47XK-V7XM9-C7227-GCQG9 
+
+<u>Windows 10 Enterprise:</u>
+Enterprise:            NPPR9-FWDCX-D2C8J-H872K-2YT43
+Enterprise N:          DPH2V-TTNVB-4X9Q3-TJR4H-KHJW4
+Enterprise LTSC:       M7XTQ-FN8P6-TTKYV-9D4CC-J462D 
+Enterprise LTSB:       DCPHK-NFMTC-H88MJ-PFHPY-QJ4BJ 
+Enterprise 2015 LTSB:  WNMTR-4C88C-JK8YV-HQ7T2-76DF9 
+Enterprise 2015 LTSB N:2F77B-TNFGY-69QQF-B8YKP-D69TJ
+
+<u>Windows 10 Education:</u>
+Education:             NW6C2-QMPVW-D7KKK-3GKT6-VCFB2 
+Education N:           2WH4N-8QGBV-H22JP-CT43Q-MDWWJ
+    </div>
+
+    <hr>
+
+    <!-- PUBLICIDAD 2 -->
+    <a href="https://nicotips27.github.io/Estalingrado-corp-Buscador-/" target="_blank" class="retro-banner" style="border-color: #00FF00; box-shadow: 8px 8px 0px #0000FF;">
+        <span class="banner-text">¿BUSCAS ALGO EN LA DEEP WEB? <span class="blink" style="color:#FF0000;">&gt;&gt; USA EL BUSCADOR EC &lt;&lt;</span></span>
+        <div style="color: #FFFF00; font-size: 1.2em; text-decoration: underline;">ACCESO SIN CENSURA - ENTRAR YA</div>
+    </a>
+
+    <!-- SOFTWARE LAB APPS -->
+    <h3>:: SOFTWARE LAB ::</h3>
+    <p><center>Listado de las app desarrolladas o optimizadas por Software Lab.</center></p>
+    <table>
+        <tr>
+            <th>App Android</th>
+            <th>Acciones</th>
+        </tr>
+        <tr>
+            <td><strong>Lotus Brower 1.0</strong></td>
+            <td><a href="#">[Ir Pagina de descarga]</a> | <a href="#">[Descargar versión 1.1 (ARM)]</a></td>
+        </tr>
+        <tr>
+            <td><strong>Reproductor de Musica</strong></td>
+            <td><a href="#">[Ir Pagina de descarga]</a> | <a href="#">[Descargar versión 1.1 (ARM)]</a></td>
+        </tr>
+        <tr>
+            <td><strong>Secret Video Recorder Pro</strong><br>(Cámara espía)</td>
+            <td><a href="#">[Ir Pagina de descarga]</a> | <a href="#">[Descargar versión 1.9 (ARM/ARM64)]</a></td>
+        </tr>
+        <tr>
+            <td><strong>DNS Adblock free</strong></td>
+            <td><span style="color: yellow; font-weight: bold;">DNS.ADGUARD.COM</span></td>
+        </tr>
+    </table>
+
+    <hr>
+
+    <!-- SECCIÓN ENTRETENIMIENTO Y MULTIMEDIA -->
+    <h3>:: ZONA OCIO Y ENTRETENIMIENTO ::</h3>
+    <table>
+        <tr>
+            <th>Categoría</th>
+            <th>Enlaces Directos</th>
+        </tr>
+        <tr>
+            <td><strong>[Gamer y PC]</strong></td>
+            <td>
+                <ul>
+                    <li><a href="https://centerdata.wixsite.com/ecblog" target="_blank">EC Blog (Gaming)</a></li>
+                    <li><a href="https://www.clasicosbasicos.org/" target="_blank">Clásicos Básicos</a></li>
+                    <li><a href="https://www.gamezfull.com" target="_blank">GamezFull</a></li>
+                    <li><a href="https://www.blizzboygames.net" target="_blank">BlizzBoyGames</a></li>
+                </ul>
+            </td>
+        </tr>
+        <tr>
+            <td><strong>[Películas y Series]</strong></td>
+            <td>
+                <ul>
+                    <li><a href="https://totalseries.org" target="_blank">Total Series</a></li>
+                    <li><a href="https://cuevana3.io" target="_blank">Cuevana 3</a></li>
+                    <li><a href="https://cuevana2.io" target="_blank">Cuevana 2</a></li>
+                    <li><a href="https://www.my90stv.com" target="_blank">My 90s TV</a></li>
+                    <li><a href="https://www.championcat.cl/catflix/" target="_blank">Catflix</a></li>
+                    <li><a href="https://photocall.tv" target="_blank">Photocall TV</a></li>
+                    <li><a href="https://playpastelinks.com/p/F0ksZ" target="_blank">PasteLinks (Películas)</a></li>
+                </ul>
+            </td>
+        </tr>
+        <tr>
+            <td><strong>[Radio y Música]</strong></td>
+            <td>
+                <ul>
+                    <li><a href="http://radio.garden" target="_blank">Radio Garden (Online)</a></li>
+                </ul>
+            </td>
+        </tr>
+        <tr>
+            <td><strong>[Games Online & Sistemas]</strong></td>
+            <td>
+                <ul>
+                    <li><a href="https://classic.minecraft.net" target="_blank">Minecraft Classic</a></li>
+                    <li><a href="https://ncase.itch.io/wbwwb" target="_blank">We Become What We Behold</a></li>
+                    <li><a href="https://emupedia.net/beta/emuos/" target="_blank">EmuOS (Retro OS)</a></li>
+                    <li><a href="https://kickassapp.com" target="_blank">Kick Ass (Destruye la web)</a></li>
+                    <li><a href="https://novacompsystem.wixsite.com/pearoslinux" target="_blank">PearOS Linux</a></li>
+                </ul>
+            </td>
+        </tr>
+    </table>
+
+    <hr>
+
+    <!-- SECCIÓN ARCHIVO MULTIMEDIA -->
+    <h3>:: ARCHIVO MULTIMEDIA CLASIFICADO ::</h3>
+    <div style="text-align: center; border: 2px dashed #00FF00; padding: 20px; background-color: #050505; margin-bottom: 20px;">
+        
+        <!-- Imagen recuperada -->
+        <div style="margin-bottom: 20px;">
+            <a href="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhjiC6E_ay_EUte37zTd6khEOVjdtgXb1lzXESa64YEXj8oCz3r8cEXLXtQy4hfyX0fhEDf9iaYGB-PiME7RMKqLKFZNdmRij5zsHkzRzdA443YvhA6cYCGuQZVwtfS5IbE9jOavucwyUY/s1600/5558.jpg" target="_blank">
+                <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhjiC6E_ay_EUte37zTd6khEOVjdtgXb1lzXESa64YEXj8oCz3r8cEXLXtQy4hfyX0fhEDf9iaYGB-PiME7RMKqLKFZNdmRij5zsHkzRzdA443YvhA6cYCGuQZVwtfS5IbE9jOavucwyUY/s400/5558.jpg" alt="Archivo 5558" style="border: 3px solid #00FF00; max-width: 100%;">
+            </a>
+            <p><small class="blink" style="color: #00FFFF;">[Haga clic en la imagen para acceder al archivo completo]</small></p>
+        </div>
+
+        <!-- Registros de Video -->
+        <p><strong>&gt;&gt; REGISTROS DE VIDEO [DECRYPTED] &lt;&lt;</strong></p>
+        <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 15px;">
+            <div style="border: 3px double #555555; padding: 5px; background: #000;">
+                <iframe width="320" height="266" src="https://www.youtube.com/embed/DDNL7QFii6g" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            </div>
+            <div style="border: 3px double #555555; padding: 5px; background: #000;">
+                <iframe width="320" height="266" src="https://www.youtube.com/embed/YRmMnlE4GgI" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            </div>
+            <div style="border: 3px double #555555; padding: 5px; background: #000;">
+                <iframe width="320" height="266" src="https://www.youtube.com/embed/AE1cRh3KnsA" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            </div>
+            <div style="border: 3px double #555555; padding: 5px; background: #000;">
+                <iframe width="320" height="266" src="https://www.youtube.com/embed/apKq7UVEa84" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            </div>
+            <div style="border: 3px double #555555; padding: 5px; background: #000;">
+                <iframe width="320" height="266" src="https://www.youtube.com/embed/papuvlVeZg8" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            </div>
+            <div style="border: 3px double #555555; padding: 5px; background: #000;">
+                <iframe width="320" height="266" src="https://www.youtube.com/embed/oygrmJFKYZY" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            </div>
+            <div style="border: 3px double #555555; padding: 5px; background: #000;">
+                <iframe width="320" height="266" src="https://www.youtube.com/embed/r7qovpFAGrQ" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            </div>
+            <div style="border: 3px double #555555; padding: 5px; background: #000;">
+                <iframe width="320" height="266" src="https://www.youtube.com/embed/PKB4cioGs98" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            </div>
+        </div>
+    </div>
+
+    <hr>
+
+    <!-- PUBLICIDAD 3 -->
+    <a href="https://nicotips27.github.io/Estalingrado-corp-Buscador-/" target="_blank" class="retro-banner" style="border-color: #FF00FF; box-shadow: 8px 8px 0px #00FFFF;">
+        <img src="https://media.giphy.com/media/xT9Igzo2EijyO4GvwY/giphy.gif" alt="Search" style="height: 60px; display: block; margin: 0 auto;">
+        <span class="banner-text blink">/\/\/\ MOTOR DE BÚSQUEDA ESTALINGRADO CORP /\/\/\</span>
+        <div style="color: #00FF00; font-size: 1.2em;">[ HAZ CLIC PARA INICIAR BÚSQUEDA ]</div>
+    </a>
+
+    <!-- DIRECTORIO CORPORATIVO DE ESTALINGRADO -->
+    <h3>:: DIRECTORIO CORPORATIVO DE ESTALINGRADO CORP ::</h3>
     
+    <div style="display: flex; flex-wrap: wrap; justify-content: space-between;">
+        
+        <!-- Enlaces Activos -->
+        <div style="flex: 1; min-width: 250px; padding: 10px;">
+            <h4 style="color: #FF00FF;">> LINKS IMPORTANTES ACTIVOS</h4>
+            <ul>
+                <li><a href="https://centercorpec.wixsite.com/estalingradocorp" target="_blank">Central</a></li>
+                <li><a href="https://centercorpec.wixsite.com/ecnews" target="_blank">EC News</a></li>
+                <li><a href="https://centerdata.wixsite.com/ecblog" target="_blank">EC Blog</a></li>
+                <li><a href="https://centercorpec.wixsite.com/ecmarket" target="_blank">EC Market</a></li>
+                <li><a href="https://centercorpec.wixsite.com/hone/blog" target="_blank">EC Academia</a></li>
+            </ul>
+        </div>
+
+        <!-- Archivos Play Estalingrado -->
+        <div style="flex: 1; min-width: 250px; padding: 10px; background-color: #110000; border: 1px dashed #FF0000; margin: 5px;">
+            <h4 style="color: #FF0000;" class="blink">> ARCHIVOS Y LINKS RETROS <br><small>[DATA RECOVERED]</small></h4>
+            <ul>
+                <li><a href="https://playestalingradocorp.blogspot.com/2026/06/wike-net.html" target="_blank" style="color: #FFFF00;">Wike-Net (Reg. 2026)</a></li>
+                <li><a href="https://playestalingradocorp.blogspot.com/2012/05/httpswww.html" target="_blank">Archivo Web (Reg. 2012)</a></li>
+                <li><a href="https://playestalingradocorp.blogspot.com/2011/12/blog-post.html" target="_blank">Blog Post Archive (Reg. 2011)</a></li>
+                <li><a href="https://centerdata.wixsite.com/website-8" target="_blank" style="color: #00FFFF;">CenterData Web 8 (Retro)</a></li>
+                <li><a href="https://centerdata.wixsite.com/website" target="_blank" style="color: #00FFFF;">CenterData Web (Retro)</a></li>
+            </ul>
+        </div>
+
+        <!-- Enlaces Fuera de Línea -->
+        <div style="flex: 1; min-width: 250px; padding: 10px;">
+            <h4 style="color: #FF00FF;">> LINKS FUERA DE LINEA <span class="blink" style="font-size: 0.8em;">(DEAD)</span></h4>
+            <ul style="opacity: 0.6;">
+                <li><a href="http://www.wix.com/estalingrado1985/estalingrado1985" target="_blank">Estalingrado 1985</a></li>
+                <li><a href="https://centercorpec.wixsite.com/ecchannel" target="_blank">EC Channel</a></li>
+                <li><a href="https://centercorpec.wixsite.com/gddg" target="_blank">GDDG</a></li>
+                <li><a href="https://centercorpec.wixsite.com/partidoliberalsalta" target="_blank">Partido Liberal Salta</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Redes Sociales y Grupos -->
+    <div style="border: 1px dotted #00FF00; padding: 15px; margin-top: 20px;">
+        <h4 style="text-align: center; color: #00FFFF;">[+++] REDES SOCIALES / GRUPOS DE FACEBOOK [+++]</h4>
+        <div style="display: flex; flex-wrap: wrap; justify-content: space-between;">
+            <div style="flex: 1; min-width: 300px; padding-right: 10px;">
+                <p><u>Grupos Administrados:</u></p>
+                <ul style="font-size: 0.9em;">
+                    <li><a href="https://www.facebook.com/groups/estalingradocorpgrup/" target="_blank">Estalingrado Corp Group</a></li>
+                    <li><a href="https://www.facebook.com/groups/emprendedoredigitales/?ref=share" target="_blank">Comunidad de emprendedores</a></li>
+                    <li><a href="https://www.facebook.com/groups/ecnewsngrup/?ref=share" target="_blank">Marketing Político</a></li>
+                    <li><a href="https://www.facebook.com/groups/saltamarket/" target="_blank">De salta soy</a></li>
+                    <li><a href="https://www.facebook.com/groups/marketingdigitalsalta/?ref=share" target="_blank">Marketing digital</a></li>
+                    <li><a href="https://www.facebook.com/groups/769893770475581/" target="_blank">Infórmate Vaquero La Caldera</a></li>
+                    <li><a href="https://www.facebook.com/groups/3005574619719170/" target="_blank">Grupos de Telegram latinos</a></li>
+                    <li><a href="https://www.facebook.com/groups/bolsadetrabajosalta/" target="_blank">Bolsa de trabajo Salta</a></li>
+                    <li><a href="https://www.facebook.com/groups/ecmagazin" target="_blank">EC Magazin</a></li>
+                    <li><a href="https://www.facebook.com/groups/239376711288823" target="_blank">Unión Juvenil Salteña</a></li>
+                    <li><a href="https://www.facebook.com/groups/143324346011582/" target="_blank">Grupos Facebook Útiles</a></li>
+                </ul>
+            </div>
+            
+            <div style="flex: 1; min-width: 300px;">
+                <p><u>Páginas Oficiales:</u></p>
+                <ul style="font-size: 0.9em;">
+                    <li><a href="https://www.facebook.com/estalingradocorp/" target="_blank">Estalingrado Corp</a></li>
+                    <li><a href="https://www.facebook.com/ecblog27" target="_blank">EC Blog 27</a></li>
+                    <li><a href="https://www.facebook.com/ecnewssalta/" target="_blank">EC News Salta</a></li>
+                    <li><a href="https://www.facebook.com/UnionjuvenilSalta" target="_blank">Unión Juvenil Salta</a></li>
+                    <li><a href="https://www.facebook.com/umbrellacorplatinoamerica" target="_blank">Umbrella Corp Latam</a></li>
+                    <li><a href="https://www.facebook.com/nicotips27" target="_blank">Nico Tips 27</a></li>
+                    <li><a href="https://www.facebook.com/ecDelsinRowe" target="_blank">EC Delsin Rowe</a></li>
+                    <li><a href="https://www.facebook.com/softwarelabec" target="_blank">Software Lab EC</a></li>
+                    <li><a href="https://www.facebook.com/ecmagazin" target="_blank">EC Magazin (Página)</a></li>
+                    <li><a href="https://www.facebook.com/Estalingradomarket" target="_blank">Estalingrado Market</a></li>
+                    <li><a href="https://www.facebook.com/fraciscoporlacaldera" target="_blank">Francisco por la Caldera</a></li>
+                    <li><a href="https://www.facebook.com/Sergio-García-por-la-Caldera-102459885417352/" target="_blank">Sergio García por la Caldera</a></li>
+                    <li><a href="https://www.facebook.com/fundacionporto" target="_blank">Fundación Porto</a></li>
+                    <li><a href="https://www.facebook.com/partidoliberalsalta" target="_blank">Partido Liberal Salta</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- FOOTER RETRO -->
     <center>
-        <p><small>&copy; 1998 - 2026 ESTALINGRADO CORP. Todos los derechos reservados.</small></p>
+        <hr>
+        <p><small>&copy; 1998 - 2026 ESTALINGRADO CORP. Todos los derechos reservados.<br>
+        Optimizado para Netscape Navigator y Lotus Browser.</small></p>
+        <p><img src="https://media.giphy.com/media/26FPjgVDaAoM/giphy.gif" alt="Under Construction" width="100" style="opacity:0.5;"></p>
     </center>
 </div>
 
+<!-- SCRIPT DE AUDIO RETRO -->
 <script>
     let audioCtx;
     let soundEnabled = false;
 
+    // Función para crear sonidos tipo 8-bits
     function playTone(frequency, type, duration, vol) {
         if (!soundEnabled) return;
+        
         try {
             const oscillator = audioCtx.createOscillator();
             const gainNode = audioCtx.createGain();
-            oscillator.type = type;
+            
+            oscillator.type = type; // 'square', 'sawtooth', 'triangle' dan un toque retro de consola
             oscillator.frequency.setValueAtTime(frequency, audioCtx.currentTime);
+            
             gainNode.gain.setValueAtTime(vol, audioCtx.currentTime);
             gainNode.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
+            
             oscillator.connect(gainNode);
             gainNode.connect(audioCtx.destination);
+            
             oscillator.start();
             oscillator.stop(audioCtx.currentTime + duration);
-        } catch(e) {}
+        } catch(e) { console.log("Audio error", e); }
     }
 
+    // Inicializar audio por interacción del usuario (requerido por navegadores modernos)
     document.getElementById('btn-audio').addEventListener('click', function() {
-        if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-        if (audioCtx.state === 'suspended') audioCtx.resume();
+        if (!audioCtx) {
+            audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        }
+        if (audioCtx.state === 'suspended') {
+            audioCtx.resume();
+        }
+        
         if (!soundEnabled) {
             soundEnabled = true;
             this.innerHTML = "[ SISTEMA DE AUDIO EN LÍNEA ]";
             this.style.backgroundColor = "#008800";
+            this.style.borderStyle = "inset";
+            this.classList.remove('blink');
+            
+            // Sonido de encendido (Boot)
             playTone(440, 'square', 0.1, 0.1);
             setTimeout(() => playTone(880, 'square', 0.3, 0.1), 100);
         }
     });
 
+    // Añadir efectos de sonido a todos los enlaces de la página
     document.querySelectorAll('a').forEach(link => {
+        // Sonido al pasar el mouse por encima (hover corto y grave)
         link.addEventListener('mouseenter', () => playTone(250, 'sawtooth', 0.05, 0.02)); 
+        
+        // Sonido al hacer clic (beep agudo)
         link.addEventListener('click', () => playTone(600, 'square', 0.1, 0.05)); 
     });
 </script>
+
 </body>
 </html>
