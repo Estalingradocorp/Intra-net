@@ -3,868 +3,688 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Estalingrado Corp Intranet Retro</title>
+    <title>Play Estalingrado Corp - Intra-net Portal</title>
+    <link href="https://fonts.googleapis.com/css2?family=VT323&family=Press+Start+2P&display=swap" rel="stylesheet">
     <style>
-        /* Estilos Retro de los 90s */
-        body {
-            background-color: #000000;
-            color: #00FF00; /* Verde terminal */
-            font-family: "Courier New", Courier, monospace;
-            margin: 0;
-            padding: 20px;
-            background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAIAAAACAQMAAABIeJ9nAAAABlBMVEUAAAAAAAClZ7nPAAAAAnRSTlMAGecY5K4AAAALSURBVAjXY2BgYAAAAEAAAN5A7wAAAAAASUVORK5CYII='); /* Patrón de puntos tenue */
-        }
-        
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            border: 4px double #00FF00;
-            padding: 15px;
-            background-color: rgba(0, 0, 0, 0.8);
+        :root {
+            /* Colores Win95 */
+            --win-gray: #c0c0c0;
+            --win-blue: #000080;
+            --win-bright: #ffffff;
+            --win-shadow: #808080;
+            
+            /* Colores Neón 80s */
+            --neon-pink: #ff00ff;
+            --neon-cyan: #00ffff;
+            --neon-yellow: #ffff00;
+            --neon-green: #39ff14;
+            
+            /* Grid Synthwave */
+            --grid-color: rgba(255, 0, 255, 0.4);
         }
 
-        h1, h2, h3 {
+        /* --- FONDO ESTILO 80s SYNTHWAVE / 90s GEOCITIES --- */
+        .estalingrado-wrapper {
+            background-color: #050510;
+            background-image: 
+                linear-gradient(var(--grid-color) 1px, transparent 1px),
+                linear-gradient(90deg, var(--grid-color) 1px, transparent 1px),
+                url('https://www.transparenttextures.com/patterns/stardust.png');
+            background-size: 40px 40px, 40px 40px, auto;
+            background-position: center bottom;
+            padding: 20px 10px;
+            font-family: 'Tahoma', 'Verdana', sans-serif;
+            color: white;
+            cursor: url('https://win98icons.alexmeub.com/icons/png/aero_arrow.png'), auto;
+            box-sizing: border-box;
+            width: 100%;
+            min-height: 100vh;
+        }
+
+        .estalingrado-wrapper * {
+            box-sizing: border-box;
+        }
+
+        /* --- CONTENEDOR PRINCIPAL --- */
+        .e-container {
+            max-width: 1100px;
+            margin: 0 auto;
+            background: rgba(0, 0, 0, 0.6);
+            padding: 15px;
+            border: 4px solid var(--neon-cyan);
+            box-shadow: 0 0 15px var(--neon-cyan), inset 0 0 15px var(--neon-cyan);
+        }
+
+        /* --- MARQUEE NEÓN --- */
+        .e-marquee-container {
+            background: #000;
+            color: var(--neon-green);
+            font-weight: bold;
+            border: 3px inset var(--neon-pink);
+            margin-bottom: 20px;
+            padding: 5px;
+            font-size: 18px;
+            font-family: 'VT323', monospace;
+            text-shadow: 0 0 5px var(--neon-green);
+            box-shadow: 0 0 10px var(--neon-pink);
+        }
+
+        /* --- NAVEGACIÓN WIN95 --- */
+        .e-navbar {
+            background: var(--win-gray);
+            border: 3px outset var(--win-bright);
+            padding: 8px;
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            justify-content: center;
+            background-image: url('https://www.transparenttextures.com/patterns/black-scales.png');
+        }
+        .e-nav-item {
+            padding: 8px 15px;
+            border: 2px outset white;
+            text-decoration: none;
+            color: black;
+            font-weight: bold;
+            font-size: 14px;
+            background: var(--win-gray);
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            box-shadow: 2px 2px 0px #000;
+        }
+        .e-nav-item:hover {
+            border-style: inset;
+            background: #e0e0e0;
+            transform: translate(1px, 1px);
+            box-shadow: 1px 1px 0px #000;
+        }
+
+        /* --- GRID DE LAYOUT --- */
+        .e-layout-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            align-items: flex-start;
+        }
+        .e-main-column {
+            flex: 2;
+            min-width: 300px;
+            width: 100%;
+        }
+        .e-sidebar {
+            flex: 1;
+            min-width: 280px;
+            width: 100%;
+        }
+
+        @media (max-width: 768px) {
+            .e-layout-grid { flex-direction: column; }
+            .e-main-column, .e-sidebar { width: 100%; flex: none; }
+        }
+
+        /* --- VENTANAS ESTILO WINDOWS --- */
+        .e-window {
+            background: var(--win-gray);
+            border: 3px outset var(--win-bright);
+            box-shadow: 4px 4px 0px rgba(0,0,0,1); /* Sombra dura retro */
+            margin-bottom: 25px;
+            color: black;
+        }
+        .e-window-title {
+            background: linear-gradient(90deg, #000080 0%, #ff00ff 100%); /* Gradiente loco */
+            color: white;
+            padding: 5px 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 14px;
+            font-weight: bold;
+            letter-spacing: 0.5px;
+            font-family: 'Trebuchet MS', sans-serif;
+        }
+        .e-window-body {
+            padding: 15px;
+            border: 1px solid var(--win-shadow);
+        }
+        .e-win-controls { display: flex; gap: 2px; }
+        .e-win-btn {
+            width: 18px; height: 16px;
+            background: var(--win-gray);
+            border: 1.5px outset white;
+            font-size: 10px;
+            display: flex; align-items: center; justify-content: center;
+            font-weight: bold; color: black; cursor: pointer;
+        }
+        .e-win-btn:active { border-style: inset; }
+
+        /* --- HERO BANNER 80s SYNTHWAVE --- */
+        .e-hero-banner {
+            background: linear-gradient(to bottom, #000022 0%, #440044 50%, #ff00ff 51%, #000000 100%);
+            border: 3px inset #555;
+            padding: 40px 20px;
             text-align: center;
-            color: #33FF33;
+            position: relative;
+            overflow: hidden;
+            box-shadow: inset 0 0 20px #000;
+        }
+        .sun {
+            position: absolute;
+            bottom: 20%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 200px;
+            height: 200px;
+            background: linear-gradient(to bottom, #ffff00 0%, #ff00ff 100%);
+            border-radius: 50%;
+            z-index: 0;
+            opacity: 0.8;
+            box-shadow: 0 0 50px var(--neon-pink);
+        }
+        .sun-lines {
+            position: absolute;
+            bottom: 20%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 200px;
+            height: 200px;
+            background: repeating-linear-gradient(transparent, transparent 10px, #000 10px, #000 15px);
+            border-radius: 50%;
+            z-index: 1;
+        }
+        .e-hero-content {
+            position: relative;
+            z-index: 2;
+        }
+        .e-glitch-title {
+            font-family: 'Press Start 2P', cursive;
+            font-size: clamp(24px, 4vw, 42px);
+            color: var(--neon-cyan);
+            text-shadow: 4px 4px var(--neon-pink), -2px -2px var(--neon-yellow);
+            margin: 15px 0;
+            letter-spacing: 2px;
+            line-height: 1.3;
             text-transform: uppercase;
         }
 
-        /* Enlaces estilo 90s */
-        a {
-            color: #00FFFF; /* Cyan */
-            text-decoration: underline;
-        }
-        a:visited {
-            color: #FF00FF; /* Magenta */
-        }
-        a:hover {
-            color: #FFFFFF;
-            background-color: #0000FF;
-        }
-
-        /* Animación de parpadeo (reemplazo CSS para la etiqueta <blink>) */
-        .blink {
-            animation: blinker 1s linear infinite;
-            color: #FF0000;
-            font-weight: bold;
-        }
-        @keyframes blinker {
-            50% { opacity: 0; }
-        }
-
-        /* Tablas retro */
-        table {
-            width: 100%;
-            border-collapse: collapse;
+        /* --- BOTONES DE ACCIÓN PRINCIPALES --- */
+        .e-action-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
             margin: 20px 0;
-            background-color: #111111;
+            flex-wrap: wrap;
+            position: relative;
+            z-index: 2;
         }
-        table, th, td {
-            border: 2px solid #00FF00;
-        }
-        th {
-            background-color: #004400;
-            padding: 10px;
-            color: #FFFFFF;
-        }
-        td {
-            padding: 8px;
-            vertical-align: top;
-        }
-
-        /* Bloque tipo consola CMD */
-        .cmd-box {
-            background-color: #000080; /* Azul oscuro clásico de DOS/BIOS */
-            color: #FFFFFF;
-            font-family: "Fixedsys", "Courier New", monospace;
-            border: 2px solid #C0C0C0;
-            padding: 15px;
-            margin: 20px 0;
-            white-space: pre-wrap;
-            box-shadow: 5px 5px 0px #00FF00;
-        }
-
-        .cmd-title {
-            background-color: #C0C0C0;
-            color: #000000;
-            padding: 2px 5px;
-            font-weight: bold;
-            margin-top: -15px;
-            margin-left: -15px;
-            margin-right: -15px;
-            margin-bottom: 10px;
-            border-bottom: 2px solid #000000;
-        }
-
-        /* Separadores */
-        hr {
-            border: 0;
-            border-top: 2px dashed #00FF00;
-            margin: 30px 0;
-        }
-
-        .hero-img {
-            display: block;
-            margin: 0 auto;
-            border: 5px groove #888888;
-            max-width: 100%;
-            height: auto;
-        }
-
-        .warning {
-            color: #FFFF00; /* Amarillo alerta */
-            font-weight: bold;
-            background-color: #550000;
-            padding: 5px;
-            text-align: center;
-            border: 1px solid #FF0000;
-        }
-
-        .nav-menu {
-            text-align: center;
-            background-color: #003300;
-            padding: 10px;
-            border: 2px solid #00FF00;
-            margin-bottom: 20px;
-        }
-        .nav-menu a {
-            margin: 0 10px;
-            font-weight: bold;
-            font-size: 1.1em;
-        }
-
-        /* Banner Publicitario Retro */
-        .retro-banner {
-            display: block;
-            text-align: center;
-            margin: 30px auto;
-            border: 5px ridge #FFFF00;
-            background-color: #000000;
-            width: 95%;
-            padding: 15px;
-            box-shadow: 8px 8px 0px #FF0000;
+        .e-retro-button {
+            background: var(--win-gray);
+            border: 4px outset white;
+            padding: 12px 20px;
             text-decoration: none;
-        }
-        .retro-banner:hover {
-            border-color: #FF0000;
-            background-color: #111111;
-        }
-        .banner-text {
-            display: block;
-            font-size: 1.5em;
+            color: black;
             font-weight: bold;
-            color: #00FFFF;
-            margin: 10px 0;
-            text-shadow: 2px 2px #0000FF;
-        }
-
-        /* Anuncio Principal / Nuevo Sitio */
-        .main-announcement {
-            background-color: #FF0000;
-            border: 8px ridge #FFFF00;
+            font-size: 16px;
             text-align: center;
-            margin: 25px auto;
-            padding: 20px;
-            width: 95%;
-            box-sizing: border-box;
-            box-shadow: 10px 10px 0px #0000FF;
-            animation: bg-flash 2s infinite;
+            display: inline-block;
+            text-transform: uppercase;
+            font-family: 'Courier New', Courier, monospace;
         }
-        @keyframes bg-flash {
-            0% { background-color: #FF0000; }
-            50% { background-color: #AA0000; }
-            100% { background-color: #FF0000; }
-        }
-        .main-announcement a {
-            color: #FFFF00;
-            font-size: 1.8em;
-            font-weight: bold;
-            text-decoration: none;
-            text-shadow: 3px 3px #000000;
-            display: block;
-        }
-        .main-announcement a:hover {
-            color: #FFFFFF;
-            text-shadow: 3px 3px #FF0000;
-        }
-
-        /* Listas estilo 90s */
-        ul {
-            list-style-type: square;
-        }
-
-        /* --- ADAPTACIÓN PARA MÓVILES (RESPONSIVE) --- */
-        @media (max-width: 768px) {
-            body {
-                padding: 5px;
-            }
-            .container {
-                padding: 10px;
-                border-width: 2px;
-                width: 100%;
-                box-sizing: border-box;
-            }
-            h1 { font-size: 1.5em; }
-            h2 { font-size: 1.2em; }
-            h3 { font-size: 1.1em; text-align: center; }
-
-            /* Menú apilado */
-            .nav-menu {
-                display: flex;
-                flex-direction: column;
-                gap: 12px;
-            }
-            .nav-menu a {
-                border-bottom: 1px dotted #00FF00;
-                padding-bottom: 5px;
-                margin: 0;
-            }
-
-            /* Tablas adaptables (se vuelven bloques apilados) */
-            table, thead, tbody, th, td, tr {
-                display: block;
-                width: 100%;
-                box-sizing: border-box;
-            }
-            th {
-                margin-top: 15px;
-                border-bottom: none;
-                text-align: center;
-            }
-            td {
-                border-top: none;
-                border-bottom: 2px solid #00FF00;
-                padding: 10px 5px;
-            }
-
-            /* Forzar que las columnas Flexbox en línea se apilen */
-            div[style*="display: flex"] {
-                flex-direction: column !important;
-            }
-            div[style*="flex: 1"] {
-                min-width: 100% !important;
-                padding-right: 0 !important;
-                margin-bottom: 15px;
-                box-sizing: border-box;
-            }
-
-            /* Iframes (Videos) responsivos */
-            iframe {
-                max-width: 100% !important;
-                height: auto !important;
-                aspect-ratio: 4/3;
-            }
-
-            /* Banners adaptados */
-            .retro-banner, .main-announcement {
-                width: 100%;
-                padding: 10px;
-                box-sizing: border-box;
-            }
-            .banner-text {
-                font-size: 1.1em;
-            }
-            .main-announcement a {
-                font-size: 1.3em;
-            }
-            .retro-banner img {
-                height: 35px !important;
-            }
-
-            /* Cajas CMD con scroll horizontal táctil */
-            .cmd-box {
-                font-size: 12px;
-                overflow-x: auto;
-                padding: 10px;
-                white-space: pre; /* Mantiene el formato de consola, pero permite hacer scroll */
-            }
-            .cmd-title {
-                font-size: 14px;
-            }
-        }
-
-        /* Botón de Audio del Sistema */
-        #audio-panel {
-            text-align: center;
-            background: #002200;
-            border-bottom: 2px solid #00FF00;
-            padding: 10px;
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-        }
-        #btn-audio {
-            background-color: #FF0000;
-            color: #FFFF00;
-            border: 3px outset #FFFF00;
-            font-family: "Courier New", Courier, monospace;
-            font-weight: bold;
-            font-size: 1.2em;
-            cursor: pointer;
-            padding: 5px 15px;
-        }
-        #btn-audio:active {
+        .e-retro-button:hover {
             border-style: inset;
-            background-color: #CC0000;
+            background: #e0e0e0;
         }
+        .e-btn-search { background: var(--neon-yellow); color: #000; box-shadow: 0 0 10px var(--neon-yellow); }
+        .e-btn-download { background: var(--neon-cyan); color: #000; box-shadow: 0 0 10px var(--neon-cyan); }
+
+        /* --- MULTIMEDIA Y JUEGOS --- */
+        .e-video-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 15px;
+            background: #111;
+            padding: 15px;
+            border: 3px inset #888;
+            background-image: url('https://www.transparenttextures.com/patterns/carbon-fibre.png');
+        }
+        .e-v-item {
+            border: 2px solid var(--neon-pink);
+            background: #000;
+            box-shadow: 0 0 5px var(--neon-pink);
+        }
+        .e-v-item iframe {
+            width: 100%;
+            aspect-ratio: 16/9;
+            border: none;
+            display: block;
+        }
+        .e-v-caption {
+            color: var(--neon-cyan);
+            font-size: 14px;
+            text-align: center;
+            padding: 5px;
+            font-family: 'VT323', monospace;
+            border-top: 1px solid var(--neon-pink);
+            text-shadow: 0 0 3px var(--neon-cyan);
+        }
+
+        /* --- LISTA DE "JUEGOS / PLAY" --- */
+        .e-game-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            border: 2px inset var(--win-shadow);
+            background: #fff;
+        }
+        .e-game-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px;
+            border-bottom: 1px dashed #888;
+        }
+        .e-game-item:hover { background: var(--neon-cyan); color: black; }
+        .e-game-icon { width: 32px; height: 32px; image-rendering: pixelated; }
+        .e-game-info { flex: 1; }
+        .e-game-title { font-weight: bold; color: #000080; font-size: 15px; margin: 0; }
+        .e-game-desc { font-size: 11px; color: #333; margin: 0; font-family: 'Comic Sans MS', cursive, sans-serif; }
+        .e-play-btn {
+            background: #000080; color: white; text-decoration: none;
+            padding: 5px 10px; font-size: 12px; font-weight: bold; border: 2px outset #fff;
+            font-family: 'Tahoma', sans-serif;
+        }
+        .e-play-btn:hover { border-style: inset; }
+
+        /* --- ASISTENTE CRT --- */
+        .e-assistant-crt {
+            position: relative;
+            border: 6px solid #333;
+            border-radius: 15px 15px 5px 5px;
+            overflow: hidden;
+            background: #000;
+            box-shadow: inset 0 0 15px #0f0;
+        }
+        .e-assistant-crt img {
+            width: 100%;
+            display: block;
+            filter: grayscale(20%) contrast(1.5) sepia(50%) hue-rotate(80deg); /* Efecto verde Matrix/CRT */
+        }
+        .e-scanlines {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%);
+            background-size: 100% 4px;
+            pointer-events: none;
+        }
+
+        /* --- WINAMP FAKE PLAYER --- */
+        .winamp-player {
+            background: #2a2a35;
+            border: 2px solid #5a5a65;
+            border-top-color: #8a8a95;
+            border-left-color: #8a8a95;
+            padding: 5px;
+            color: #0f0;
+            font-family: 'VT323', monospace;
+            text-align: center;
+        }
+        .wa-screen {
+            background: #000;
+            border: 2px inset #555;
+            padding: 5px;
+            margin-bottom: 5px;
+            font-size: 16px;
+        }
+        .wa-controls { display: flex; justify-content: center; gap: 5px; }
+        .wa-btn {
+            background: #4a4a55; border: 2px outset #6a6a75;
+            color: #ccc; width: 30px; height: 25px;
+            font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center;
+        }
+        .wa-btn:active { border-style: inset; }
+
+        /* --- MISC --- */
+        .e-counter-box {
+            background: #000; color: var(--neon-pink); padding: 5px 10px;
+            font-family: 'Courier New', Courier, monospace;
+            border: 2px inset #555; display: inline-block;
+            font-weight: bold; letter-spacing: 3px; font-size: 20px;
+            text-shadow: 0 0 5px var(--neon-pink);
+        }
+        .e-footer-gifs {
+            text-align: center; margin-top: 40px; padding-top: 20px;
+            border-top: 2px dashed var(--neon-cyan); color: white;
+        }
+        .flaming-text {
+            color: #ffaa00;
+            text-shadow: 0 -2px 4px #ff0000, 0 -4px 8px #ff0000, 0 -6px 12px #ff0000;
+            font-family: 'Impact', sans-serif;
+            font-size: 24px;
+            letter-spacing: 2px;
+        }
+        blink { animation: blink-animation 0.8s steps(5, start) infinite; }
+        @keyframes blink-animation { to { visibility: hidden; } }
+
     </style>
 </head>
 <body>
 
-<div id="audio-panel">
-    <button id="btn-audio" class="blink">[ ACTIVAR SONIDO DEL SISTEMA ]</button>
-</div>
+<div class="estalingrado-wrapper">
+    <div class="e-container">
 
-<div class="container">
-    <!-- CABECERA -->
-    <center>
-        <h1><span class="blink">[!]</span> ESTALINGRADO CORP <span class="blink">[!]</span></h1>
-        <h2>/// INTRANET RETRO v1.0 ///</h2>
-    </center>
-
-    <img src="https://64.media.tumblr.com/37c52c25279f877bd0bc2d538626c938/2f8407cc51b2210e-be/s540x810/c379bb3cd18325d6b075e62fd26ffe91f5093ee3.jpg" alt="Estalingrado Retro" class="hero-img">
-
-    <!-- Logotipo descontinuado engadido -->
-    <div style="text-align: center; margin: 20px auto; padding: 15px; border: 2px dashed #880000; background-color: #110000; width: fit-content;">
-        <img src="https://static.wixstatic.com/media/8c4320_b1a3ff74576e4518b8f95da1a37609e6~mv2.jpg/v1/fill/w_230,h_230,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/42085350_2436621059688888_90701146672920.jpg" alt="" style="filter: grayscale(100%); opacity: 0.4; border: 3px double #FF0000; max-width: 150px; display: block; margin: 0 auto;">
-        <br>
-        <span class="blink" style="color: #FF0000; font-weight: bold; padding: 5px; display: inline-block;">[X] STATUS: DESCONTINUADO [X]</span>
-    </div>
-
-    <marquee scrollamount="5" style="border: 1px solid #00FF00; padding: 5px; margin-top: 15px; background: #002200;">
-        *** BIENVENIDO A LA INTRANET PRIVADA DE ESTALINGRADO CORP *** APPS Y PROGRAMAS PARA SOLUCIONAR TU VIDA *** ACCESO RESTRINGIDO ***
-    </marquee>
-
-    <!-- GRAN ANUNCIO DE NUEVO SITIO -->
-    <div class="main-announcement">
-        <a href="https://nicotips27.github.io/Estalingrado-corp-Buscador-/" target="_blank">
-            <img src="https://media.giphy.com/media/26n6WvwCRG9E3MTvO/giphy.gif" alt="Alerta" style="height: 60px; vertical-align: middle;">
-            <span class="blink" style="color: #00FFFF; font-size: 1.2em;">¡¡ ATENCIÓN USUARIOS !!</span>
-            <img src="https://media.giphy.com/media/26n6WvwCRG9E3MTvO/giphy.gif" alt="Alerta" style="height: 60px; vertical-align: middle;"><br>
-            ESTE ES NUESTRO SITIO PRINCIPAL AHORA<br>
-            <span style="font-size: 0.7em; color: #FFFFFF; text-decoration: underline;">[ CLIC AQUÍ PARA IR AL NUEVO PORTAL ]</span>
-        </a>
-    </div>
-
-    <!-- MENÚ PRINCIPAL -->
-    <div class="nav-menu">
-        <a href="#">[Ir a la pagina de EC Download →]</a> | 
-        <a href="#">[Estalingrado Corp Pro →]</a> | 
-        <a href="#">[Intra-net →]</a> | 
-        <a href="#">[Demiurgo Box Play Online]</a>
-    </div>
-
-    <!-- PUBLICIDAD 1 -->
-    <a href="https://nicotips27.github.io/Estalingrado-corp-Buscador-/" target="_blank" class="retro-banner">
-        <img src="https://media.giphy.com/media/26n6WvwCRG9E3MTvO/giphy.gif" alt="Alerta" style="height: 50px; vertical-align: middle;">
-        <span class="banner-text blink">*** ¡NUEVO! *** DESCUBRE EL BUSCADOR PRIVADO ESTALINGRADO CORP</span>
-        <img src="https://media.giphy.com/media/26n6WvwCRG9E3MTvO/giphy.gif" alt="Alerta" style="height: 50px; vertical-align: middle;">
-        <div style="color: #FF00FF; font-size: 1.2em;">[ CLIC AQUÍ PARA ENTRAR ]</div>
-    </a>
-
-    <!-- SECCIÓN DE PRODUCTIVIDAD Y UTILIDADES -->
-    <h3>:: Apps y programas para solucionar tu vida ::</h3>
-    <table>
-        <tr>
-            <th>Categoría</th>
-            <th>Recursos y Enlaces</th>
-        </tr>
-        <tr>
-            <td><strong>[Productividad & Programación]</strong><br>Aprende a programar</td>
-            <td>
-                <ul>
-                    <li><a href="https://coddy.tech/" target="_blank">Coddy Tech</a></li>
-                    <li><a href="https://learn-anything.xyz/" target="_blank">Learn Anything XYZ</a></li>
-                </ul>
-            </td>
-        </tr>
-        <tr>
-            <td><strong>[Biología]</strong></td>
-            <td>
-                <ul>
-                    <li><a href="https://human.biodigital.com/" target="_blank">Human BioDigital</a></li>
-                </ul>
-            </td>
-        </tr>
-        <tr>
-            <td><strong>[Empleo ONline]</strong></td>
-            <td>
-                <ul>
-                    <li><a href="https://remote.co/" target="_blank">Remote.co</a></li>
-                </ul>
-            </td>
-        </tr>
-        <tr>
-            <td><strong>[Salud Digital]</strong></td>
-            <td>
-                <ul>
-                    <li><a href="https://musclewiki.com/es-es" target="_blank">MuscleWiki (ES)</a></li>
-                </ul>
-            </td>
-        </tr>
-        <tr>
-            <td><strong>[Educación]</strong></td>
-            <td>
-                <ul>
-                    <li><a href="https://es.symbolab.com/" target="_blank">Symbolab (ES)</a></li>
-                    <li><a href="https://chemequations.com/en/" target="_blank">ChemEquations</a></li>
-                </ul>
-            </td>
-        </tr>
-        <tr>
-            <td><strong>[Inteligencia]</strong></td>
-            <td>
-                <ul>
-                    <li><a href="https://github.com/qeeqbox/social-analyzer" target="_blank">Qeeqbox Social-Analyzer (GitHub)</a></li>
-                </ul>
-            </td>
-        </tr>
-        <tr>
-            <td><strong>[Biblioteca Digital]</strong></td>
-            <td>
-                <ul>
-                    <li><a href="https://archive.org" target="_blank">Internet Archive Digital Library (IR A LA WEB)</a></li>
-                </ul>
-            </td>
-        </tr>
-    </table>
-
-    <hr>
-
-    <!-- SECCIÓN DE HERRAMIENTAS WEB AVANZADAS -->
-    <h3>:: HERRAMIENTAS WEB AVANZADAS & SERVIDORES ::</h3>
-    <table>
-        <tr>
-            <th>Categoría</th>
-            <th>Recursos y Enlaces</th>
-        </tr>
-        <tr>
-            <td><strong>[Diseño y Fotos]</strong></td>
-            <td>
-                <ul>
-                    <li><a href="https://getpaidstock.com" target="_blank">GetPaidStock</a></li>
-                    <li><a href="https://www.glorify.com" target="_blank">Glorify</a></li>
-                    <li><a href="https://pixelsurplus.com" target="_blank">Pixel Surplus</a></li>
-                    <li><a href="https://dronestock.com" target="_blank">Drone Stock</a></li>
-                </ul>
-            </td>
-        </tr>
-        <tr>
-            <td><strong>[Oficina & Productividad]</strong></td>
-            <td>
-                <ul>
-                    <li><a href="https://www.generadordegraficos.com/graph?selected_graph=bar_line" target="_blank">Generador de Gráficos</a></li>
-                    <li><a href="https://www.docracy.com" target="_blank">Docracy</a></li>
-                </ul>
-            </td>
-        </tr>
-        <tr>
-            <td><strong>[Gana Dinero $$$]</strong></td>
-            <td>
-                <ul class="blink" style="color: #00FF00;">
-                    <li><a href="https://adf.ly/" target="_blank">Adf.ly</a></li>
-                    <li><a href="https://www.rev.com" target="_blank">Rev</a></li>
-                    <li><a href="https://www.freelancer.com" target="_blank">Freelancer</a></li>
-                </ul>
-            </td>
-        </tr>
-        <tr>
-            <td><strong>[Contenido & SEO]</strong></td>
-            <td>
-                <ul>
-                    <li><a href="https://snazzy.ai" target="_blank">Snazzy.ai</a></li>
-                    <li><a href="https://www.social-searcher.com" target="_blank">Social Searcher</a></li>
-                    <li><a href="https://lorcaeditor.com" target="_blank">Lorca Editor</a></li>
-                    <li><a href="https://turboscribe.ai/es/downloader/youtube/mp4" target="_blank">TurboScribe YT Downloader</a></li>
-                    <li><a href="https://www.geoimgr.com" target="_blank">GeoImgr (SEO)</a></li>
-                </ul>
-            </td>
-        </tr>
-        <tr>
-            <td><strong>[Servidores & Hosting]</strong></td>
-            <td>
-                <ul>
-                    <li><a href="https://www.mediafire.com/login/" target="_blank">Mediafire</a></li>
-                    <li><a href="https://mega.nz/" target="_blank">Mega.nz</a></li>
-                    <li><a href="https://es.wix.com/" target="_blank">Wix</a></li>
-                    <li><a href="https://www.freenom.com/es" target="_blank">Freenom</a></li>
-                    <li><a href="https://3pod.io/" target="_blank">3pod.io</a></li>
-                </ul>
-            </td>
-        </tr>
-        <tr>
-            <td><strong>[Bots & IA]</strong></td>
-            <td>
-                <ul>
-                    <li><a href="https://dashboard.chatfuel.com/login" target="_blank">Chatfuel</a></li>
-                    <li><a href="https://www.deepword.co" target="_blank">Deepword</a></li>
-                    <li><a href="https://whimsical.com" target="_blank">Whimsical</a></li>
-                    <li><a href="https://landbot.io" target="_blank">Landbot</a></li>
-                    <li>Bot Millonario 0.1 - <a href="#">[Descargar]</a> <span class="blink" style="color: yellow;">[NUEVO]</span></li>
-                </ul>
-            </td>
-        </tr>
-        <tr>
-            <td><strong>[Desarrollo & Corporativo]</strong></td>
-            <td>
-                <ul>
-                    <li><a href="https://bubble.io" target="_blank">Bubble.io (Desarrollo de Apk)</a></li>
-                    <li><a href="https://www.zoho.com/es-xl/mail/" target="_blank">Zoho Mail (Email Corporativo)</a></li>
-                </ul>
-            </td>
-        </tr>
-        <tr>
-            <td><strong>[Otros & Curiosidades]</strong></td>
-            <td>
-                <ul>
-                    <li><a href="https://www.playphrase.me" target="_blank">PlayPhrase.me (Interesante)</a></li>
-                    <li><a href="https://www.deepl.com/translator" target="_blank">DeepL Translator</a></li>
-                    <li><a href="https://www.flightradar24.com" target="_blank">FlightRadar24</a></li>
-                    <li><a href="https://playback.fm" target="_blank">Playback.fm</a></li>
-                    <li><a href="https://iplogger.org/es/" target="_blank">IPLogger</a></li>
-                    <li><a href="https://writeaprisoner.com" target="_blank">Write A Prisoner</a></li>
-                </ul>
-            </td>
-        </tr>
-    </table>
-
-    <hr>
-
-    <!-- SECCIÓN DE DESCARGAS Y SEGURIDAD -->
-    <h3>:: SEGURIDAD Y HERRAMIENTAS PC ::</h3>
-    <table>
-        <tr>
-            <th>Software / Herramienta</th>
-            <th>Acción / Estado</th>
-        </tr>
-        <tr>
-            <td><strong>MICROSOFT SAFETY SCANNER</strong></td>
-            <td>
-                <a href="#">[Ir Pagina de descarga]</a> | <a href="#">[Descargar]</a><br>
-                <span class="warning blink">Vulnerabilidad Encontrado!</span>
-            </td>
-        </tr>
-        <tr>
-            <td><strong>Infecciones controladas S-2420</strong><br><small>(CONTROLADO)</small></td>
-            <td>
-                <a href="#">[Descargar Hosts Block]</a><br>
-                <a href="#">[Descargar S-2420 !]</a><br>
-                <span style="color: yellow;">Contraseña de Zip: ( 2772 )</span>
-            </td>
-        </tr>
-        <tr>
-            <td><strong>Game Cheat</strong></td>
-            <td>
-                Cheat-engine<br>
-                <a href="#">[Ir Pagina de descarga]</a> | <a href="#">[Descargar]</a>
-            </td>
-        </tr>
-        <tr>
-            <td><strong>Utilidades PC</strong></td>
-            <td>
-                Protector de Pantalla Windows 98<br>
-                <a href="#">[Ir Pagina de descarga]</a> | <a href="#">[Descargar]</a>
-            </td>
-        </tr>
-        <tr>
-            <td><strong>Brave Navegador</strong></td>
-            <td>
-                <a href="#">[Ir a la pagina]</a><br>
-                <a href="#">[Descargar Brave para windows 7 y 8]</a>
-            </td>
-        </tr>
-    </table>
-
-    <hr>
-
-    <!-- SECCIÓN HACKING / SISTEMA -->
-    <h3>:: CONSOLA DEL SISTEMA & ACTIVADORES ::</h3>
-    
-    <div class="cmd-box">
-<div class="cmd-title">C:\Windows\System32\cmd.exe</div>Microsoft Windows [Versión 6.1.7601]
-(c) Copyright 1985-2001 Microsoft Corp.
-
-C:\EstalingradoCorp> <b>Comando CMD (Activación Automática Win 7)</b>
-C:\EstalingradoCorp> <span style="color: #00FF00;">slmgr -rearm</span>
-
-<b>Datos del sistema donde se probo el comando:</b>
-Nombre del sistema operativo:         Microsoft Windows 7 Professional
-Versión del sistema operativo:         6.1.7601 Service Pack 1 Compilación 601
-Fabricante del sistema operativo:      Microsoft Corporation
-Configuración del sistema operativo:   Estación de trabajo independiente
-Tipo de compilación del SO:            ------------
-Propiedad de:                          ----------
-    </div>
-
-    <div class="cmd-box">
-<div class="cmd-title">ACTIVACIÓN WINDOWS 10 (MÉTODO CMD)</div><b>Instrucciones de Activación (Cualquier versión):</b>
-Códigos de Activación:  
-> slmgr /ipk ******************
-> slmgr /skms kms.digiboy.ir   o   kms.msguides.com 
-> slmgr /ato
-
-<b>[CLAVES DISPONIBLES]</b>
-<u>Windows 10 Home:</u>
-Home:                  TX9XD-98N7V-6WMQ6-BX7FG-H8Q99
-Home N:                3KHY7-WNT83-DGQKR-F7HPR-844BM 
-Home Single Language:  7HNRX-D7KGG-3K4RQ-4WPJ4-YTDFH 
-Home Country Specific: PVMJN-6DFY6-9CCP6-7BKTT-D3WVR 
-
-<u>Windows 10 Professional:</u>
-Professional:          W269N-WFGWX-YVC9B-4J6C9-T83GX
-Professional N:        MH37W-N47XK-V7XM9-C7227-GCQG9 
-
-<u>Windows 10 Enterprise:</u>
-Enterprise:            NPPR9-FWDCX-D2C8J-H872K-2YT43
-Enterprise N:          DPH2V-TTNVB-4X9Q3-TJR4H-KHJW4
-Enterprise LTSC:       M7XTQ-FN8P6-TTKYV-9D4CC-J462D 
-Enterprise LTSB:       DCPHK-NFMTC-H88MJ-PFHPY-QJ4BJ 
-Enterprise 2015 LTSB:  WNMTR-4C88C-JK8YV-HQ7T2-76DF9 
-Enterprise 2015 LTSB N:2F77B-TNFGY-69QQF-B8YKP-D69TJ
-
-<u>Windows 10 Education:</u>
-Education:             NW6C2-QMPVW-D7KKK-3GKT6-VCFB2 
-Education N:           2WH4N-8QGBV-H22JP-CT43Q-MDWWJ
-    </div>
-
-    <hr>
-
-    <!-- PUBLICIDAD 2 -->
-    <a href="https://nicotips27.github.io/Estalingrado-corp-Buscador-/" target="_blank" class="retro-banner" style="border-color: #00FF00; box-shadow: 8px 8px 0px #0000FF;">
-        <span class="banner-text">¿BUSCAS ALGO EN LA DEEP WEB? <span class="blink" style="color:#FF0000;">&gt;&gt; USA EL BUSCADOR EC &lt;&lt;</span></span>
-        <div style="color: #FFFF00; font-size: 1.2em; text-decoration: underline;">ACCESO SIN CENSURA - ENTRAR YA</div>
-    </a>
-
-    <!-- SOFTWARE LAB APPS -->
-    <h3>:: SOFTWARE LAB ::</h3>
-    <p><center>Listado de las app desarrolladas o optimizadas por Software Lab.</center></p>
-    <table>
-        <tr>
-            <th>App Android</th>
-            <th>Acciones</th>
-        </tr>
-        <tr>
-            <td><strong>Lotus Brower 1.0</strong></td>
-            <td><a href="#">[Ir Pagina de descarga]</a> | <a href="#">[Descargar versión 1.1 (ARM)]</a></td>
-        </tr>
-        <tr>
-            <td><strong>Reproductor de Musica</strong></td>
-            <td><a href="#">[Ir Pagina de descarga]</a> | <a href="#">[Descargar versión 1.1 (ARM)]</a></td>
-        </tr>
-        <tr>
-            <td><strong>Secret Video Recorder Pro</strong><br>(Cámara espía)</td>
-            <td><a href="#">[Ir Pagina de descarga]</a> | <a href="#">[Descargar versión 1.9 (ARM/ARM64)]</a></td>
-        </tr>
-        <tr>
-            <td><strong>DNS Adblock free</strong></td>
-            <td><span style="color: yellow; font-weight: bold;">DNS.ADGUARD.COM</span></td>
-        </tr>
-    </table>
-
-    <hr>
-
-    <!-- SECCIÓN ENTRETENIMIENTO Y MULTIMEDIA -->
-    <h3>:: ZONA OCIO Y ENTRETENIMIENTO ::</h3>
-    <table>
-        <tr>
-            <th>Categoría</th>
-            <th>Enlaces Directos</th>
-        </tr>
-        <tr>
-            <td><strong>[Gamer y PC]</strong></td>
-            <td>
-                <ul>
-                    <li><a href="https://centerdata.wixsite.com/ecblog" target="_blank">EC Blog (Gaming)</a></li>
-                    <li><a href="https://www.clasicosbasicos.org/" target="_blank">Clásicos Básicos</a></li>
-                    <li><a href="https://www.gamezfull.com" target="_blank">GamezFull</a></li>
-                    <li><a href="https://www.blizzboygames.net" target="_blank">BlizzBoyGames</a></li>
-                </ul>
-            </td>
-        </tr>
-        <tr>
-            <td><strong>[Películas y Series]</strong></td>
-            <td>
-                <ul>
-                    <li><a href="https://totalseries.org" target="_blank">Total Series</a></li>
-                    <li><a href="https://cuevana3.io" target="_blank">Cuevana 3</a></li>
-                    <li><a href="https://cuevana2.io" target="_blank">Cuevana 2</a></li>
-                    <li><a href="https://www.my90stv.com" target="_blank">My 90s TV</a></li>
-                    <li><a href="https://www.championcat.cl/catflix/" target="_blank">Catflix</a></li>
-                    <li><a href="https://photocall.tv" target="_blank">Photocall TV</a></li>
-                    <li><a href="https://playpastelinks.com/p/F0ksZ" target="_blank">PasteLinks (Películas)</a></li>
-                </ul>
-            </td>
-        </tr>
-        <tr>
-            <td><strong>[Radio y Música]</strong></td>
-            <td>
-                <ul>
-                    <li><a href="http://radio.garden" target="_blank">Radio Garden (Online)</a></li>
-                </ul>
-            </td>
-        </tr>
-        <tr>
-            <td><strong>[Games Online & Sistemas]</strong></td>
-            <td>
-                <ul>
-                    <li><a href="https://classic.minecraft.net" target="_blank">Minecraft Classic</a></li>
-                    <li><a href="https://ncase.itch.io/wbwwb" target="_blank">We Become What We Behold</a></li>
-                    <li><a href="https://emupedia.net/beta/emuos/" target="_blank">EmuOS (Retro OS)</a></li>
-                    <li><a href="https://kickassapp.com" target="_blank">Kick Ass (Destruye la web)</a></li>
-                    <li><a href="https://novacompsystem.wixsite.com/pearoslinux" target="_blank">PearOS Linux</a></li>
-                </ul>
-            </td>
-        </tr>
-    </table>
-
-    <hr>
-
-    <!-- SECCIÓN ARCHIVO MULTIMEDIA -->
-    <h3>:: ARCHIVO MULTIMEDIA CLASIFICADO ::</h3>
-    <div style="text-align: center; border: 2px dashed #00FF00; padding: 20px; background-color: #050505; margin-bottom: 20px;">
-        
-        <!-- Imagen recuperada -->
-        <div style="margin-bottom: 20px;">
-            <a href="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhjiC6E_ay_EUte37zTd6khEOVjdtgXb1lzXESa64YEXj8oCz3r8cEXLXtQy4hfyX0fhEDf9iaYGB-PiME7RMKqLKFZNdmRij5zsHkzRzdA443YvhA6cYCGuQZVwtfS5IbE9jOavucwyUY/s1600/5558.jpg" target="_blank">
-                <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhjiC6E_ay_EUte37zTd6khEOVjdtgXb1lzXESa64YEXj8oCz3r8cEXLXtQy4hfyX0fhEDf9iaYGB-PiME7RMKqLKFZNdmRij5zsHkzRzdA443YvhA6cYCGuQZVwtfS5IbE9jOavucwyUY/s400/5558.jpg" alt="Archivo 5558" style="border: 3px solid #00FF00; max-width: 100%;">
-            </a>
-            <p><small class="blink" style="color: #00FFFF;">[Haga clic en la imagen para acceder al archivo completo]</small></p>
+        <!-- MARQUEE SUPERIOR NEÓN -->
+        <div class="e-marquee-container">
+            <marquee scrollamount="8">
+                ★ 1989-1998 ★ SISTEMA DE ARCHIVOS CONECTADO ★ BIENVENIDO A LA RED NEÓN DE ESTALINGRADO CORP ★ PROTOCOLO DE TRANCE ACTIVADO ★ CARGANDO MÓDULOS DE REALIDAD VIRTUAL... ★
+            </marquee>
         </div>
 
-        <!-- Registros de Video -->
-        <p><strong>&gt;&gt; REGISTROS DE VIDEO [DECRYPTED] &lt;&lt;</strong></p>
-        <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 15px;">
-            <div style="border: 3px double #555555; padding: 5px; background: #000;">
-                <iframe width="320" height="266" src="https://www.youtube.com/embed/DDNL7QFii6g" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-            </div>
-            <div style="border: 3px double #555555; padding: 5px; background: #000;">
-                <iframe width="320" height="266" src="https://www.youtube.com/embed/YRmMnlE4GgI" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-            </div>
-            <div style="border: 3px double #555555; padding: 5px; background: #000;">
-                <iframe width="320" height="266" src="https://www.youtube.com/embed/AE1cRh3KnsA" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-            </div>
-            <div style="border: 3px double #555555; padding: 5px; background: #000;">
-                <iframe width="320" height="266" src="https://www.youtube.com/embed/apKq7UVEa84" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-            </div>
-            <div style="border: 3px double #555555; padding: 5px; background: #000;">
-                <iframe width="320" height="266" src="https://www.youtube.com/embed/papuvlVeZg8" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-            </div>
-            <div style="border: 3px double #555555; padding: 5px; background: #000;">
-                <iframe width="320" height="266" src="https://www.youtube.com/embed/oygrmJFKYZY" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-            </div>
-            <div style="border: 3px double #555555; padding: 5px; background: #000;">
-                <iframe width="320" height="266" src="https://www.youtube.com/embed/r7qovpFAGrQ" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-            </div>
-            <div style="border: 3px double #555555; padding: 5px; background: #000;">
-                <iframe width="320" height="266" src="https://www.youtube.com/embed/PKB4cioGs98" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-            </div>
-        </div>
-    </div>
-
-    <hr>
-
-    <!-- PUBLICIDAD 3 -->
-    <a href="https://nicotips27.github.io/Estalingrado-corp-Buscador-/" target="_blank" class="retro-banner" style="border-color: #FF00FF; box-shadow: 8px 8px 0px #00FFFF;">
-        <img src="https://media.giphy.com/media/xT9Igzo2EijyO4GvwY/giphy.gif" alt="Search" style="height: 60px; display: block; margin: 0 auto;">
-        <span class="banner-text blink">/\/\/\ MOTOR DE BÚSQUEDA ESTALINGRADO CORP /\/\/\</span>
-        <div style="color: #00FF00; font-size: 1.2em;">[ HAZ CLIC PARA INICIAR BÚSQUEDA ]</div>
-    </a>
-
-    <!-- DIRECTORIO CORPORATIVO DE ESTALINGRADO -->
-    <h3>:: DIRECTORIO CORPORATIVO DE ESTALINGRADO CORP ::</h3>
-    
-    <div style="display: flex; flex-wrap: wrap; justify-content: space-between;">
-        
-        <!-- Enlaces Activos -->
-        <div style="flex: 1; min-width: 250px; padding: 10px;">
-            <h4 style="color: #00FF00;">[ SERVICIOS EN LÍNEA ]</h4>
-            <ul>
-                <li><a href="https://nicotips27.github.io/Estalingrado-corp-Buscador-/" target="_blank">Portal Web Principal</a></li>
-                <li><a href="#">Acceso a Intranet Segura</a></li>
-                <li><a href="#">Base de Datos S-2420</a></li>
-                <li><a href="#">Foro de Empleados Corporativos</a></li>
-                <li><a href="#">Soporte Técnico (Ticket System)</a></li>
-            </ul>
+        <!-- MENÚ DE NAVEGACIÓN WIN95 -->
+        <div class="e-navbar">
+            <a href="https://nicotips27.github.io/ec-Intra-net/" class="e-nav-item"><img src="https://win98icons.alexmeub.com/icons/png/world-1.png" width="16"> 🏠 Inicio Intra-net</a>
+            <a href="https://playestalingradocorp.blogspot.com/" class="e-nav-item" style="color: #ff00ff;"><img src="https://win98icons.alexmeub.com/icons/png/joystick-0.png" width="16"> 🎮 PLAY AREA</a>
+            <a href="https://centercorpec.wixsite.com/estalingradocorp/post/software-lab-lista-de-proyectos-activos" target="_blank" class="e-nav-item" style="color: #0000ff;"><img src="https://win98icons.alexmeub.com/icons/png/computer_explorer_cool-0.png" width="16"> ⚙️ Lab</a>
+            <a href="https://nicotips27.github.io/ec-download/" class="e-nav-item"><img src="https://win98icons.alexmeub.com/icons/png/save_download-0.png" width="16"> 💾 Downloads</a>
+            <a href="https://nicotips27.github.io/Estalingrado-corp-Buscador-/" class="e-nav-item"><img src="https://win98icons.alexmeub.com/icons/png/search_computer-0.png" width="16"> 🔍 Buscar</a>
+            <a href="https://www.youtube.com/@Estalingradocorp" target="_blank" class="e-nav-item"><img src="https://win98icons.alexmeub.com/icons/png/tv-0.png" width="16"> 📺 Canal</a>
         </div>
 
-        <!-- Enlaces Clasificados / Obsoletos -->
-        <div style="flex: 1; min-width: 250px; padding: 10px;">
-            <h4 style="color: #FF0000;">[ BÓVEDA CLASIFICADA ]</h4>
-            <ul style="color: #888888;">
-                <li><del><a href="#" style="color: #666666;">Proyecto Demiurgo (TERMINADO)</a></del></li>
-                <li><del><a href="#" style="color: #666666;">Software Lab v0.1 (OBSOLETO)</a></del></li>
-                <li><del><a href="#" style="color: #666666;">Registros de Operaciones 1999</a></del></li>
-                <li><del><a href="#" style="color: #666666;">Servidor Legacy Alpha</a></del></li>
-            </ul>
+        <!-- LAYOUT PRINCIPAL -->
+        <div class="e-layout-grid">
+            
+            <!-- COLUMNA PRINCIPAL (IZQUIERDA) -->
+            <div class="e-main-column">
+                
+                <!-- VENTANA HERO SYNTHWAVE -->
+                <div class="e-window">
+                    <div class="e-window-title">
+                        <span>C:\SYSTEM\RAD_HUB.EXE</span>
+                        <div class="e-win-controls">
+                            <div class="e-win-btn">_</div>
+                            <div class="e-win-btn">□</div>
+                            <div class="e-win-btn">X</div>
+                        </div>
+                    </div>
+                    <div class="e-window-body">
+                        <div class="e-hero-banner">
+                            <!-- CSS Atardecer Synthwave -->
+                            <div class="sun"></div>
+                            <div class="sun-lines"></div>
+                            
+                            <div class="e-hero-content">
+                                <img src="https://64.media.tumblr.com/37c52c25279f877bd0bc2d538626c938/2f8407cc51b2210e-be/s540x810/c379bb3cd18325d6b075e62fd26ffe91f5093ee3.jpg" style="width: 120px; border: 3px solid var(--neon-pink); box-shadow: 0 0 15px var(--neon-cyan);" alt="Logo">
+                                <h1 class="e-glitch-title">ESTALINGRADO<br>CYBER-PORTAL</h1>
+                                <p><blink style="color: var(--neon-green); font-weight: bold; font-family: 'Courier New', monospace; font-size: 18px; text-shadow: 0 0 5px #0f0;">&gt; ACCESO A LA MATRIX CONCEDIDO_</blink></p>
+                            </div>
+                        </div>
+
+                        <div class="e-action-buttons">
+                            <a href="https://nicotips27.github.io/ec-Intra-net/" class="e-retro-button" style="background: var(--neon-pink); color: #fff; box-shadow: 0 0 10px var(--neon-pink);">
+                                &gt; INTRA-NET ROOT
+                            </a>
+                            <a href="https://nicotips27.github.io/Estalingrado-corp-Buscador-/" class="e-retro-button e-btn-search">
+                                &gt; BUSCADOR
+                            </a>
+                            <a href="https://centercorpec.wixsite.com/estalingradocorp/post/software-lab-lista-de-proyectos-activos" target="_blank" class="e-retro-button e-btn-download">
+                                &gt; ENTRAR AL LAB
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SECCIÓN: LANZADOR DE JUEGOS Y PROYECTOS -->
+                <div class="e-window">
+                    <div class="e-window-title">
+                        <span>GAME_ROM_LAUNCHER_98.BAT</span>
+                        <div class="e-win-btn">X</div>
+                    </div>
+                    <div class="e-window-body" style="background: #c0c0c0;">
+                        <h3 style="margin-top: 0; border-bottom: 2px solid #888; padding-bottom: 5px; display: flex; align-items: center; gap: 10px;">
+                            <img src="https://win98icons.alexmeub.com/icons/png/game_mine_1-0.png" width="24"> 
+                            ARCADE Y SIMULADORES
+                        </h3>
+                        <ul class="e-game-list">
+                            <li class="e-game-item">
+                                <!-- Reemplaza el src de la imagen de abajo por la URL de la imagen de Warcraft que quieras usar -->
+                                <img src="https://win98icons.alexmeub.com/icons/png/cd_rom_drive-1.png" class="e-game-icon" alt="Warcraft III">
+                                <div class="e-game-info">
+                                    <p class="e-game-title">Warcraft III: The Frozen Throne</p>
+                                    <p class="e-game-desc">Estrategia en tiempo real. Archivo del Software Lab.</p>
+                                </div>
+                                <a href="https://centercorpec.wixsite.com/softwarelab/post/warcraft-iii-the-frozen-throne" target="_blank" class="e-play-btn" style="background: #008000; color: white;">INICIAR</a>
+                            </li>
+                            <li class="e-game-item">
+                                <img src="https://win98icons.alexmeub.com/icons/png/cd_audio_cd_a-3.png" class="e-game-icon" alt="Game 1">
+                                <div class="e-game-info">
+                                    <p class="e-game-title">Software Lab - Directorio</p>
+                                    <p class="e-game-desc">Cargando base de datos de proyectos activos...</p>
+                                </div>
+                                <a href="https://centercorpec.wixsite.com/estalingradocorp/post/software-lab-lista-de-proyectos-activos" target="_blank" class="e-play-btn">EJECUTAR</a>
+                            </li>
+                            <li class="e-game-item">
+                                <img src="https://win98icons.alexmeub.com/icons/png/movie_maker-0.png" class="e-game-icon" alt="Game 2">
+                                <div class="e-game-info">
+                                    <p class="e-game-title">Cinta Clasificada #119859</p>
+                                    <p class="e-game-desc">Transmisión VHS ripeada desde servidores seguros.</p>
+                                </div>
+                                <a href="https://vimeo.com/manage/videos/1198597418" target="_blank" class="e-play-btn" style="background: #ff00ff; color: #000;">VER_TAPE</a>
+                            </li>
+                            <li class="e-game-item">
+                                <img src="https://win98icons.alexmeub.com/icons/png/ms_dos-0.png" class="e-game-icon" alt="Game 3">
+                                <div class="e-game-info">
+                                    <p class="e-game-title">MUD Estalingrado (BBS)</p>
+                                    <p class="e-game-desc">Conectando al puerto 23. Aventura conversacional.</p>
+                                </div>
+                                <a href="#" class="e-play-btn">TELNET</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- VENTANA VISOR DE IMÁGENES (ADAPTADO DEL FRAGMENTO) -->
+                <div class="e-window">
+                    <div class="e-window-title">
+                        <span>IMAGE_VIEWER_95.EXE</span>
+                        <div class="e-win-btn">X</div>
+                    </div>
+                    <div class="e-window-body" style="text-align: center; background: #000; border: 2px inset #555;">
+                        <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhjiC6E_ay_EUte37zTd6khEOVjdtgXb1lzXESa64YEXj8oCz3r8cEXLXtQy4hfyX0fhEDf9iaYGB-PiME7RMKqLKFZNdmRij5zsHkzRzdA443YvhA6cYCGuQZVwtfS5IbE9jOavucwyUY/s1600/5558.jpg" alt="Archivo Desclasificado" style="max-width: 100%; border: 2px solid var(--neon-pink); box-shadow: 0 0 10px var(--neon-pink);">
+                        <p style="color: var(--neon-cyan); font-family: 'Courier New', monospace; font-size: 14px; margin-top: 10px; text-shadow: 0 0 3px var(--neon-cyan);">IMG_5558.JPG - [ ARCHIVO DESCLASIFICADO ]</p>
+                    </div>
+                </div>
+
+                <!-- VENTANA MULTIMEDIA -->
+                <div class="e-window">
+                    <div class="e-window-title">
+                        <span>REAL_PLAYER_VR.DLL</span>
+                        <div class="e-win-btn">X</div>
+                    </div>
+                    <div class="e-window-body" style="background: #222;">
+                        <h3 style="margin-top: 0; color: var(--neon-yellow);">📼 ARCHIVOS DE VIDEO CORPORATIVO:</h3>
+                        <div class="e-video-container">
+                            <div class="e-v-item">
+                                <iframe src="https://www.youtube.com/embed/YHHfxAaR4Fg" allowfullscreen></iframe>
+                                <div class="e-v-caption">HIMNO_CORP.AVI</div>
+                            </div>
+                            <div class="e-v-item">
+                                <iframe src="https://www.youtube.com/embed/FTE3aIJwatc" allowfullscreen></iframe>
+                                <div class="e-v-caption">TUTORIAL_95.MPG</div>
+                            </div>
+                            <div class="e-v-item">
+                                <iframe src="https://www.youtube.com/embed/HS2Opmx_qUA" allowfullscreen></iframe>
+                                <div class="e-v-caption">CEO_MESSAGE.MOV</div>
+                            </div>
+                            <div class="e-v-item">
+                                <iframe src="https://www.youtube.com/embed/eNAJqVF4b3U" allowfullscreen></iframe>
+                                <div class="e-v-caption">TRANCE_PROTOCOL.RM</div>
+                            </div>
+                            <div class="e-v-item">
+                                <iframe src="https://www.youtube.com/embed/4eqq8WKBSgQ" allowfullscreen></iframe>
+                                <div class="e-v-caption">ARCHIVO_SECRETO.WMV</div>
+                            </div>
+                            <div class="e-v-item">
+                                <iframe src="https://www.youtube.com/embed/apKq7UVEa84" allowfullscreen></iframe>
+                                <div class="e-v-caption">DATA_STREAM_01.MPG</div>
+                            </div>
+                            <div class="e-v-item">
+                                <iframe src="https://www.youtube.com/embed/4dAibmipnn8" allowfullscreen></iframe>
+                                <div class="e-v-caption">TEST_FOOTAGE.AVI</div>
+                            </div>
+                            <div class="e-v-item">
+                                <iframe src="https://www.youtube.com/embed/90Kgcnj1If4" allowfullscreen></iframe>
+                                <div class="e-v-caption">PROJECT_X.MOV</div>
+                            </div>
+                            <div class="e-v-item">
+                                <iframe src="https://www.youtube.com/embed/9Uuhd8f4R9A" allowfullscreen></iframe>
+                                <div class="e-v-caption">SYSTEM_LOG_99.RM</div>
+                            </div>
+                            <div class="e-v-item">
+                                <iframe src="https://www.youtube.com/embed/-h0rsPdYheo" allowfullscreen></iframe>
+                                <div class="e-v-caption">AUDIO_VISUAL_05.ASF</div>
+                            </div>
+                            <div class="e-v-item">
+                                <iframe src="https://www.youtube.com/embed/-vffYZsc8yU" allowfullscreen></iframe>
+                                <div class="e-v-caption">UNKNOWN_SIGNAL.AVI</div>
+                            </div>
+                            
+                            <!-- VIDEOS ADAPTADOS DEL FRAGMENTO -->
+                            <div class="e-v-item">
+                                <iframe src="https://www.youtube.com/embed/DDNL7QFii6g" allowfullscreen></iframe>
+                                <div class="e-v-caption">LOG_DDNL7.AVI</div>
+                            </div>
+                            <div class="e-v-item">
+                                <iframe src="https://www.youtube.com/embed/YRmMnlE4GgI" allowfullscreen></iframe>
+                                <div class="e-v-caption">LOG_YRmM.MPG</div>
+                            </div>
+                            <div class="e-v-item">
+                                <iframe src="https://www.youtube.com/embed/AE1cRh3KnsA" allowfullscreen></iframe>
+                                <div class="e-v-caption">LOG_AE1c.MOV</div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- COLUMNA LATERAL (DERECHA) -->
+            <div class="e-sidebar">
+                
+                <!-- ASISTENTE CRT 90s -->
+                <div class="e-window">
+                    <div class="e-window-title">
+                        <span>AI_ASSISTANT_V2.EXE</span>
+                        <div class="e-win-btn">X</div>
+                    </div>
+                    <div class="e-window-body" style="background: #000;">
+                        <div class="e-assistant-crt">
+                            <img src="https://64.media.tumblr.com/9d42d4f9b673d609e7780a2054d233b2/e56ad3411e9b4f5a-f8/s540x810/3459663a7a9ef5cfc312e258a1399f8b295b637a.jpg" alt="Virtual Assistant">
+                            <div class="e-scanlines"></div>
+                        </div>
+                        <p style="color: var(--neon-green); font-size: 13px; margin-top: 10px; font-family: 'Courier New', monospace; text-shadow: 0 0 2px var(--neon-green);">
+                            C:\> SYSTEM_ONLINE<br>
+                            C:\> MEMORY OK<br>
+                            <br>
+                            "Saludos. Soy la IA de Estalingrado Corp. El ciberespacio te espera. No olvides rebobinar la cinta."
+                        </p>
+                    </div>
+                </div>
+
+                <!-- WINAMP FALSO -->
+                <div class="e-window">
+                    <div class="e-window-title">
+                        <span>WinAmp 2.91</span>
+                        <div class="e-win-btn">X</div>
+                    </div>
+                    <div class="e-window-body" style="padding: 0;">
+                        <div class="winamp-player">
+                            <div style="font-size: 12px; margin-bottom: 2px;">WINAMP</div>
+                            <div class="wa-screen">
+                                <marquee scrollamount="3">▶ 01. ESTALINGRADO_SYNTHWAVE.MID (128kbps)</marquee>
+                                <div style="font-size: 10px; text-align: right; margin-top: 5px;">02:14 / 04:20</div>
+                            </div>
+                            <div class="wa-controls">
+                                <button class="wa-btn">⏮</button>
+                                <button class="wa-btn">▶</button>
+                                <button class="wa-btn">⏸</button>
+                                <button class="wa-btn">⏹</button>
+                                <button class="wa-btn">⏭</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ENLACES CORPORATIVOS -->
+                <div class="e-window">
+                    <div class="e-window-title">
+                        <span>LINKS.TXT</span>
+                        <div class="e-win-btn">X</div>
+                    </div>
+                    <div class="e-window-body" style="background: #ffffcc;">
+                        <p style="margin-top: 0; font-weight: bold; border-bottom: 1px solid black; padding-bottom: 5px;">📡 Surf the Web:</p>
+                        <ul style="padding-left: 20px; margin: 0; font-family: 'Comic Sans MS', cursive;">
+                            <li><a href="https://nicotips27.github.io/ec-Intra-net/" target="_blank" style="color: red; font-weight: bold;">[!] EC_Intra-net_Hub.url</a></li>
+                            <li><a href="https://www.youtube.com/@Estalingradocorp" target="_blank" style="color: blue;">Youtube_Channel.url</a></li>
+                            <li><a href="https://vimeo.com/manage/videos/1198597418" target="_blank" style="color: blue;">Vimeo_Archive.url</a></li>
+                            <li><a href="https://www.tumblr.com/blog/fotopia" target="_blank" style="color: blue;">Fotopia_Webring.url</a></li>
+                            <li><a href="https://centercorpec.wixsite.com/estalingradocorp/post/software-lab-lista-de-proyectos-activos" target="_blank" style="color: blue;">Software_Lab.url</a></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- ESTADÍSTICAS DEL BLOG -->
+                <div class="e-window">
+                    <div class="e-window-title">
+                        <span>STATS.INI</span>
+                    </div>
+                    <div class="e-window-body" style="background: #e0e0e0; font-family: 'Courier New', monospace; font-size: 14px; text-align: center;">
+                        <p style="margin-top: 0;"><strong>VISITAS DESDE 1998:</strong></p>
+                        <div class="e-counter-box" id="e-counter">0004589</div>
+                        <hr style="border: 1px dashed #888; margin: 15px 0;">
+                        <p style="margin: 5px 0;">MODEM: <span style="color: #000080; font-weight: bold;">56K BAUDIOS</span></p>
+                        <p style="margin: 5px 0;">RESOLUTION: <span>800x600</span></p>
+                        <p style="margin: 5px 0; background: yellow; display: inline-block; padding: 2px;">CYBER-SURFERS: <b id="e-users-online">7</b></p>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- FOOTER Y GIFS RETRO -->
+        <div class="e-footer-gifs">
+            <h2 class="flaming-text">★ WEBRINGS & AFILIADOS ★</h2>
+            <div style="margin-bottom: 20px;">
+                <img src="https://web.archive.org/web/20090830053412/http://geocities.com/CollegePark/Union/2470/construc.gif" width="80" alt="Under Construction">
+                <img src="https://web.archive.org/web/20091027083041/http://geocities.com/Heartland/Plains/1219/netscape.gif" alt="Netscape">
+                <img src="https://web.archive.org/web/20091027083041/http://geocities.com/Heartland/Plains/1219/ie.gif" alt="IE">
+                <img src="https://web.archive.org/web/20090902143003/http://geocities.com/CollegePark/Quad/1315/flames1.gif" alt="Flames" height="31">
+            </div>
+            
+            <p style="font-size: 12px; color: var(--neon-cyan); font-family: 'Courier New', monospace;">
+                PLAY ESTALINGRADO CORP BBS | OPTIMIZADO PARA NETSCAPE NAVIGATOR 4.0 | (C) 1989-1999
+            </p>
         </div>
 
     </div>
-
-    <hr>
-
-    <!-- FOOTER RETRO -->
-    <center style="margin-top: 40px; margin-bottom: 20px;">
-        <p style="color: #888888;">==================================================</p>
-        <p><strong>Estalingrado Corp &copy; 1998 - 2026. Todos los derechos reservados.</strong></p>
-        <p><small style="color: #00AA00;">Advertencia: El acceso no autorizado será reportado al sistema central.</small></p>
-        <p><small>Mejor visualizado en Netscape Navigator 4.0 o superior a 800x600.</small></p>
-        <img src="https://media.giphy.com/media/26n6WvwCRG9E3MTvO/giphy.gif" alt="Valid HTML 4.01" style="height: 31px; border: 1px solid #00FF00; filter: grayscale(100%);">
-        <p style="color: #888888;">==================================================</p>
-    </center>
-
 </div>
 
 <script>
-    // Funcionalidad del botón de audio (Genera un beep retro de PC)
-    const btnAudio = document.getElementById('btn-audio');
-    let audioCtx;
+    // Contador de visitas animado para el layout del blog
+    let visitCount = 4589;
+    setInterval(() => {
+        visitCount += Math.floor(Math.random() * 2);
+        const counterEl = document.getElementById('e-counter');
+        if(counterEl) counterEl.innerText = visitCount.toString().padStart(7, '0');
+    }, 5000);
 
-    btnAudio.addEventListener('click', function() {
-        if (!audioCtx) {
-            audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-        }
-
-        if (btnAudio.innerText.includes('ACTIVAR')) {
-            // Cambiar estado visual a encendido
-            btnAudio.innerText = '[ SONIDO ACTIVADO - SISTEMA ONLINE ]';
-            btnAudio.classList.remove('blink');
-            btnAudio.style.backgroundColor = '#004400';
-            btnAudio.style.color = '#00FF00';
-            btnAudio.style.borderColor = '#00FF00';
-
-            // Reproducir un pitido sintético estilo BIOS/DOS
-            playRetroBeep();
-        } else {
-            // Cambiar estado visual a apagado
-            btnAudio.innerText = '[ ACTIVAR SONIDO DEL SISTEMA ]';
-            btnAudio.classList.add('blink');
-            btnAudio.style.backgroundColor = '#FF0000';
-            btnAudio.style.color = '#FFFF00';
-            btnAudio.style.borderColor = '#FFFF00';
-        }
-    });
-
-    // Función para crear el pitido mediante la API Web Audio
-    function playRetroBeep() {
-        if(!audioCtx) return;
-        const oscillator = audioCtx.createOscillator();
-        const gainNode = audioCtx.createGain();
-
-        // Onda cuadrada para dar ese efecto electrónico crudo de los 90s
-        oscillator.type = 'square';
-        oscillator.frequency.setValueAtTime(880, audioCtx.currentTime); // Tono alto inicial
-        oscillator.frequency.exponentialRampToValueAtTime(440, audioCtx.currentTime + 0.1); // Baja el tono rápido
-
-        // Volumen y fundido
-        gainNode.gain.setValueAtTime(0.1, audioCtx.currentTime);
-        gainNode.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.3);
-
-        oscillator.connect(gainNode);
-        gainNode.connect(audioCtx.destination);
-
-        oscillator.start();
-        oscillator.stop(audioCtx.currentTime + 0.3);
-    }
+    // Usuarios online fluctuando
+    setInterval(() => {
+        let currentUsers = 7 + Math.floor(Math.random() * 4);
+        const usersEl = document.getElementById('e-users-online');
+        if(usersEl) usersEl.innerText = currentUsers;
+    }, 3500);
 </script>
 
 </body>
