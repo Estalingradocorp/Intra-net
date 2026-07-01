@@ -390,6 +390,16 @@
             <a href="https://www.youtube.com/@Estalingradocorp" target="_blank" class="e-nav-item"><img src="https://win98icons.alexmeub.com/icons/png/tv-0.png" width="16"> 📺 Canal</a>
         </div>
 
+        <!-- BARRA DE BÚSQUEDA INTEGRADA -->
+        <div style="background: var(--win-gray); border: 3px outset var(--win-bright); padding: 8px; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; background-image: url('https://www.transparenttextures.com/patterns/black-scales.png');">
+            <span style="font-weight:bold; color:#000; font-size:14px; display:flex; align-items:center; gap:5px;"><img src="https://win98icons.alexmeub.com/icons/png/search_file-0.png" width="16"> Buscar:</span>
+            <input type="text" id="ec-search-input" placeholder="Buscar en esta página..." style="flex:1; min-width:200px; padding:6px; border:2px inset #888; font-family:'Courier New',monospace; font-size:14px; background:#fff;">
+            <button id="ec-search-btn" style="padding:6px 15px; background:#000080; color:white; border:2px outset #fff; font-weight:bold; cursor:pointer; font-size:13px;">🔍 Buscar</button>
+            <span id="ec-search-result" style="font-size:12px; color:#000; font-family:'Courier New',monospace; min-width:80px;"></span>
+            <button id="ec-search-prev" style="padding:4px 10px; background:#808080; color:white; border:2px outset #fff; font-size:12px; cursor:pointer;">⬆</button>
+            <button id="ec-search-next" style="padding:4px 10px; background:#808080; color:white; border:2px outset #fff; font-size:12px; cursor:pointer;">⬇</button>
+        </div>
+
         <!-- LAYOUT PRINCIPAL -->
         <div class="e-layout-grid">
             
@@ -430,6 +440,34 @@
                                 &gt; ENTRAR AL LAB
                             </a>
                         </div>
+                    </div>
+                </div>
+
+                <!-- ===== WIDGET BUSCADOR INTERNO ===== -->
+                <div class="e-window" style="border-color: var(--neon-cyan); box-shadow: 0 0 15px var(--neon-cyan);">
+                    <div class="e-window-title" style="background: linear-gradient(90deg, #000080 0%, #00ffff 100%);">
+                        <span style="text-shadow: 0 0 5px #fff;">🔍 BUSCADOR INTERNO</span>
+                        <div class="e-win-controls">
+                            <div class="e-win-btn">_</div>
+                            <div class="e-win-btn">□</div>
+                            <div class="e-win-btn">X</div>
+                        </div>
+                    </div>
+                    <div class="e-window-body" style="background: #000; padding: 15px;">
+                        <div style="display:flex; gap:8px; margin-bottom:10px;">
+                            <input type="text" id="ec-search-input-2" placeholder="Escribe lo que buscas..." style="flex:1; padding:10px; border:2px solid var(--neon-cyan); background:#111; color:#0f0; font-family:'Courier New',monospace; font-size:16px; box-shadow:0 0 5px var(--neon-cyan);">
+                            <button id="ec-search-btn-2" style="padding:10px 20px; background:var(--neon-cyan); color:#000; border:2px outset #fff; font-weight:bold; cursor:pointer; font-size:14px; box-shadow:0 0 10px var(--neon-cyan);">BUSCAR</button>
+                        </div>
+                        <div style="display:flex; gap:10px; align-items:center; justify-content:space-between;">
+                            <span id="ec-search-result-2" style="font-size:13px; color:var(--neon-green); font-family:'Courier New',monospace; text-shadow:0 0 5px var(--neon-green);">_</span>
+                            <div style="display:flex; gap:5px;">
+                                <button id="ec-search-prev-2" style="padding:6px 15px; background:#333; color:#fff; border:2px outset #888; cursor:pointer; font-size:13px;">⬆ ANTERIOR</button>
+                                <button id="ec-search-next-2" style="padding:6px 15px; background:#333; color:#fff; border:2px outset #888; cursor:pointer; font-size:13px;">⬇ SIGUIENTE</button>
+                            </div>
+                        </div>
+                        <p style="font-size:10px; color:#666; margin-top:10px; border-top:1px solid #333; padding-top:8px; font-family:'Courier New',monospace;">
+                            &gt; Busca en todo el portal. Coincidencias resaltadas en amarillo.
+                        </p>
                     </div>
                 </div>
 
@@ -674,6 +712,10 @@
                                 <div class="e-v-caption">LOG_YRmM.MPG</div>
                             </div>
                             <div class="e-v-item">
+                                <iframe src="https://www.youtube.com/embed/HR7y3f18Ug8" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                                <div class="e-v-caption">RADIO_EC.MP3</div>
+                            </div>
+                            <div class="e-v-item">
                                 <iframe src="https://www.youtube.com/embed/AE1cRh3KnsA" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
                                 <div class="e-v-caption">LOG_AE1c.MOV</div>
                             </div>
@@ -715,6 +757,25 @@
                         <ul style="padding-left:20px; margin:5px 0;">
                             <li><a href="https://github.com/qeeqbox/social-analyzer" target="_blank" style="color:blue;">Social Analyzer</a> - Análisis de redes sociales (GitHub)</li>
                         </ul>
+                    </div>
+                </div>
+
+                <!-- ===== ESPACIO PUBLICITARIO ===== -->
+                <div class="e-window" style="border: 2px dashed #ff8800;">
+                    <div class="e-window-title" style="background: linear-gradient(90deg, #ff8800 0%, #ffcc00 100%);">
+                        <span style="color:#000; font-size:12px;">📢 ESPACIO PUBLICITARIO</span>
+                        <div class="e-win-controls">
+                            <div class="e-win-btn">_</div>
+                            <div class="e-win-btn">□</div>
+                            <div class="e-win-btn">X</div>
+                        </div>
+                    </div>
+                    <div class="e-window-body" style="text-align:center; background:#fffbe6; padding:10px;">
+                        <p style="font-size:10px; color:#888; margin:0 0 5px 0; text-transform:uppercase; letter-spacing:1px;">— Sponsor —</p>
+                        <a href="https://static.wixstatic.com/media/9dbdc2_35909e78448e4b98b6bf434e9a755e91~mv2.gif" target="_blank">
+                            <img src="https://static.wixstatic.com/media/9dbdc2_35909e78448e4b98b6bf434e9a755e91~mv2.gif" alt="Sponsor" style="max-width:100%; border:2px solid #ff8800; box-shadow:0 0 10px rgba(255,136,0,0.5);">
+                        </a>
+                        <p style="font-size:9px; color:#aaa; margin:5px 0 0 0;">Publicidad - Apoya a nuestros sponsors</p>
                     </div>
                 </div>
 
@@ -814,6 +875,25 @@ Fabricante:                 Microsoft Corporation
 Configuración:              Estación de trabajo independiente
                             </pre>
                         </div>
+                    </div>
+                </div>
+
+                <!-- ===== ESPACIO PUBLICITARIO ===== -->
+                <div class="e-window" style="border: 2px dashed #ff8800;">
+                    <div class="e-window-title" style="background: linear-gradient(90deg, #ff8800 0%, #ffcc00 100%);">
+                        <span style="color:#000; font-size:12px;">📢 ESPACIO PUBLICITARIO</span>
+                        <div class="e-win-controls">
+                            <div class="e-win-btn">_</div>
+                            <div class="e-win-btn">□</div>
+                            <div class="e-win-btn">X</div>
+                        </div>
+                    </div>
+                    <div class="e-window-body" style="text-align:center; background:#fffbe6; padding:10px;">
+                        <p style="font-size:10px; color:#888; margin:0 0 5px 0; text-transform:uppercase; letter-spacing:1px;">— Sponsor —</p>
+                        <a href="https://static.wixstatic.com/media/9dbdc2_3a4483a3e19a415285aa91477bf99087~mv2.gif" target="_blank">
+                            <img src="https://static.wixstatic.com/media/9dbdc2_3a4483a3e19a415285aa91477bf99087~mv2.gif" alt="Sponsor 2" style="max-width:100%; border:2px solid #ff8800; box-shadow:0 0 10px rgba(255,136,0,0.5);">
+                        </a>
+                        <p style="font-size:9px; color:#aaa; margin:5px 0 0 0;">Publicidad - Apoya a nuestros sponsors</p>
                     </div>
                 </div>
 
@@ -921,6 +1001,9 @@ slmgr /ato
                             </a>
                             <a href="https://kickassapp.com" target="_blank" style="background:#111; border:2px solid #ffff00; padding:15px 10px; text-decoration:none; color:#ff0; font-weight:bold; box-shadow:0 0 10px #ff0;">
                                 💥 Kick Ass<br><span style="font-size:11px; color:#aaa;">App divertida</span>
+                            </a>
+                            <a href="https://hl2.slqnt.dev/" target="_blank" style="background:#111; border:2px solid #ff6600; padding:15px 10px; text-decoration:none; color:#f60; font-weight:bold; box-shadow:0 0 10px #f60;">
+                                🔫 HL2 Browser<br><span style="font-size:11px; color:#aaa;">Half-Life 2 en navegador</span>
                             </a>
                         </div>
                         <p style="color:#0f0; font-family:'Courier New',monospace; font-size:11px; margin-top:10px; text-shadow:0 0 5px #0f0;">
@@ -1192,6 +1275,25 @@ slmgr /ato
                     </div>
                 </div>
 
+                <!-- ===== ESPACIO PUBLICITARIO ===== -->
+                <div class="e-window" style="border: 2px dashed #ff8800;">
+                    <div class="e-window-title" style="background: linear-gradient(90deg, #ff8800 0%, #ffcc00 100%);">
+                        <span style="color:#000; font-size:12px;">📢 ESPACIO PUBLICITARIO</span>
+                        <div class="e-win-controls">
+                            <div class="e-win-btn">_</div>
+                            <div class="e-win-btn">□</div>
+                            <div class="e-win-btn">X</div>
+                        </div>
+                    </div>
+                    <div class="e-window-body" style="text-align:center; background:#fffbe6; padding:10px;">
+                        <p style="font-size:10px; color:#888; margin:0 0 5px 0; text-transform:uppercase; letter-spacing:1px;">— Sponsor —</p>
+                        <a href="https://static.wixstatic.com/media/9dbdc2_3a4483a3e19a415285aa91477bf99087~mv2.gif" target="_blank">
+                            <img src="https://static.wixstatic.com/media/9dbdc2_3a4483a3e19a415285aa91477bf99087~mv2.gif" alt="Sponsor 2" style="max-width:100%; border:2px solid #ff8800; box-shadow:0 0 10px rgba(255,136,0,0.5);">
+                        </a>
+                        <p style="font-size:9px; color:#aaa; margin:5px 0 0 0;">Publicidad - Apoya a nuestros sponsors</p>
+                    </div>
+                </div>
+
                 <!-- ===== UTILIDADES PC ===== -->
                 <div class="e-window">
                     <div class="e-window-title">
@@ -1213,6 +1315,25 @@ slmgr /ato
                         <p><strong>🦁 Brave Navegador</strong></p>
                         <p><a href="#" style="color:blue;">Ir a la página</a></p>
                         <p><a href="#" style="color:blue;">Descargar Brave para Windows 7 y 8</a></p>
+                    </div>
+                </div>
+
+                <!-- ===== ESPACIO PUBLICITARIO ===== -->
+                <div class="e-window" style="border: 2px dashed #ff8800;">
+                    <div class="e-window-title" style="background: linear-gradient(90deg, #ff8800 0%, #ffcc00 100%);">
+                        <span style="color:#000; font-size:12px;">📢 ESPACIO PUBLICITARIO</span>
+                        <div class="e-win-controls">
+                            <div class="e-win-btn">_</div>
+                            <div class="e-win-btn">□</div>
+                            <div class="e-win-btn">X</div>
+                        </div>
+                    </div>
+                    <div class="e-window-body" style="text-align:center; background:#fffbe6; padding:10px;">
+                        <p style="font-size:10px; color:#888; margin:0 0 5px 0; text-transform:uppercase; letter-spacing:1px;">— Sponsor —</p>
+                        <a href="https://static.wixstatic.com/media/9dbdc2_35909e78448e4b98b6bf434e9a755e91~mv2.gif" target="_blank">
+                            <img src="https://static.wixstatic.com/media/9dbdc2_35909e78448e4b98b6bf434e9a755e91~mv2.gif" alt="Publicidad Sponsor" style="max-width:100%; border:2px solid #ff8800; box-shadow:0 0 10px rgba(255,136,0,0.5);">
+                        </a>
+                        <p style="font-size:9px; color:#aaa; margin:5px 0 0 0;">Publicidad - Apoya a nuestros sponsors</p>
                     </div>
                 </div>
 
@@ -1268,7 +1389,7 @@ slmgr /ato
                     </div>
                 </div>
 
-            </div>
+                </div>
 
         </div>
 
@@ -1305,6 +1426,148 @@ slmgr /ato
         const usersEl = document.getElementById('e-users-online');
         if(usersEl) usersEl.innerText = currentUsers;
     }, 3500);
+
+    // Buscador interno - función genérica
+    function crearBuscador(inputId, btnId, resultId, prevId, nextId) {
+        const searchInput = document.getElementById(inputId);
+        const searchBtn = document.getElementById(btnId);
+        const searchResult = document.getElementById(resultId);
+        const prevBtn = document.getElementById(prevId);
+        const nextBtn = document.getElementById(nextId);
+
+        if (!searchInput || !searchBtn || !searchResult) return;
+
+        let matches = [];
+        let currentIndex = -1;
+
+        function removeHighlights() {
+            document.querySelectorAll('.ec-highlight').forEach(el => {
+                const parent = el.parentNode;
+                parent.replaceChild(document.createTextNode(el.textContent), el);
+                parent.normalize();
+            });
+            document.querySelectorAll('.ec-current-highlight').forEach(el => {
+                const parent = el.parentNode;
+                parent.replaceChild(document.createTextNode(el.textContent), el);
+                parent.normalize();
+            });
+        }
+
+        function doSearch() {
+            removeHighlights();
+            const query = searchInput.value.trim().toLowerCase();
+            matches = [];
+            currentIndex = -1;
+
+            if (!query) {
+                searchResult.textContent = 'Ingresa un término.';
+                return;
+            }
+
+            const walker = document.createTreeWalker(
+                document.querySelector('.estalingrado-wrapper'),
+                NodeFilter.SHOW_TEXT,
+                {
+                    acceptNode: function(node) {
+                        if (node.parentElement && (node.parentElement.tagName === 'SCRIPT' || node.parentElement.tagName === 'STYLE' || node.parentElement.tagName === 'IFRAME')) {
+                            return NodeFilter.FILTER_REJECT;
+                        }
+                        return NodeFilter.FILTER_ACCEPT;
+                    }
+                }
+            );
+
+            const regex = new RegExp(escapeRegExp(query), 'gi');
+            let textNodes = [];
+            let node;
+            while (node = walker.nextNode()) {
+                textNodes.push(node);
+            }
+
+            textNodes.forEach(textNode => {
+                const text = textNode.textContent;
+                const matches_in_node = [...text.matchAll(regex)];
+                if (matches_in_node.length > 0) {
+                    const parent = textNode.parentNode;
+                    const frag = document.createDocumentFragment();
+                    let lastIdx = 0;
+                    matches_in_node.forEach((match) => {
+                        const idx = match.index;
+                        if (idx > lastIdx) {
+                            frag.appendChild(document.createTextNode(text.slice(lastIdx, idx)));
+                        }
+                        const mark = document.createElement('mark');
+                        mark.className = 'ec-highlight';
+                        mark.style.backgroundColor = '#ffff00';
+                        mark.style.color = '#000';
+                        mark.style.fontWeight = 'bold';
+                        mark.style.padding = '1px 2px';
+                        mark.textContent = match[0];
+                        frag.appendChild(mark);
+                        matches.push({ element: mark, parent: parent });
+                        lastIdx = idx + match[0].length;
+                    });
+                    if (lastIdx < text.length) {
+                        frag.appendChild(document.createTextNode(text.slice(lastIdx)));
+                    }
+                    parent.replaceChild(frag, textNode);
+                }
+            });
+
+            if (matches.length === 0) {
+                searchResult.textContent = '❌ Sin resultados para "' + searchInput.value + '"';
+                return;
+            }
+
+            searchResult.textContent = '✅ ' + matches.length + ' resultado(s) para "' + searchInput.value + '"';
+            goToMatch(0);
+        }
+
+        function escapeRegExp(str) {
+            return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+        }
+
+        function goToMatch(index) {
+            document.querySelectorAll('.ec-current-highlight').forEach(el => {
+                el.className = 'ec-highlight';
+                el.style.backgroundColor = '#ffff00';
+                el.style.color = '#000';
+            });
+
+            if (index < 0 || index >= matches.length) return;
+            currentIndex = index;
+            const el = matches[currentIndex].element;
+            el.className = 'ec-current-highlight';
+            el.style.backgroundColor = '#ff6600';
+            el.style.color = '#fff';
+            el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+
+        function nextMatch() {
+            if (matches.length === 0) return;
+            const next = (currentIndex + 1) % matches.length;
+            goToMatch(next);
+            searchResult.textContent = '✅ ' + (next + 1) + '/' + matches.length + ' resultados';
+        }
+
+        function prevMatch() {
+            if (matches.length === 0) return;
+            const prev = (currentIndex - 1 + matches.length) % matches.length;
+            goToMatch(prev);
+            searchResult.textContent = '✅ ' + (prev + 1) + '/' + matches.length + ' resultados';
+        }
+
+        searchBtn.addEventListener('click', doSearch);
+        searchInput.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') doSearch();
+        });
+        if (prevBtn) prevBtn.addEventListener('click', prevMatch);
+        if (nextBtn) nextBtn.addEventListener('click', nextMatch);
+    }
+
+    // Iniciar buscadores
+    crearBuscador('ec-search-input', 'ec-search-btn', 'ec-search-result', 'ec-search-prev', 'ec-search-next');
+    crearBuscador('ec-search-input-2', 'ec-search-btn-2', 'ec-search-result-2', 'ec-search-prev-2', 'ec-search-next-2');
 </script>
 
 </body>
