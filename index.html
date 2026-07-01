@@ -366,9 +366,45 @@
         blink { animation: blink-animation 0.8s steps(5, start) infinite; }
         @keyframes blink-animation { to { visibility: hidden; } }
 
+        /* --- NUEVOS ESTILOS: BOOT, NOTEPAD, SNAKE Y GUESTBOOK --- */
+        #boot-screen {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: #000; color: #c0c0c0; z-index: 99999;
+            font-family: 'Perfect DOS VGA 437', 'Courier New', monospace;
+            padding: 20px; font-size: 16px;
+            display: flex; flex-direction: column;
+        }
+        .ec-notepad-area {
+            width: 100%; height: 150px; background: #fff; color: #000;
+            font-family: 'Courier New', monospace; font-size: 14px;
+            border: 2px inset #888; resize: vertical; padding: 5px;
+        }
+        .ec-guestbook-list {
+            height: 120px; overflow-y: auto; background: #fff; border: 2px inset #888;
+            padding: 5px; font-family: 'Tahoma', sans-serif; font-size: 12px;
+            margin-bottom: 5px;
+        }
+        .gb-entry { border-bottom: 1px dotted #ccc; margin-bottom: 4px; padding-bottom: 4px; }
+        .gb-name { font-weight: bold; color: var(--win-blue); }
+        #snake-canvas { background: #000; border: 3px inset #888; display: block; margin: 0 auto; }
+        #nav-clock {
+            background: #000; color: var(--neon-green); font-family: 'VT323', monospace;
+            padding: 2px 10px; border: 2px inset #555; font-size: 18px; margin-left: auto;
+            text-shadow: 0 0 5px var(--neon-green);
+        }
     </style>
 </head>
 <body>
+
+<!-- BOOT SCREEN FALSO -->
+<div id="boot-screen">
+    <div id="boot-text"></div>
+    <blink id="boot-cursor" style="display:none;">_</blink>
+</div>
+
+<!-- AUDIO EFFECTS & MUSIC -->
+<audio id="sfx-click" src="https://www.soundjay.com/buttons/sounds/button-16.mp3" preload="auto"></audio>
+<audio id="winamp-audio" src="https://files.freemusicarchive.org/storage-freemusicarchive-org/music/no_curator/Tours/Enthusiast/Tours_-_01_-_Enthusiast.mp3" preload="auto" loop></audio>
 
 <div class="estalingrado-wrapper">
     <div class="e-container">
@@ -388,6 +424,9 @@
             <a href="https://nicotips27.github.io/ec-download/" class="e-nav-item"><img src="https://win98icons.alexmeub.com/icons/png/save_download-0.png" width="16"> 💾 Downloads</a>
             <a href="https://nicotips27.github.io/Estalingrado-corp-Buscador-/" class="e-nav-item"><img src="https://win98icons.alexmeub.com/icons/png/search_computer-0.png" width="16"> 🔍 Buscar</a>
             <a href="https://www.youtube.com/@Estalingradocorp" target="_blank" class="e-nav-item"><img src="https://win98icons.alexmeub.com/icons/png/tv-0.png" width="16"> 📺 Canal</a>
+            
+            <!-- RELOJ DIGITAL -->
+            <div id="nav-clock" title="System Time">00:00:00</div>
         </div>
 
         <!-- BARRA DE BÚSQUEDA INTEGRADA -->
@@ -633,6 +672,26 @@
                                 <a href="#" class="e-play-btn">TELNET</a>
                             </li>
                         </ul>
+                    </div>
+                </div>
+
+                <!-- ===== MINIJUEGO RETRO (SNAKE) ===== -->
+                <div class="e-window" style="border-color: var(--neon-green); box-shadow: 0 0 15px var(--neon-green);">
+                    <div class="e-window-title" style="background: linear-gradient(90deg, #004400 0%, #00ff00 100%); color: #000;">
+                        <span>SNAKE_95.EXE</span>
+                        <div class="e-win-controls">
+                            <div class="e-win-btn">_</div>
+                            <div class="e-win-btn">□</div>
+                            <div class="e-win-btn">X</div>
+                        </div>
+                    </div>
+                    <div class="e-window-body" style="background: #111; text-align: center;">
+                        <h3 style="color: var(--neon-green); margin-top: 0; font-family: 'Press Start 2P', cursive; font-size: 12px; text-shadow: 0 0 5px var(--neon-green);">SNAKE CYBER-SCORE: <span id="snake-score">0</span></h3>
+                        <canvas id="snake-canvas" width="240" height="240"></canvas>
+                        <div style="margin-top: 10px;">
+                            <button id="btn-snake-start" class="e-retro-button" style="background: var(--neon-green); color: #000; padding: 5px 15px; font-size: 14px; cursor: pointer;">▶ START</button>
+                            <p style="color: #aaa; font-size: 10px; font-family: 'Courier New', monospace; margin-bottom: 0; margin-top: 5px;">USA LAS FLECHAS DEL TECLADO</p>
+                        </div>
                     </div>
                 </div>
 
@@ -1183,7 +1242,7 @@ slmgr /ato
                     </div>
                 </div>
 
-                <!-- WINAMP FALSO -->
+                <!-- WINAMP FUNCIONAL -->
                 <div class="e-window">
                     <div class="e-window-title">
                         <span>WinAmp 2.91</span>
@@ -1191,18 +1250,55 @@ slmgr /ato
                     </div>
                     <div class="e-window-body" style="padding: 0;">
                         <div class="winamp-player">
-                            <div style="font-size: 12px; margin-bottom: 2px;">WINAMP</div>
+                            <div style="font-size: 12px; margin-bottom: 2px; text-align: left; padding-left: 5px;">WINAMP</div>
                             <div class="wa-screen">
-                                <marquee scrollamount="3">▶ 01. ESTALINGRADO_SYNTHWAVE.MID (128kbps)</marquee>
-                                <div style="font-size: 10px; text-align: right; margin-top: 5px;">02:14 / 04:20</div>
+                                <marquee scrollamount="3" id="wa-title">▶ TOURS - ENTHUSIAST.MP3 (128kbps)</marquee>
+                                <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 5px;">
+                                    <span style="font-size: 10px;" id="wa-time">00:00 / 00:00</span>
+                                    <input type="range" id="wa-vol" min="0" max="1" step="0.01" value="0.5" style="width: 60px; cursor: pointer;">
+                                </div>
                             </div>
                             <div class="wa-controls">
-                                <button class="wa-btn">⏮</button>
-                                <button class="wa-btn">▶</button>
-                                <button class="wa-btn">⏸</button>
-                                <button class="wa-btn">⏹</button>
-                                <button class="wa-btn">⏭</button>
+                                <button class="wa-btn" id="wa-prev" title="Previous">⏮</button>
+                                <button class="wa-btn" id="wa-play" title="Play">▶</button>
+                                <button class="wa-btn" id="wa-pause" title="Pause">⏸</button>
+                                <button class="wa-btn" id="wa-stop" title="Stop">⏹</button>
+                                <button class="wa-btn" id="wa-next" title="Next">⏭</button>
                             </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- BLOC DE NOTAS -->
+                <div class="e-window">
+                    <div class="e-window-title">
+                        <span>NOTEPAD.EXE</span>
+                        <div class="e-win-btn">X</div>
+                    </div>
+                    <div class="e-window-body" style="background: #c0c0c0;">
+                        <div style="background: var(--win-gray); display:flex; gap:10px; margin-bottom:5px; font-size:12px; padding:2px;">
+                            <span style="cursor:pointer; text-decoration:underline;">Archivo</span>
+                            <span style="cursor:pointer; text-decoration:underline;">Edición</span>
+                        </div>
+                        <textarea id="ec-notepad" class="ec-notepad-area" placeholder="Escribe tus notas aquí... se guardan en tu memoria local."></textarea>
+                    </div>
+                </div>
+
+                <!-- GUESTBOOK / CHAT OFFLINE -->
+                <div class="e-window">
+                    <div class="e-window-title">
+                        <span>GUESTBOOK.DAT</span>
+                        <div class="e-win-btn">X</div>
+                    </div>
+                    <div class="e-window-body" style="background: var(--win-gray);">
+                        <p style="margin-top:0; font-weight:bold; font-size:13px; border-bottom:1px solid #888;">Libro de Visitas Local</p>
+                        <div id="ec-guestbook-list" class="ec-guestbook-list">
+                            <!-- Los mensajes se cargarán aquí -->
+                        </div>
+                        <div style="display:flex; gap:5px; flex-wrap:wrap;">
+                            <input type="text" id="gb-name" placeholder="Tu alias" style="flex:1; min-width:60px; padding:3px; font-size:12px; border:2px inset #888;">
+                            <input type="text" id="gb-msg" placeholder="Firma el libro..." style="flex:2; min-width:120px; padding:3px; font-size:12px; border:2px inset #888;">
+                            <button id="gb-btn" style="background: var(--win-blue); color: white; border: 2px outset white; padding: 2px 10px; font-weight: bold; font-size:12px; cursor: pointer;">FIRM</button>
                         </div>
                     </div>
                 </div>
@@ -1412,13 +1508,73 @@ slmgr /ato
 </div>
 
 <script>
-    // Contador de visitas animado para el layout del blog
-    let visitCount = 4589;
-    setInterval(() => {
-        visitCount += Math.floor(Math.random() * 2);
-        const counterEl = document.getElementById('e-counter');
-        if(counterEl) counterEl.innerText = visitCount.toString().padStart(7, '0');
-    }, 5000);
+    // 1. BOOT SCREEN FALSO
+    const bootScreen = document.getElementById('boot-screen');
+    const bootText = document.getElementById('boot-text');
+    const bootCursor = document.getElementById('boot-cursor');
+    const bootLines = [
+        "ESTALINGRADO CORP BIOS v4.02",
+        "Copyright (C) 1989-1995, Estalingrado Corp.",
+        "",
+        "Checking RAM... 640K Base OK, 15360K Extended OK",
+        "Initializing Trance Protocol...",
+        "Loading Virtual Modules........ DONE",
+        "Mounting Network Drive Z:...... SUCCESS",
+        "",
+        "Ejecutando SYSTEM\\RAD_HUB.EXE...",
+        "Accediendo a la Matrix..."
+    ];
+    let bootLineIdx = 0;
+    
+    function typeBootLine() {
+        if (bootLineIdx < bootLines.length) {
+            bootText.innerHTML += bootLines[bootLineIdx] + "<br>";
+            bootLineIdx++;
+            setTimeout(typeBootLine, 150 + Math.random() * 300);
+        } else {
+            bootCursor.style.display = 'inline';
+            setTimeout(() => {
+                bootScreen.style.opacity = '0';
+                bootScreen.style.transition = 'opacity 0.5s ease';
+                setTimeout(() => bootScreen.style.display = 'none', 500);
+            }, 800);
+        }
+    }
+    window.addEventListener('load', typeBootLine);
+
+    // 2. EFECTOS DE SONIDO AL HACER CLIC
+    const clickSfx = document.getElementById('sfx-click');
+    document.body.addEventListener('click', (e) => {
+        // Sonar si es un botón, enlace, o botón de ventana
+        if (e.target.tagName === 'BUTTON' || e.target.tagName === 'A' || 
+            e.target.classList.contains('e-win-btn') || 
+            e.target.closest('a') || e.target.closest('button')) {
+            clickSfx.currentTime = 0;
+            clickSfx.volume = 0.4;
+            clickSfx.play().catch(err => {}); // Silencioso si el navegador lo bloquea al inicio
+        }
+    });
+
+    // 3. RELOJ DIGITAL EN TIEMPO REAL
+    function updateClock() {
+        const now = new Date();
+        const timeString = now.toLocaleTimeString('es-ES', { hour12: false });
+        const clockEl = document.getElementById('nav-clock');
+        if (clockEl) clockEl.innerText = timeString;
+    }
+    setInterval(updateClock, 1000);
+    updateClock();
+
+    // 4. CONTADOR DE VISITAS PERSISTENTE
+    let visitCount = localStorage.getItem('ec_visit_count');
+    if (!visitCount) {
+        visitCount = 4589; // Valor semilla
+    } else {
+        visitCount = parseInt(visitCount) + 1;
+    }
+    localStorage.setItem('ec_visit_count', visitCount);
+    const counterEl = document.getElementById('e-counter');
+    if (counterEl) counterEl.innerText = visitCount.toString().padStart(7, '0');
 
     // Usuarios online fluctuando
     setInterval(() => {
@@ -1426,6 +1582,192 @@ slmgr /ato
         const usersEl = document.getElementById('e-users-online');
         if(usersEl) usersEl.innerText = currentUsers;
     }, 3500);
+
+    // 5. BLOC DE NOTAS (NOTEPAD)
+    const notepad = document.getElementById('ec-notepad');
+    if (notepad) {
+        notepad.value = localStorage.getItem('ec_notepad_data') || '';
+        notepad.addEventListener('input', () => {
+            localStorage.setItem('ec_notepad_data', notepad.value);
+        });
+    }
+
+    // 6. GUESTBOOK / CHAT LOCAL
+    const gbList = document.getElementById('ec-guestbook-list');
+    const gbName = document.getElementById('gb-name');
+    const gbMsg = document.getElementById('gb-msg');
+    const gbBtn = document.getElementById('gb-btn');
+    
+    function renderGuestbook() {
+        if (!gbList) return;
+        const msgs = JSON.parse(localStorage.getItem('ec_guestbook') || '[]');
+        if (msgs.length === 0) {
+            gbList.innerHTML = '<p style="color:#888; text-align:center;">El libro está vacío. ¡Firma primero!</p>';
+            return;
+        }
+        gbList.innerHTML = msgs.map(m => `
+            <div class="gb-entry">
+                <span class="gb-name">${m.name}:</span> ${m.msg}
+            </div>
+        `).join('');
+        gbList.scrollTop = gbList.scrollHeight;
+    }
+
+    if (gbBtn) {
+        gbBtn.addEventListener('click', () => {
+            const name = gbName.value.trim() || 'Guest' + Math.floor(Math.random()*100);
+            const msg = gbMsg.value.trim();
+            if (!msg) return;
+            
+            const msgs = JSON.parse(localStorage.getItem('ec_guestbook') || '[]');
+            msgs.push({ name: name, msg: msg });
+            if(msgs.length > 25) msgs.shift(); // Límite de 25 mensajes para no petar localStorage
+            
+            localStorage.setItem('ec_guestbook', JSON.stringify(msgs));
+            gbMsg.value = '';
+            renderGuestbook();
+        });
+        renderGuestbook();
+    }
+
+    // 7. WINAMP FUNCIONAL
+    const waAudio = document.getElementById('winamp-audio');
+    const waPlay = document.getElementById('wa-play');
+    const waPause = document.getElementById('wa-pause');
+    const waStop = document.getElementById('wa-stop');
+    const waVol = document.getElementById('wa-vol');
+    const waTime = document.getElementById('wa-time');
+    const waTitle = document.getElementById('wa-title');
+
+    if (waAudio && waPlay) {
+        // Configuración inicial de volumen basado en el slider
+        waAudio.volume = waVol.value;
+
+        waPlay.addEventListener('click', () => { waAudio.play(); waTitle.innerText = "▶ TOURS - ENTHUSIAST.MP3 (PLAYING)"; });
+        waPause.addEventListener('click', () => { waAudio.pause(); waTitle.innerText = "⏸ TOURS - ENTHUSIAST.MP3 (PAUSED)"; });
+        waStop.addEventListener('click', () => { 
+            waAudio.pause(); 
+            waAudio.currentTime = 0; 
+            waTitle.innerText = "⏹ TOURS - ENTHUSIAST.MP3 (STOPPED)"; 
+        });
+        waVol.addEventListener('input', (e) => { waAudio.volume = e.target.value; });
+        
+        waAudio.addEventListener('timeupdate', () => {
+            const formatTime = (secs) => {
+                if (isNaN(secs)) return "00:00";
+                const m = Math.floor(secs / 60).toString().padStart(2, '0');
+                const s = Math.floor(secs % 60).toString().padStart(2, '0');
+                return `${m}:${s}`;
+            };
+            waTime.innerText = `${formatTime(waAudio.currentTime)} / ${formatTime(waAudio.duration)}`;
+        });
+    }
+
+    // 8. MINIJUEGO SNAKE
+    const snakeCanvas = document.getElementById('snake-canvas');
+    const btnSnakeStart = document.getElementById('btn-snake-start');
+    const scoreEl = document.getElementById('snake-score');
+    
+    if (snakeCanvas && btnSnakeStart) {
+        const ctx = snakeCanvas.getContext('2d');
+        const box = 10;
+        let snake, food, d, game, score;
+
+        function initSnake() {
+            snake = [{ x: 9 * box, y: 10 * box }];
+            score = 0;
+            scoreEl.innerText = score;
+            d = "RIGHT";
+            food = {
+                x: Math.floor(Math.random() * 23 + 1) * box,
+                y: Math.floor(Math.random() * 23 + 1) * box
+            };
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (!game) return;
+            if (e.key === "ArrowLeft" && d !== "RIGHT") d = "LEFT";
+            else if (e.key === "ArrowUp" && d !== "DOWN") d = "UP";
+            else if (e.key === "ArrowRight" && d !== "LEFT") d = "RIGHT";
+            else if (e.key === "ArrowDown" && d !== "UP") d = "DOWN";
+            
+            // Evitar scroll de la página al usar flechas si estás jugando
+            if(["ArrowUp","ArrowDown","ArrowLeft","ArrowRight"].indexOf(e.code) > -1) {
+                e.preventDefault();
+            }
+        });
+
+        function drawSnake() {
+            ctx.fillStyle = "#111";
+            ctx.fillRect(0, 0, snakeCanvas.width, snakeCanvas.height);
+
+            for (let i = 0; i < snake.length; i++) {
+                ctx.fillStyle = (i === 0) ? "#39ff14" : "#00aa00";
+                ctx.fillRect(snake[i].x, snake[i].y, box, box);
+                ctx.strokeStyle = "#000";
+                ctx.strokeRect(snake[i].x, snake[i].y, box, box);
+            }
+
+            ctx.fillStyle = "red";
+            ctx.fillRect(food.x, food.y, box, box);
+
+            let snakeX = snake[0].x;
+            let snakeY = snake[0].y;
+
+            if (d === "LEFT") snakeX -= box;
+            if (d === "UP") snakeY -= box;
+            if (d === "RIGHT") snakeX += box;
+            if (d === "DOWN") snakeY += box;
+
+            if (snakeX === food.x && snakeY === food.y) {
+                score += 10;
+                scoreEl.innerText = score;
+                food = {
+                    x: Math.floor(Math.random() * 23 + 1) * box,
+                    y: Math.floor(Math.random() * 23 + 1) * box
+                };
+            } else {
+                snake.pop();
+            }
+
+            let newHead = { x: snakeX, y: snakeY };
+
+            // Choque con paredes o consigo mismo
+            if (snakeX < 0 || snakeX >= snakeCanvas.width || snakeY < 0 || snakeY >= snakeCanvas.height || collision(newHead, snake)) {
+                clearInterval(game);
+                ctx.fillStyle = "white";
+                ctx.font = "20px 'Courier New'";
+                ctx.fillText("GAME OVER", 65, 125);
+                game = null;
+                btnSnakeStart.innerText = "▶ RESTART";
+                return;
+            }
+
+            snake.unshift(newHead);
+        }
+
+        function collision(head, array) {
+            for (let i = 0; i < array.length; i++) {
+                if (head.x === array[i].x && head.y === array[i].y) return true;
+            }
+            return false;
+        }
+
+        btnSnakeStart.addEventListener('click', () => {
+            if (game) clearInterval(game);
+            initSnake();
+            btnSnakeStart.innerText = "▶ JUGANDO...";
+            game = setInterval(drawSnake, 100);
+            snakeCanvas.scrollIntoView({ behavior: "smooth", block: "center" });
+        });
+        
+        // Dibujo inicial estático
+        ctx.fillStyle = "#111";
+        ctx.fillRect(0, 0, snakeCanvas.width, snakeCanvas.height);
+        ctx.fillStyle = "#39ff14";
+        ctx.font = "16px 'Press Start 2P'";
+        ctx.fillText("SNAKE", 75, 125);
+    }
 
     // Buscador interno - función genérica
     function crearBuscador(inputId, btnId, resultId, prevId, nextId) {
