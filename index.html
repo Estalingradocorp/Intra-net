@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Play Estalingrado Corp - Intra-net Portal</title>
     <link href="https://fonts.googleapis.com/css2?family=VT323&family=Press+Start+2P&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=VT323&family=Press+Start+2P&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+    <noscript><link href="https://fonts.googleapis.com/css2?family=VT323&family=Press+Start+2P&display=swap" rel="stylesheet"></noscript>
     <style>
         :root {
             /* Colores Win95 */
@@ -28,8 +30,7 @@
             background-color: #050510;
             background-image: 
                 linear-gradient(var(--grid-color) 1px, transparent 1px),
-                linear-gradient(90deg, var(--grid-color) 1px, transparent 1px),
-                url('https://www.transparenttextures.com/patterns/stardust.png');
+                linear-gradient(90deg, var(--grid-color) 1px, transparent 1px);
             background-size: 40px 40px, 40px 40px, auto;
             background-position: center bottom;
             padding: 20px 10px;
@@ -79,7 +80,6 @@
             margin-bottom: 20px;
             flex-wrap: wrap;
             justify-content: center;
-            background-image: url('https://www.transparenttextures.com/patterns/black-scales.png');
         }
         .e-nav-item {
             padding: 8px 15px;
@@ -246,7 +246,6 @@
             background: #111;
             padding: 15px;
             border: 3px inset #888;
-            background-image: url('https://www.transparenttextures.com/patterns/carbon-fibre.png');
         }
         .e-v-item {
             border: 2px solid var(--neon-pink);
@@ -403,8 +402,8 @@
 </div>
 
 <!-- AUDIO EFFECTS & MUSIC -->
-<audio id="sfx-click" src="https://www.soundjay.com/buttons/sounds/button-16.mp3" preload="auto"></audio>
-<audio id="winamp-audio" src="https://files.freemusicarchive.org/storage-freemusicarchive-org/music/no_curator/Tours/Enthusiast/Tours_-_01_-_Enthusiast.mp3" preload="auto" loop></audio>
+<audio id="sfx-click" src="https://www.soundjay.com/buttons/sounds/button-16.mp3" preload="none"></audio>
+<audio id="winamp-audio" src="https://files.freemusicarchive.org/storage-freemusicarchive-org/music/no_curator/Tours/Enthusiast/Tours_-_01_-_Enthusiast.mp3" preload="none" loop></audio>
 
 <div class="estalingrado-wrapper">
     <div class="e-container">
@@ -430,7 +429,7 @@
         </div>
 
         <!-- BARRA DE BÚSQUEDA INTEGRADA -->
-        <div style="background: var(--win-gray); border: 3px outset var(--win-bright); padding: 8px; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; background-image: url('https://www.transparenttextures.com/patterns/black-scales.png');">
+        <div style="background: var(--win-gray); border: 3px outset var(--win-bright); padding: 8px; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
             <span style="font-weight:bold; color:#000; font-size:14px; display:flex; align-items:center; gap:5px;"><img src="https://win98icons.alexmeub.com/icons/png/search_file-0.png" width="16"> Buscar:</span>
             <input type="text" id="ec-search-input" placeholder="Buscar en esta página..." style="flex:1; min-width:200px; padding:6px; border:2px inset #888; font-family:'Courier New',monospace; font-size:14px; background:#fff;">
             <button id="ec-search-btn" style="padding:6px 15px; background:#000080; color:white; border:2px outset #fff; font-weight:bold; cursor:pointer; font-size:13px;">🔍 Buscar</button>
@@ -623,6 +622,70 @@
                             </p>
                         </div>
 
+                    </div>
+                </div>
+
+                <!-- ===== LEARN FOR FREE ===== -->
+                <div class="e-window" style="border-color: var(--neon-yellow); box-shadow: 0 0 15px var(--neon-yellow);">
+                    <div class="e-window-title" style="background: linear-gradient(90deg, #888800 0%, #ffff00 100%); color: #000;">
+                        <span style="text-shadow: 0 0 5px #fff;">🎓 LEARN_FOR_FREE.EDU</span>
+                        <div class="e-win-controls">
+                            <div class="e-win-btn">_</div>
+                            <div class="e-win-btn">□</div>
+                            <div class="e-win-btn">X</div>
+                        </div>
+                    </div>
+                    <div class="e-window-body" style="background: #000; color: var(--neon-yellow); font-family: 'Courier New', monospace;">
+                        <p style="margin-top:0; color:#ffff00; font-weight:bold; border-bottom:2px solid #ffff00; padding-bottom:5px; text-shadow:0 0 5px #ff0;">
+                            &gt; APRENDE GRATIS - RECURSOS EDUCATIVOS ONLINE &lt;
+                        </p>
+                        <p style="color:#0f0; font-size:11px; margin-top:0;">★ Cursos y tutoriales 100% gratuitos desde tu navegador</p>
+
+                        <table style="width:100%; border-collapse:collapse; font-size:13px; margin-top:10px; background:#111;">
+                            <tr style="background:#444400; color:#ffff00; text-shadow:0 0 3px #ff0;">
+                                <th style="padding:6px; border:1px solid #888; text-align:left;">📚 Tecnología</th>
+                                <th style="padding:6px; border:1px solid #888; text-align:left;">🌐 Recurso</th>
+                            </tr>
+                            <tr><td style="padding:5px; border:1px solid #444; color:#00ffff;">HTML</td><td style="padding:5px; border:1px solid #444;"><a href="https://html.com" target="_blank" style="color:#ffff00;">html.com</a></td></tr>
+                            <tr><td style="padding:5px; border:1px solid #444; color:#00ffff;">CSS</td><td style="padding:5px; border:1px solid #444;"><a href="https://web.dev/learn/css" target="_blank" style="color:#ffff00;">web.dev/learn/css</a></td></tr>
+                            <tr><td style="padding:5px; border:1px solid #444; color:#00ffff;">JavaScript</td><td style="padding:5px; border:1px solid #444;"><a href="https://javascript.info" target="_blank" style="color:#ffff00;">javascript.info</a></td></tr>
+                            <tr><td style="padding:5px; border:1px solid #444; color:#ff00ff;">React</td><td style="padding:5px; border:1px solid #444;"><a href="https://reactplay.io" target="_blank" style="color:#ffff00;">reactplay.io</a></td></tr>
+                            <tr><td style="padding:5px; border:1px solid #444; color:#ff00ff;">Vue</td><td style="padding:5px; border:1px solid #444;"><a href="https://learnvue.co" target="_blank" style="color:#ffff00;">learnvue.co</a></td></tr>
+                            <tr><td style="padding:5px; border:1px solid #444; color:#ff00ff;">Angular</td><td style="padding:5px; border:1px solid #444;"><a href="https://angular.dev/tutorials" target="_blank" style="color:#ffff00;">angular.dev/tutorials</a></td></tr>
+                            <tr><td style="padding:5px; border:1px solid #444; color:#39ff14;">Git</td><td style="padding:5px; border:1px solid #444;"><a href="https://git-scm.com/book" target="_blank" style="color:#ffff00;">git-scm.com/book</a></td></tr>
+                            <tr><td style="padding:5px; border:1px solid #444; color:#39ff14;">Web3</td><td style="padding:5px; border:1px solid #444;"><a href="https://learnweb3.io" target="_blank" style="color:#ffff00;">learnweb3.io</a></td></tr>
+                            <tr><td style="padding:5px; border:1px solid #444; color:#39ff14;">Python</td><td style="padding:5px; border:1px solid #444;"><a href="https://learnpython.org" target="_blank" style="color:#ffff00;">learnpython.org</a></td></tr>
+                            <tr><td style="padding:5px; border:1px solid #444; color:#39ff14;">SQL</td><td style="padding:5px; border:1px solid #444;"><a href="https://w3schools.com/sql" target="_blank" style="color:#ffff00;">w3schools.com/sql</a></td></tr>
+                            <tr><td style="padding:5px; border:1px solid #444; color:#ff8800;">Blockchain</td><td style="padding:5px; border:1px solid #444;"><a href="https://cryptozombies.io" target="_blank" style="color:#ffff00;">cryptozombies.io</a></td></tr>
+                            <tr><td style="padding:5px; border:1px solid #444; color:#ff8800;">Next.js</td><td style="padding:5px; border:1px solid #444;"><a href="https://nextjs.org/learn" target="_blank" style="color:#ffff00;">nextjs.org/learn</a></td></tr>
+                            <tr><td style="padding:5px; border:1px solid #444; color:#ff8800;">AI (Basics)</td><td style="padding:5px; border:1px solid #444;"><a href="https://elementsofai.com" target="_blank" style="color:#ffff00;">elementsofai.com</a></td></tr>
+                            <tr><td style="padding:5px; border:1px solid #444; color:#00ffff;">PHP</td><td style="padding:5px; border:1px solid #444;"><a href="https://phptherightway.com" target="_blank" style="color:#ffff00;">phptherightway.com</a></td></tr>
+                            <tr><td style="padding:5px; border:1px solid #444; color:#00ffff;">API</td><td style="padding:5px; border:1px solid #444;"><a href="https://rapidapi.com/learn" target="_blank" style="color:#ffff00;">rapidapi.com/learn</a></td></tr>
+                            <tr><td style="padding:5px; border:1px solid #444; color:#00ffff;">Go</td><td style="padding:5px; border:1px solid #444;"><a href="https://learn-golang.org" target="_blank" style="color:#ffff00;">learn-golang.org</a></td></tr>
+                            <tr><td style="padding:5px; border:1px solid #444; color:#ff4488;">Rust</td><td style="padding:5px; border:1px solid #444;"><a href="https://rust-lang.org/learn" target="_blank" style="color:#ffff00;">rust-lang.org/learn</a></td></tr>
+                            <tr><td style="padding:5px; border:1px solid #444; color:#ff4488;">Design Patterns</td><td style="padding:5px; border:1px solid #444;"><a href="https://refactoring.guru" target="_blank" style="color:#ffff00;">refactoring.guru</a></td></tr>
+                            <tr><td style="padding:5px; border:1px solid #444; color:#ff4488;">TypeScript</td><td style="padding:5px; border:1px solid #444;"><a href="https://typescriptlang.org/docs" target="_blank" style="color:#ffff00;">typescriptlang.org/docs</a></td></tr>
+                            <tr><td style="padding:5px; border:1px solid #444; color:#ff8800;">C++</td><td style="padding:5px; border:1px solid #444;"><a href="https://cplusplus.com/doc/tutorial" target="_blank" style="color:#ffff00;">cplusplus.com/doc/tutorial</a></td></tr>
+                            <tr><td style="padding:5px; border:1px solid #444; color:#ff8800;">Java</td><td style="padding:5px; border:1px solid #444;"><a href="https://docs.oracle.com/javase/tutorial" target="_blank" style="color:#ffff00;">docs.oracle.com/javase/tutorial</a></td></tr>
+                            <tr><td style="padding:5px; border:1px solid #444; color:#ff8800;">C#</td><td style="padding:5px; border:1px solid #444;"><a href="https://dotnet.microsoft.com/learn/csharp" target="_blank" style="color:#ffff00;">dotnet.microsoft.com/learn/csharp</a></td></tr>
+                            <tr><td style="padding:5px; border:1px solid #444; color:#ff8800;">Swift</td><td style="padding:5px; border:1px solid #444;"><a href="https://swift.org/learn" target="_blank" style="color:#ffff00;">swift.org/learn</a></td></tr>
+                            <tr><td style="padding:5px; border:1px solid #444; color:#39ff14;">Django</td><td style="padding:5px; border:1px solid #444;"><a href="https://djangoproject.com/start" target="_blank" style="color:#ffff00;">djangoproject.com/start</a></td></tr>
+                            <tr><td style="padding:5px; border:1px solid #444; color:#39ff14;">Flask</td><td style="padding:5px; border:1px solid #444;"><a href="https://flask.palletsprojects.com/tutorial" target="_blank" style="color:#ffff00;">flask.palletsprojects.com/tutorial</a></td></tr>
+                            <tr><td style="padding:5px; border:1px solid #444; color:#ff00ff;">Docker</td><td style="padding:5px; border:1px solid #444;"><a href="https://docker.com/get-started" target="_blank" style="color:#ffff00;">docker.com/get-started</a></td></tr>
+                            <tr><td style="padding:5px; border:1px solid #444; color:#ff00ff;">Kubernetes</td><td style="padding:5px; border:1px solid #444;"><a href="https://kubernetes.io/docs/tutorials" target="_blank" style="color:#ffff00;">kubernetes.io/docs/tutorials</a></td></tr>
+                            <tr><td style="padding:5px; border:1px solid #444; color:#ff00ff;">Linux</td><td style="padding:5px; border:1px solid #444;"><a href="https://linuxjourney.com" target="_blank" style="color:#ffff00;">linuxjourney.com</a></td></tr>
+                            <tr><td style="padding:5px; border:1px solid #444; color:#ff4488;">Cybersecurity</td><td style="padding:5px; border:1px solid #444;"><a href="https://tryhackme.com" target="_blank" style="color:#ffff00;">tryhackme.com</a></td></tr>
+                            <tr><td style="padding:5px; border:1px solid #444; color:#ff4488;">DevOps</td><td style="padding:5px; border:1px solid #444;"><a href="https://roadmap.sh/devops" target="_blank" style="color:#ffff00;">roadmap.sh/devops</a></td></tr>
+                            <tr><td style="padding:5px; border:1px solid #444; color:#00ffff;">Cloud (AWS)</td><td style="padding:5px; border:1px solid #444;"><a href="https://aws.amazon.com/training" target="_blank" style="color:#ffff00;">aws.amazon.com/training</a></td></tr>
+                            <tr><td style="padding:5px; border:1px solid #444; color:#00ffff;">Cloud (GCP)</td><td style="padding:5px; border:1px solid #444;"><a href="https://cloudskillsboost.google" target="_blank" style="color:#ffff00;">cloudskillsboost.google</a></td></tr>
+                            <tr><td style="padding:5px; border:1px solid #444; color:#00ffff;">Cloud (Azure)</td><td style="padding:5px; border:1px solid #444;"><a href="https://microsoft.com/learn/azure" target="_blank" style="color:#ffff00;">microsoft.com/learn/azure</a></td></tr>
+                            <tr><td style="padding:5px; border:1px solid #444; color:#ff00ff;">IBM Quantum Cloud</td><td style="padding:5px; border:1px solid #444;"><a href="http://quantum.cloud.ibm.com/" target="_blank" style="color:#ffff00;">quantum.cloud.ibm.com</a></td></tr>
+                        </table>
+
+                        <p style="color:#0f0; font-size:11px; margin-top:10px; text-shadow:0 0 5px #0f0;">
+                            <blink>&gt;</blink> 35 RECURSOS EDUCATIVOS ACTIVADOS <blink>&lt;</blink><br>
+                            <span style="color:#888;">&gt; Estalingrado Corp Academia - Conocimiento libre para todos.</span>
+                        </p>
                     </div>
                 </div>
 
@@ -1493,10 +1556,10 @@ slmgr /ato
         <div class="e-footer-gifs">
             <h2 class="flaming-text">★ WEBRINGS & AFILIADOS ★</h2>
             <div style="margin-bottom: 20px;">
-                <img src="https://web.archive.org/web/20090830053412/http://geocities.com/CollegePark/Union/2470/construc.gif" width="80" alt="Under Construction">
-                <img src="https://web.archive.org/web/20091027083041/http://geocities.com/Heartland/Plains/1219/netscape.gif" alt="Netscape">
-                <img src="https://web.archive.org/web/20091027083041/http://geocities.com/Heartland/Plains/1219/ie.gif" alt="IE">
-                <img src="https://web.archive.org/web/20090902143003/http://geocities.com/CollegePark/Quad/1315/flames1.gif" alt="Flames" height="31">
+                <img src="data:image/gif;base64,R0lGODlhUAA8APcAAAAAAIAAAACAAICAAAAAgIAAgACAgMDAwICAgP8AAAD/AP//AAAA//8A/wD//////wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACH5BAEAAAEALAAAAABQADwAAAj/AAEIHEiwoMGDCBMqXMiwocOHECNKnEixosWLGDNq3Mixo8ePIEOKHEmypMmTKFOqXMmypcuXMGPKnEmzps2bOHPq3Mmzp8+fQIMKHUq0qNGjSJNmtJkzpdOnUKNKnUq1qtWrWLNq3cq1q9evYMOKHUu2rNmzaNOqXcu2rdu3cOPKnUu3rt27ePPq3cu3r9+/gAMLHky4sOHDiBMrXsy4sePHkCNLnky5suXLmDNr3sy5s+fPoEOLHk26tOnTqFOrXs26tevXsGPLnk27tu3buHPr3s27t+/fwIMLH068uPHjyJMrX868ufPn0KNLn069uvXr2LNr3659O/fu4sOL/x9Pvrz58+jTq1/Pvr379/Djy59Pv779+/jz69/Pv7///wAGKKCABBZo4IEIJqjgggw26OCDEEYo4YQUVmjhhRhmqOGGHHbo4YcghijiiCSWaOKJKKao4oostujiizDGKOOMNNZo44045qjjjjz26OOPQAYp5JBEFmnkkUgmqeSSTDbp5JNQRinllFRWaeWVWGap5ZZcdunll2CGKeaYZJZp5plopqnmmmy26eabcMYp55x01mnnnXjmqeeeevbp55+ABirooIQWauihiCaq6KKMNuroo5BGKumklFZq6aWYZqrpppx26umnoIYq6qiklmrqqaimquqqrLbq6quwxv8q66y01mrrrbjmquuuvPbq66/ABivssMQWa+yxyCar7LLMNuvss9BGK+201FZr7bXYZqvtttx26+234IYr7rjklmvuueimq+667Lbr7rvwxivvvPTWa++9+Oar77789uvvvwAHLPDABBds8MEIJ6zwwgw37PDDEEcs8cQUV2zxxRhnrPHGHHfs8ccghyzyyCSXbPLJKKes8sost+zyyzDHLPPMNNds880456zzzjz37PPPQAct9NBEF2300UgnrfTSTDft9NNQRy311FRXbfXVWGet9dZcd+3112CHLfbYZJdt9tlop6322my3/i333HTXbffdeOet99589+3334AHLvjghBdu+OGIJ6744ow37vjjkEcu+eSUV2755ZhnrvnmnHfu+eeghy766KSXbvrpqKeu+uqst+7667DHLvvstNdu++2456777rz37vvvwAcv/PDEF2/88cgnr/zyzDfv/PPQRy/99NRXb/312Gev/fbcd+/99+CHL/745Jdv/vnop6/++uy37/778Mcv//z012///fjnr//+/Pfv//8ADKAAB0jAAhrwgAhMoAIXyMAGOvCBEIyghCZEoQpdKEMb6tCHQgyiEIdIxCIa8YhITKISl8jEJjrxiVCMohSnSMUqWvGKWMyiFrfIxS568YtgDKMYx0jGMprxjGRMoxrXyMY2uvGNcIyjHOdIxzra8Y54zKMe98jHPvrxj4AMpCAHSchCGvKQiEykIhfJyEY68pGQjKQkJ0nJSlrykpjMpCY3yclOevKToAylKEdJylKa8pSoTKUqV8nKVrrylbCMpSxnScta2vKWuMylLnfJy1768pfADKYwh0nMYhrzmMhMpjKXycxmOvOZ0IymNKdJzWpa85rYzKY2t8nNbnrzm+AMpzjHSc5ymvOc6EynOtfJzna6jz4A" width="80" alt="Under Construction" loading="lazy">
+                <img src="https://web.archive.org/web/20091027083041/http://geocities.com/Heartland/Plains/1219/netscape.gif" alt="Netscape" loading="lazy">
+                <img src="https://web.archive.org/web/20091027083041/http://geocities.com/Heartland/Plains/1219/ie.gif" alt="IE" loading="lazy">
+                <img src="https://web.archive.org/web/20090902143003/http://geocities.com/CollegePark/Quad/1315/flames1.gif" alt="Flames" height="31" loading="lazy">
             </div>
             
             <p style="font-size: 12px; color: var(--neon-cyan); font-family: 'Courier New', monospace;">
@@ -1530,17 +1593,21 @@ slmgr /ato
         if (bootLineIdx < bootLines.length) {
             bootText.innerHTML += bootLines[bootLineIdx] + "<br>";
             bootLineIdx++;
-            setTimeout(typeBootLine, 150 + Math.random() * 300);
+            setTimeout(typeBootLine, 30 + Math.random() * 60);
         } else {
             bootCursor.style.display = 'inline';
             setTimeout(() => {
                 bootScreen.style.opacity = '0';
-                bootScreen.style.transition = 'opacity 0.5s ease';
-                setTimeout(() => bootScreen.style.display = 'none', 500);
-            }, 800);
+                bootScreen.style.transition = 'opacity 0.3s ease';
+                setTimeout(() => bootScreen.style.display = 'none', 300);
+            }, 200);
         }
     }
-    window.addEventListener('load', typeBootLine);
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', typeBootLine);
+    } else {
+        typeBootLine();
+    }
 
     // 2. EFECTOS DE SONIDO AL HACER CLIC
     const clickSfx = document.getElementById('sfx-click');
@@ -1910,6 +1977,19 @@ slmgr /ato
     // Iniciar buscadores
     crearBuscador('ec-search-input', 'ec-search-btn', 'ec-search-result', 'ec-search-prev', 'ec-search-next');
     crearBuscador('ec-search-input-2', 'ec-search-btn-2', 'ec-search-result-2', 'ec-search-prev-2', 'ec-search-next-2');
+
+    // Lazy loading global para imágenes e iframes que no lo tengan
+    document.addEventListener('DOMContentLoaded', function() {
+        document.querySelectorAll('img:not([loading]), iframe:not([loading])').forEach(function(el) {
+            el.setAttribute('loading', 'lazy');
+        });
+        // Si alguna imagen falla, no rompe el layout
+        document.querySelectorAll('img').forEach(function(img) {
+            img.addEventListener('error', function() {
+                this.style.display = 'none';
+            });
+        });
+    });
 </script>
 
 </body>
