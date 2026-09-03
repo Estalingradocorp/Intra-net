@@ -346,6 +346,33 @@
             content: ">";
             margin-right: 5px;
         }
+
+        /* Navegación entre portales (menú externo) */
+        .portal-nav {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 12px;
+            padding: 8px;
+            border: 1px dashed var(--terminal-green);
+            background-color: rgba(0, 255, 0, 0.05);
+        }
+        .portal-nav a {
+            color: var(--terminal-green);
+            text-decoration: none;
+            padding: 6px 14px;
+            border: 1px solid var(--terminal-green);
+            font-family: 'Courier New', monospace;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.2s;
+        }
+        .portal-nav a:hover {
+            background-color: var(--terminal-green);
+            color: #000;
+            box-shadow: 0 0 10px var(--terminal-green);
+        }
         
         /* Layout Principal */
         .main-content {
@@ -837,6 +864,14 @@
                 </div>
             </div>
         </header>
+
+        <!-- Menú de navegación entre portales de Estalingrado Corp -->
+        <nav class="portal-nav" aria-label="Navegación entre portales">
+            <span style="color: var(--terminal-green); font-family:'Courier New',monospace; font-size:0.8rem; letter-spacing:1px; padding:6px 4px;">[RED_ESTALINGRADO]</span>
+            <a href="index.html"><i class="fas fa-desktop"></i> PORTAL_RETRO</a>
+            <a href="index2.html"><i class="fas fa-database"></i> DATA-WIKI</a>
+            <a href="Buscador retro.html"><i class="fas fa-search"></i> BUSCADOR_RETRO</a>
+        </nav>
         
         <!-- Navegación -->
         <nav class="terminal-nav">
@@ -844,9 +879,6 @@
             <a href="#store" class="nav-item" data-target="store"><i class="fas fa-microchip"></i> [TIENDA]</a>
             <a href="#terminal" class="nav-item" data-target="terminal"><i class="fas fa-terminal"></i> [TERMINAL_ROOT]</a>
             <a href="#about" class="nav-item" data-target="about"><i class="fas fa-file-code"></i> [INFO_SISTEMA]</a>
-            <a href="index.html" class="nav-item"><i class="fas fa-desktop"></i> [PORTAL_RETRO]</a>
-            <a href="index2.html" class="nav-item"><i class="fas fa-database"></i> [DATA-WIKI]</a>
-            <a href="Buscador retro.html" class="nav-item"><i class="fas fa-search-plus"></i> [BUSCADOR_RETRO]</a>
         </nav>
         
         <!-- Cuerpo -->
