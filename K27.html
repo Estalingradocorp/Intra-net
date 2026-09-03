@@ -6,7 +6,7 @@
     <title>DarkWeb Terminal Store v3.0 - AR Edition</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Fuente para el nuevo Loader -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=VT323&family=Press+Start+2P&display=swap" rel="stylesheet">
     <style>
         :root {
             --primary-bg: #050505;
@@ -120,58 +120,61 @@
         }
 
         /* =========================================
-           NUEVO LOADER (Estilo Estalingrado Corp)
+           LOADER (Estilo Buscador / IDEX de Estalingrado Corp)
            ========================================= */
-        #loader {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
-            background: #0f172a; z-index: 20000; /* Z-index alto para tapar todo */
-            display: flex; justify-content: center; align-items: center; 
-            transition: opacity 0.8s ease-out;
+        #loading-screen {
+            position: fixed; z-index: 9999;
+            background: #050505;
+            width: 100vw; height: 100vh;
+            display: flex; flex-direction: column;
+            justify-content: center; align-items: center;
+            gap: 14px;
         }
-        
-        .loader-content {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 25px;
-            position: relative;
-            font-family: 'Inter', sans-serif;
-        }
-
-        .loader-logo {
+        .loading-logo {
             width: 100px; height: 100px; border-radius: 50%;
-            border: 3px solid var(--primary-loader);
-            box-shadow: 0 0 30px rgba(59, 130, 246, 0.4);
-            object-fit: cover; animation: pulse-ring 2.5s infinite;
+            border: 3px solid var(--terminal-blue);
+            box-shadow: 0 0 20px var(--terminal-blue), 0 0 40px var(--terminal-blue);
+            animation: pulse-glow 1.5s ease-in-out infinite alternate;
+            object-fit: cover;
         }
-
-        .loader-text {
-            color: var(--text-loader); font-size: 14px; letter-spacing: 2px;
-            text-transform: uppercase; font-weight: 300;
-            animation: fadeText 2s infinite alternate; text-align: center;
+        @keyframes pulse-glow {
+            from { box-shadow: 0 0 10px var(--terminal-blue), 0 0 20px var(--terminal-blue); }
+            to   { box-shadow: 0 0 28px var(--terminal-blue), 0 0 60px var(--terminal-blue), 0 0 80px var(--terminal-cyan); }
         }
-
-        .loader-vector-svg { width: 50px; height: 50px; margin-top: 5px; }
-        .loader-circle {
-            fill: none; stroke-width: 3; stroke-linecap: round;
-            stroke-dasharray: 100; stroke-dashoffset: 0; transform-origin: center;
-            animation: vector-spin 2s linear infinite, vector-dash 1.5s ease-in-out infinite;
+        .loading-text {
+            font-family: 'Press Start 2P', monospace; font-size: 10px;
+            color: var(--terminal-blue); text-shadow: 0 0 10px var(--terminal-blue);
+            text-align: center; padding: 0 20px;
+            animation: blink-text 2s step-end infinite;
         }
-
-        @keyframes vector-spin { 100% { transform: rotate(360deg); } }
-        @keyframes vector-dash {
-            0% { stroke-dasharray: 1, 150; stroke-dashoffset: 0; }
-            50% { stroke-dasharray: 90, 150; stroke-dashoffset: -35; }
-            100% { stroke-dasharray: 90, 150; stroke-dashoffset: -124; }
+        @keyframes blink-text { 50% { opacity: .5; } }
+        .loading-sys {
+            font-size: 12px; color: var(--terminal-cyan);
+            text-shadow: 0 0 6px var(--terminal-cyan);
+            letter-spacing: 2px; text-transform: uppercase;
+            font-family: 'Courier New', monospace;
         }
-        @keyframes pulse-ring {
-            0% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.7); border-color: var(--primary-loader); }
-            50% { border-color: #60a5fa; }
-            70% { box-shadow: 0 0 0 25px rgba(59, 130, 246, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0); border-color: var(--primary-loader); }
+        .loading-bar {
+            width: 320px; height: 22px;
+            border: 2px solid var(--terminal-blue);
+            background: #0a0a0a;
+            position: relative;
+            box-shadow: 0 0 10px var(--terminal-blue);
         }
-        @keyframes fadeText { from { opacity: 0.6; } to { opacity: 1; text-shadow: 0 0 10px rgba(59, 130, 246, 0.5); } }
-
+        .loading-bar::before {
+            content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+            background: repeating-linear-gradient(90deg, transparent, transparent 4px, rgba(0,0,0,.3) 4px, rgba(0,0,0,.3) 8px);
+            z-index: 1;
+        }
+        #loading-progress-bar {
+            height: 100%; width: 0%;
+            background: var(--terminal-blue); box-shadow: 0 0 8px var(--terminal-blue);
+            transition: width .1s linear;
+        }
+        #loading-percent {
+            font-family: 'VT323', monospace; font-size: 22px;
+            color: var(--terminal-green); text-shadow: 0 0 8px var(--terminal-green);
+        }
 
         /* --- UI Principal --- */
         .container {
@@ -811,21 +814,13 @@
 </head>
 <body>
 
-    <!-- Nuevo Loader de Estalingrado Corp -->
-    <div id="loader">
-        <div class="loader-content">
-          <img src="https://64.media.tumblr.com/37c52c25279f877bd0bc2d538626c938/2f8407cc51b2210e-be/s540x810/c379bb3cd18325d6b075e62fd26ffe91f5093ee3.jpg" alt="Estalingrado Logo" class="loader-logo">
-          <p class="loader-text">Ingresando a la intranet de<br><strong style="font-size:16px; color:white;">Estalingrado Corp</strong></p>
-          <svg class="loader-vector-svg" viewBox="0 0 50 50">
-            <defs>
-              <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                <stop offset="0%" style="stop-color:#3b82f6;stop-opacity:1" />
-                <stop offset="100%" style="stop-color:#8B5CF6;stop-opacity:1" />
-              </linearGradient>
-            </defs>
-            <circle class="loader-circle" cx="25" cy="25" r="20" stroke="url(#gradient)"></circle>
-          </svg>
-        </div>
+    <!-- Loader de Estalingrado Corp (estilo Buscador/IDEX) -->
+    <div id="loading-screen">
+      <img src="https://64.media.tumblr.com/3d305395ebd099966bbd46734f6afa03/4d78480730607865-41/s1280x1920/617bcc52deb4bb5c2bf470b4f95db32123898bc6.pnj" class="loading-logo" alt="Logo">
+      <p class="loading-text">CARGANDO SISTEMA...</p>
+      <p class="loading-sys">ESTALINGRADO CORP v3.0 // INICIANDO</p>
+      <div class="loading-bar"><div id="loading-progress-bar"></div></div>
+      <div id="loading-percent">0%</div>
     </div>
 
     <!-- Fondo y Efectos -->
@@ -1076,29 +1071,44 @@
 
         // --- NUEVA SECUENCIA DE ARRANQUE CON LOADER GRÁFICO ---
         async function runBootSequence() {
-            // Simulamos tiempo de carga de 3 segundos
-            setTimeout(() => {
-                const loader = document.getElementById('loader');
-                const mainInterface = document.getElementById('main-interface');
-                
-                // Desvanecer loader
-                loader.style.opacity = '0';
-                
-                setTimeout(() => {
-                    loader.style.display = 'none';
-                    // Mostrar interfaz principal
-                    mainInterface.style.display = 'block';
-                    mainInterface.style.animation = 'fadeIn 1s forwards'; // Animación suave
+            const loadingScreen = document.getElementById('loading-screen');
+            const progressBar = document.getElementById('loading-progress-bar');
+            const percentText = document.getElementById('loading-percent');
+            const mainInterface = document.getElementById('main-interface');
+            if(!loadingScreen || !progressBar || !percentText || !mainInterface) return;
 
-                    // Iniciar sistemas internos una vez cargado
-                    document.getElementById('tx-id').innerText = Math.random().toString(36).substring(2, 15).toUpperCase();
-                    updateIP();
-                    startThreatLevel();
-                    showToast("Conexión segura establecida", "info");
-                    
-                }, 800); // Esperar a que termine la transición de opacidad
-                
-            }, 3000); 
+            const duration = [2000, 1500, 2500][Math.floor(Math.random() * 3)];
+            let startTime = null;
+
+            function anim(t) {
+                if(!startTime) startTime = t;
+                const progress = Math.min(((t - startTime) / duration) * 100, 100);
+                progressBar.style.width = `${progress}%`;
+                percentText.textContent = `${Math.floor(progress)}%`;
+                if(progress < 100) {
+                    requestAnimationFrame(anim);
+                } else {
+                    setTimeout(() => {
+                        loadingScreen.style.transition = 'opacity .5s';
+                        loadingScreen.style.opacity = '0';
+                        setTimeout(() => {
+                            loadingScreen.style.display = 'none';
+                            mainInterface.style.display = 'block';
+                            mainInterface.style.animation = 'fadeIn 1s forwards';
+
+                            // Iniciar sistemas internos una vez cargado
+                            document.getElementById('tx-id').innerText = Math.random().toString(36).substring(2, 15).toUpperCase();
+                            updateIP();
+                            startThreatLevel();
+                            showToast("Conexión segura establecida", "info");
+                        }, 500);
+                    }, 300);
+                }
+            }
+
+            loadingScreen.style.display = 'flex';
+            loadingScreen.style.opacity = '1';
+            requestAnimationFrame(anim);
         }
 
         function updateIP() {
