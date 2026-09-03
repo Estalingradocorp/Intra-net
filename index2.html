@@ -1,0 +1,1988 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Centro de Control Digital | Estalingrado Corp</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --accent: #0b84e8;
+    --accent-hover: #0072cc;
+    --accent-dark: #0056a3;
+    --ec-blue: #1b9af5;
+    --ec-blue-bg: #e8f4fe;
+    --bg: #f0f4f8;
+    --sidebar-bg: #ffffff;
+    --header-bg: #0b1929;
+    --header-border: #152840;
+    --text: #1a2636;
+    --muted: #5a718a;
+    --border: #d4e0ed;
+    --nav-active: #0b84e8;
+    --card-bg: #fafdff;
+    --footer-bg: #0b1929;
+    --footer-text: #8aaccf;
+    --color-white: #ffffff;
+    --color-black: #111111;
+    --color-red: #e53935;
+    --color-green: #43a047;
+    --color-blue: #1e88e5;
+    --color-yellow: #fdd835;
+    --color-orange: #fb8c00;
+    --color-pink: #e91e63;
+    --color-purple: #8e24aa;
+  }
+
+  body {
+    font-family: 'Inter', 'Segoe UI', Tahoma, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+  }
+
+  /* FULLSCREEN OVERLAY */
+  #fullscreen-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    cursor: pointer;
+    transition: background 0.3s;
+  }
+  #fullscreen-overlay.active { display: block; }
+  #fullscreen-exit-hint {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: rgba(0,0,0,0.45);
+    color: #fff;
+    font-size: 13px;
+    padding: 8px 16px;
+    border-radius: 20px;
+    z-index: 10000;
+    pointer-events: none;
+    opacity: 1;
+    transition: opacity 1s;
+  }
+
+  /* HEADER */
+  header {
+    background: var(--header-bg);
+    border-bottom: 1px solid var(--header-border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 24px;
+    height: 56px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.3);
+  }
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+  }
+  .logo-img {
+    width: 34px;
+    height: 34px;
+    border-radius: 6px;
+    object-fit: cover;
+  }
+  .logo-text {
+    display: flex;
+    flex-direction: column;
+    line-height: 1;
+  }
+  .logo-name {
+    font-size: 14px;
+    font-weight: 700;
+    color: #ffffff;
+    letter-spacing: 0.04em;
+  }
+  .logo-sub {
+    font-size: 10px;
+    color: #5a9fd4;
+    letter-spacing: 0.08em;
+    font-weight: 400;
+    text-transform: uppercase;
+    margin-top: 2px;
+  }
+  .header-right {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    font-size: 13px;
+  }
+  .header-right a { color: #8aaccf; text-decoration: none; }
+  .header-right a:hover { color: #ffffff; }
+  .lang-selector {
+    position: relative;
+    cursor: pointer;
+  }
+  .lang-btn {
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 4px;
+    padding: 4px 10px;
+    font-size: 13px;
+    cursor: pointer;
+    color: #cce0f5;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+  .lang-btn:hover { background: rgba(255,255,255,0.14); }
+  .lang-dropdown {
+    display: none;
+    position: absolute;
+    right: 0;
+    top: 100%;
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    min-width: 130px;
+    z-index: 200;
+    overflow: hidden;
+  }
+  .lang-dropdown a {
+    display: block;
+    padding: 7px 14px;
+    font-size: 13px;
+    color: var(--text);
+    text-decoration: none;
+  }
+  .lang-dropdown a:hover { background: #f0f0f0; }
+  .lang-selector:hover .lang-dropdown { display: block; }
+
+  /* LAYOUT */
+  .layout {
+    display: grid;
+    grid-template-columns: 200px 1fr 220px;
+    gap: 0;
+    min-height: calc(100vh - 56px);
+  }
+
+  /* LEFT NAV */
+  .left-nav {
+    background: var(--sidebar-bg);
+    border-right: 1px solid var(--border);
+    padding: 16px 0;
+  }
+  .left-nav a {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 18px;
+    font-size: 14px;
+    color: var(--text);
+    text-decoration: none;
+    transition: background 0.15s;
+  }
+  .left-nav a:hover { background: #eef6ff; }
+  .left-nav a.active {
+    background: var(--ec-blue-bg);
+    color: var(--accent);
+    font-weight: 600;
+    border-left: 3px solid var(--accent);
+  }
+  .color-dot {
+    width: 14px; height: 14px;
+    border-radius: 50%;
+    border: 1px solid rgba(0,0,0,0.12);
+    flex-shrink: 0;
+  }
+
+  /* MAIN */
+  main {
+    padding: 28px 32px;
+    max-width: 800px;
+  }
+  h1 {
+    font-size: 26px;
+    font-weight: 600;
+    margin-bottom: 16px;
+    color: var(--text);
+  }
+
+  /* COLOR TABS */
+  .color-tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 22px;
+  }
+  .color-tab {
+    padding: 5px 14px;
+    border-radius: 20px;
+    font-size: 13px;
+    text-decoration: none;
+    border: 1px solid var(--border);
+    background: #fff;
+    color: var(--text);
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .color-tab:hover { border-color: var(--accent); color: var(--accent); }
+  .color-tab.active { background: var(--accent); color: #fff; border-color: var(--accent); }
+
+  /* SCREEN PREVIEW */
+  .screen-preview {
+    width: 100%;
+    aspect-ratio: 16/9;
+    max-height: 340px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+    transition: box-shadow 0.2s;
+    background: var(--current-color, #ffffff);
+  }
+  .screen-preview:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.12); }
+  .screen-preview-label {
+    position: absolute;
+    bottom: 12px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0,0,0,0.35);
+    color: #fff;
+    font-size: 12px;
+    padding: 4px 12px;
+    border-radius: 20px;
+    white-space: nowrap;
+  }
+
+  /* CONTROLS */
+  .controls {
+    margin-top: 20px;
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 18px 20px;
+  }
+  .controls h3 {
+    font-size: 15px;
+    font-weight: 600;
+    margin-bottom: 14px;
+    color: var(--text);
+  }
+  .resolution-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 14px;
+  }
+  .res-btn {
+    padding: 5px 12px;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    font-size: 12px;
+    cursor: pointer;
+    background: #fafafa;
+    color: var(--text);
+    transition: all 0.15s;
+  }
+  .res-btn:hover { background: #eee; }
+  .custom-size {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  .custom-size input {
+    width: 80px;
+    padding: 6px 10px;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    font-size: 13px;
+  }
+  .custom-size span { font-size: 13px; color: var(--muted); }
+  .btn-primary {
+    padding: 7px 18px;
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    font-size: 13px;
+    cursor: pointer;
+    transition: background 0.15s;
+  }
+  .btn-primary:hover { background: var(--accent-hover); }
+  .btn-secondary {
+    padding: 7px 18px;
+    background: #fff;
+    color: var(--text);
+    border: 1px solid var(--border);
+    border-radius: 5px;
+    font-size: 13px;
+    cursor: pointer;
+    transition: background 0.15s;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .btn-secondary:hover { background: #f0f0f0; }
+  .action-buttons {
+    display: flex;
+    gap: 10px;
+    margin-top: 14px;
+    flex-wrap: wrap;
+  }
+
+  /* COLOR PICKER */
+  .color-picker-wrap {
+    margin-top: 14px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .color-picker-wrap input[type="color"] {
+    width: 40px; height: 36px;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    cursor: pointer;
+    padding: 2px;
+  }
+  .hex-input {
+    width: 100px;
+    padding: 6px 10px;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    font-size: 13px;
+    font-family: monospace;
+  }
+
+  /* PRANK SECTION */
+  .section-title {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin: 28px 0 12px;
+  }
+  .prank-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    gap: 10px;
+  }
+  .prank-card {
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+    text-decoration: none;
+    color: var(--text);
+    font-size: 12px;
+    background: #fff;
+    transition: box-shadow 0.15s, transform 0.15s;
+  }
+  .prank-card:hover {
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    transform: translateY(-2px);
+  }
+  .prank-card-thumb {
+    height: 72px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 26px;
+    background: #f5f5f5;
+  }
+  .prank-card-label {
+    padding: 6px 8px;
+    text-align: center;
+    font-weight: 500;
+  }
+
+  /* USE CASES */
+  .use-cases {
+    margin-top: 28px;
+  }
+  .use-cases h2 {
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 14px;
+  }
+  .use-case-item {
+    padding: 12px 0;
+    border-bottom: 1px solid #eee;
+  }
+  .use-case-item h3 {
+    font-size: 14px;
+    font-weight: 500;
+    margin-bottom: 4px;
+    color: var(--accent);
+  }
+  .use-case-item p {
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.5;
+  }
+
+  /* RIGHT SIDEBAR */
+  .right-sidebar {
+    background: var(--sidebar-bg);
+    border-left: 1px solid var(--border);
+    padding: 16px 14px;
+  }
+  .sidebar-section-title {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--muted);
+    margin-bottom: 10px;
+  }
+  .sidebar-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    margin-bottom: 20px;
+  }
+  .sidebar-card {
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    overflow: hidden;
+    text-decoration: none;
+    color: var(--text);
+    font-size: 11px;
+    background: #fafafa;
+    transition: box-shadow 0.15s;
+  }
+  .sidebar-card:hover { box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+  .sidebar-card-thumb {
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    background: #f0f0f0;
+  }
+  .sidebar-card-label {
+    padding: 4px 6px;
+    text-align: center;
+    font-size: 10px;
+    font-weight: 500;
+    line-height: 1.3;
+  }
+
+  /* FOOTER */
+  footer {
+    background: var(--footer-bg);
+    border-top: 1px solid var(--header-border);
+    padding: 20px 32px;
+    font-size: 12px;
+    color: var(--footer-text);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .footer-brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .footer-logo-img {
+    width: 24px;
+    height: 24px;
+    border-radius: 4px;
+    opacity: 0.85;
+  }
+  footer a { color: #5a9fd4; text-decoration: none; }
+  footer a:hover { color: #a8d4f5; }
+  .footer-links { display: flex; gap: 16px; }
+
+  /* COOKIE BANNER */
+  #cookie-banner {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: #333;
+    color: #fff;
+    padding: 14px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    z-index: 500;
+    font-size: 13px;
+    gap: 16px;
+  }
+  #cookie-banner a { color: #7ec8e3; text-decoration: underline; }
+  #cookie-ok {
+    background: #fff;
+    color: #333;
+    border: none;
+    padding: 7px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 13px;
+    white-space: nowrap;
+  }
+
+  /* TOAST */
+  #toast {
+    position: fixed;
+    bottom: 60px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #222;
+    color: #fff;
+    padding: 10px 22px;
+    border-radius: 24px;
+    font-size: 13px;
+    z-index: 600;
+    opacity: 0;
+    transition: opacity 0.3s;
+    pointer-events: none;
+  }
+  #toast.show { opacity: 1; }
+
+  @media (max-width: 900px) {
+    .layout { grid-template-columns: 1fr; }
+    .left-nav, .right-sidebar { display: none; }
+    main { padding: 20px 16px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- FULLSCREEN OVERLAY -->
+<div id="fullscreen-overlay" onclick="closeFullscreen()">
+  <div id="fullscreen-exit-hint">Haz clic para salir de pantalla completa</div>
+</div>
+
+<!-- COOKIE BANNER -->
+<div id="cookie-banner">
+  <span>Usamos <a href="#">cookies</a> para mejorar tu experiencia.</span>
+  <button id="cookie-ok" onclick="document.getElementById('cookie-banner').remove()">OK</button>
+</div>
+
+<!-- TOAST -->
+<div id="toast">¡Descarga iniciada!</div>
+
+<!-- HEADER -->
+<header>
+  <a class="logo" href="https://nicotips27.github.io/ec-download/">
+    <img class="logo-img" src="https://64.media.tumblr.com/37c52c25279f877bd0bc2d538626c938/2f8407cc51b2210e-be/s540x810/c379bb3cd18325d6b075e62fd26ffe91f5093ee3.jpg" alt="Logo Estalingrado Corp">
+    <div class="logo-text">
+      <span class="logo-name">Estalingrado Corp</span>
+      <span class="logo-sub">Centro de Control Digital</span>
+    </div>
+  </a>
+  <div class="header-right">
+    <a href="index.html" style="background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);border-radius:4px;padding:6px 12px;font-size:13px;color:#cce0f5;text-decoration:none;">⬅️ Portal Retro (Intra-net)</a>
+    <a href="#">Soporte</a>
+    <button id="sound-toggle-btn" onclick="toggleSound()" title="Activar/desactivar sonido" style="background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);border-radius:4px;padding:4px 10px;font-size:16px;cursor:pointer;color:#cce0f5;line-height:1;">🔊</button>
+    <div class="lang-selector">
+      <button class="lang-btn">🌐 Español ▾</button>
+      <div class="lang-dropdown">
+        <a href="#">English</a>
+        <a href="#">Deutsch</a>
+        <a href="#">Français</a>
+        <a href="#">Українська</a>
+        <a href="#">Polski</a>
+        <a href="#">Italiano</a>
+        <a href="#">Türkçe</a>
+        <a href="#">Português</a>
+        <a href="#">Svenska</a>
+        <a href="#">日本語</a>
+        <a href="#">한국어</a>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- LAYOUT -->
+<div class="layout">
+
+  <!-- LEFT NAV -->
+  <nav class="left-nav">
+    <a href="#" class="active" onclick="setColor('#ffffff','white','Pantalla Blanca',this)">
+      <span class="color-dot" style="background:#fff;border-color:#ccc;"></span>
+      Pantalla Blanca
+    </a>
+    <a href="#" onclick="setColor('#111111','black','Pantalla Negra',this)">
+      <span class="color-dot" style="background:#111;"></span>
+      Pantalla Negra
+    </a>
+    <a href="#" onclick="setColor('#e53935','red','Pantalla Roja',this)">
+      <span class="color-dot" style="background:#e53935;"></span>
+      Pantalla Roja
+    </a>
+    <a href="#" onclick="setColor('#43a047','green','Pantalla Verde',this)">
+      <span class="color-dot" style="background:#43a047;"></span>
+      Pantalla Verde
+    </a>
+    <a href="#" onclick="setColor('#1e88e5','blue','Pantalla Azul',this)">
+      <span class="color-dot" style="background:#1e88e5;"></span>
+      Pantalla Azul
+    </a>
+    <a href="#" onclick="setColor('#fdd835','yellow','Pantalla Amarilla',this)">
+      <span class="color-dot" style="background:#fdd835;"></span>
+      Pantalla Amarilla
+    </a>
+    <a href="#" onclick="setColor('#fb8c00','orange','Pantalla Naranja',this)">
+      <span class="color-dot" style="background:#fb8c00;"></span>
+      Pantalla Naranja
+    </a>
+    <a href="#" onclick="setColor('#e91e63','pink','Pantalla Rosa',this)">
+      <span class="color-dot" style="background:#e91e63;"></span>
+      Pantalla Rosa
+    </a>
+    <a href="#" onclick="setColor('#8e24aa','purple','Pantalla Morada',this)">
+      <span class="color-dot" style="background:#8e24aa;"></span>
+      Pantalla Morada
+    </a>
+  </nav>
+
+  <!-- MAIN CONTENT -->
+  <main>
+    <h1 id="page-title">Pantalla Blanca</h1>
+
+    <div class="color-tabs">
+      <a class="color-tab" href="#" onclick="setColor('#fdd835','yellow','Pantalla Amarilla'); return false;">Pantalla Amarilla</a>
+      <a class="color-tab" href="#" onclick="setColor('#fb8c00','orange','Pantalla Naranja'); return false;">Pantalla Naranja</a>
+      <a class="color-tab" href="#" onclick="setColor('#e91e63','pink','Pantalla Rosa'); return false;">Pantalla Rosa</a>
+      <a class="color-tab" href="#" onclick="setColor('#8e24aa','purple','Pantalla Morada'); return false;">Pantalla Morada</a>
+      <a class="color-tab active" href="#" onclick="setColor('#ffffff','white','Pantalla Blanca'); return false;">Zoom-Iluminación</a>
+    </div>
+
+    <!-- SCREEN PREVIEW -->
+    <div class="screen-preview" id="screen-preview" onclick="openFullscreen()" style="background:#ffffff;">
+      <div class="screen-preview-label">Clic para pantalla completa</div>
+    </div>
+
+    <!-- CONTROLS -->
+    <div class="controls">
+      <h3>Fondo <span id="color-name-label">blanco</span> antecedentes</h3>
+      <div class="resolution-grid">
+        <button class="res-btn" onclick="setResolution(854,480)">480p</button>
+        <button class="res-btn" onclick="setResolution(1280,720)">720p</button>
+        <button class="res-btn" onclick="setResolution(1920,1080)">1080p</button>
+        <button class="res-btn" onclick="setResolution(2560,1440)">1440p 2K</button>
+        <button class="res-btn" onclick="setResolution(3840,2160)">2160p 4K</button>
+        <button class="res-btn" onclick="setResolution(7680,4320)">4320p 8K</button>
+      </div>
+      <div class="custom-size">
+        <input type="number" id="width-input" placeholder="Ancho" value="1920" min="1" max="9999">
+        <span>×</span>
+        <input type="number" id="height-input" placeholder="Alto" value="1080" min="1" max="9999">
+        <span>px</span>
+        <button class="btn-primary" onclick="downloadImage()">Descargar</button>
+      </div>
+      <div class="color-picker-wrap">
+        <input type="color" id="color-picker" value="#ffffff" onchange="onColorPick(this.value)">
+        <input type="text" class="hex-input" id="hex-input" value="#ffffff" oninput="onHexInput(this.value)" placeholder="#ffffff">
+        <button class="btn-secondary" onclick="openCustomColor()">🎨 Personalizar</button>
+      </div>
+      <div class="action-buttons">
+        <button class="btn-primary" onclick="openFullscreen()">🖥️ Abrir en pantalla completa</button>
+        <button class="btn-secondary" onclick="openAllScreens()">Abrir en todas las pantallas</button>
+        <button class="btn-secondary" onclick="closeAllScreens()">Cerrar en todas las pantallas</button>
+      </div>
+    </div>
+
+    <!-- PRANK SCREENS -->
+    <div class="section-title">Pantallas de broma</div>
+    <div class="prank-grid">
+      <a class="prank-card" href="#" onclick="activatePrank('noise'); return false;">
+        <div class="prank-card-thumb" style="background:#222;">📺</div>
+        <div class="prank-card-label">Ruido Blanco</div>
+      </a>
+      <a class="prank-card" href="#" onclick="activatePrank('broken'); return false;">
+        <div class="prank-card-thumb" style="background:#1a1a2e;">💥</div>
+        <div class="prank-card-label">Pantalla Rota</div>
+      </a>
+      <a class="prank-card" href="#" onclick="activatePrank('bsod'); return false;">
+        <div class="prank-card-thumb" style="background:#0078d7;">💀</div>
+        <div class="prank-card-label">Pantalla de la Muerte</div>
+      </a>
+      <a class="prank-card" href="#" onclick="activatePrank('hacker'); return false;">
+        <div class="prank-card-thumb" style="background:#0d1117; color:#00ff00;">⌨️</div>
+        <div class="prank-card-label">Escritor Hacker</div>
+      </a>
+    </div>
+
+    <div class="section-title">Pantallas de actualización falsas</div>
+    <div class="prank-grid">
+      <a class="prank-card" href="#" onclick="activatePrank('win10'); return false;">
+        <div class="prank-card-thumb" style="background:#0067b8; color:#fff; font-size:13px; font-weight:600;">WIN 10</div>
+        <div class="prank-card-label">Windows 10</div>
+      </a>
+      <a class="prank-card" href="#" onclick="activatePrank('winxp'); return false;">
+        <div class="prank-card-thumb" style="background:#245edb; color:#fff; font-size:13px; font-weight:600;">XP</div>
+        <div class="prank-card-label">Windows XP</div>
+      </a>
+      <a class="prank-card" href="#" onclick="activatePrank('macos'); return false;">
+        <div class="prank-card-thumb" style="background:#1c1c1e; color:#fff; font-size:22px;">🍎</div>
+        <div class="prank-card-label">Mac OS X</div>
+      </a>
+      <a class="prank-card" href="#" onclick="activatePrank('ubuntu'); return false;">
+        <div class="prank-card-thumb" style="background:#dd4814; color:#fff; font-size:22px;">🐧</div>
+        <div class="prank-card-label">Ubuntu 22.04</div>
+      </a>
+      <a class="prank-card" href="#" onclick="activatePrank('dvd'); return false;">
+        <div class="prank-card-thumb" style="background:#111; color:#fff; font-size:22px;">💿</div>
+        <div class="prank-card-label">DVD</div>
+      </a>
+      <a class="prank-card" href="#" onclick="activatePrank('clock'); return false;">
+        <div class="prank-card-thumb" style="background:#222; color:#fff; font-size:22px;">🕐</div>
+        <div class="prank-card-label">Reloj Flip</div>
+      </a>
+    </div>
+
+    <!-- SCREENSAVERS -->
+    <div class="section-title">Protectores de pantalla</div>
+    <div class="prank-grid">
+      <a class="prank-card" href="#" onclick="activateScreensaver('pipes'); return false;">
+        <div class="prank-card-thumb" style="background:#000080;">🖥️</div>
+        <div class="prank-card-label">Tuberías 3D</div>
+      </a>
+      <a class="prank-card" href="#" onclick="activateScreensaver('mystify'); return false;">
+        <div class="prank-card-thumb" style="background:#000;">🔷</div>
+        <div class="prank-card-label">Mystify</div>
+      </a>
+      <a class="prank-card" href="#" onclick="activateScreensaver('starfield'); return false;">
+        <div class="prank-card-thumb" style="background:#000;">✨</div>
+        <div class="prank-card-label">Campo de Estrellas</div>
+      </a>
+      <a class="prank-card" href="#" onclick="activateScreensaver('beziers'); return false;">
+        <div class="prank-card-thumb" style="background:#000;">〰️</div>
+        <div class="prank-card-label">Béziers</div>
+      </a>
+      <a class="prank-card" href="#" onclick="activateScreensaver('flying'); return false;">
+        <div class="prank-card-thumb" style="background:#008080; color:#fff; font-size:13px; font-weight:700;">WIN</div>
+        <div class="prank-card-label">Flying Windows</div>
+      </a>
+      <a class="prank-card" href="#" onclick="activateScreensaver('matrix'); return false;">
+        <div class="prank-card-thumb" style="background:#000; color:#00ff41; font-size:13px; font-weight:700;">101</div>
+        <div class="prank-card-label">Matrix</div>
+      </a>
+    </div>
+
+    <!-- USE CASES -->
+    <div class="use-cases">
+      <h2>Las personas usan la pantalla blanca para:</h2>
+      <div class="use-case-item">
+        <h3>Iluminación para llamadas de zoom</h3>
+        <p>Para videollamadas! No tengo anillo de luz, pero sí dos pantallas. Puedo usar una para iluminar mi cara!</p>
+      </div>
+      <div class="use-case-item">
+        <h3>Copiar dibujos</h3>
+        <p>Necesito un fondo blanco brillante debajo de mi papel para copiar un dibujo mas facilmente.</p>
+      </div>
+      <div class="use-case-item">
+        <h3>Comprobar el monitor</h3>
+        <p>Para revisar el monitor y encontrar píxeles muertos con facilidad.</p>
+      </div>
+      <div class="use-case-item">
+        <h3>Limpiar el monitor</h3>
+        <p>Lo uso para limpiar el monitor, es fácil ver la suciedad. También para calibrar colores entre diferentes pantallas.</p>
+      </div>
+      <div class="use-case-item">
+        <h3>Luz para leer</h3>
+        <p>Para tener una fuente de luz para lectura nocturna, cuando el interruptor está demasiado lejos.</p>
+      </div>
+      <div class="use-case-item">
+        <h3>Atrapar moscas</h3>
+        <p>Lo uso para atrapar mosquitos y moscas, al ser estos atraídos a la pantalla blanca.</p>
+      </div>
+    </div>
+  </main>
+
+  <!-- RIGHT SIDEBAR -->
+  <aside class="right-sidebar">
+    <div class="sidebar-section-title">Colores populares</div>
+    <div class="sidebar-grid">
+      <a class="sidebar-card" href="#" onclick="setColor('#ffffff','white','Pantalla Blanca'); return false;">
+        <div class="sidebar-card-thumb" style="background:#ffffff; border-bottom:1px solid #eee;">⬜</div>
+        <div class="sidebar-card-label">Blanca</div>
+      </a>
+      <a class="sidebar-card" href="#" onclick="setColor('#111111','black','Pantalla Negra'); return false;">
+        <div class="sidebar-card-thumb" style="background:#111; color:#fff;">⬛</div>
+        <div class="sidebar-card-label">Negra</div>
+      </a>
+      <a class="sidebar-card" href="#" onclick="setColor('#e53935','red','Pantalla Roja'); return false;">
+        <div class="sidebar-card-thumb" style="background:#e53935; color:#fff;">🟥</div>
+        <div class="sidebar-card-label">Roja</div>
+      </a>
+      <a class="sidebar-card" href="#" onclick="setColor('#43a047','green','Pantalla Verde'); return false;">
+        <div class="sidebar-card-thumb" style="background:#43a047; color:#fff;">🟩</div>
+        <div class="sidebar-card-label">Verde</div>
+      </a>
+      <a class="sidebar-card" href="#" onclick="setColor('#1e88e5','blue','Pantalla Azul'); return false;">
+        <div class="sidebar-card-thumb" style="background:#1e88e5; color:#fff;">🟦</div>
+        <div class="sidebar-card-label">Azul</div>
+      </a>
+      <a class="sidebar-card" href="#" onclick="setColor('#fdd835','yellow','Pantalla Amarilla'); return false;">
+        <div class="sidebar-card-thumb" style="background:#fdd835;">🟨</div>
+        <div class="sidebar-card-label">Amarilla</div>
+      </a>
+    </div>
+
+    <div class="sidebar-section-title">Pantallas de broma</div>
+    <div class="sidebar-grid">
+      <a class="sidebar-card" href="#" onclick="activatePrank('noise'); return false;">
+        <div class="sidebar-card-thumb" style="background:#222; color:#fff; font-size:18px;">📺</div>
+        <div class="sidebar-card-label">Ruido Blanco</div>
+      </a>
+      <a class="sidebar-card" href="#" onclick="activatePrank('bsod'); return false;">
+        <div class="sidebar-card-thumb" style="background:#0078d7; color:#fff; font-size:18px;">💀</div>
+        <div class="sidebar-card-label">BSOD</div>
+      </a>
+      <a class="sidebar-card" href="#" onclick="activatePrank('hacker'); return false;">
+        <div class="sidebar-card-thumb" style="background:#0d1117; color:#00ff00; font-size:18px;">👨‍💻</div>
+        <div class="sidebar-card-label">Hacker</div>
+      </a>
+      <a class="sidebar-card" href="#" onclick="activatePrank('broken'); return false;">
+        <div class="sidebar-card-thumb" style="background:#1a1a2e; color:#fff; font-size:18px;">💥</div>
+        <div class="sidebar-card-label">Rota</div>
+      </a>
+    </div>
+
+    <div class="sidebar-section-title">Actualizaciones falsas</div>
+    <div class="sidebar-grid">
+      <a class="sidebar-card" href="#" onclick="activatePrank('win10'); return false;">
+        <div class="sidebar-card-thumb" style="background:#0067b8; color:#fff; font-size:11px; font-weight:700;">WIN 10</div>
+        <div class="sidebar-card-label">Windows 10</div>
+      </a>
+      <a class="sidebar-card" href="#" onclick="activatePrank('macos'); return false;">
+        <div class="sidebar-card-thumb" style="background:#1c1c1e; color:#fff; font-size:18px;">🍎</div>
+        <div class="sidebar-card-label">Mac OS X</div>
+      </a>
+    </div>
+    <div class="sidebar-section-title">Protectores de pantalla</div>
+    <div class="sidebar-grid">
+      <a class="sidebar-card" href="#" onclick="activateScreensaver('pipes'); return false;">
+        <div class="sidebar-card-thumb" style="background:#000080; color:#fff; font-size:18px;">🖥️</div>
+        <div class="sidebar-card-label">Tuberías 3D</div>
+      </a>
+      <a class="sidebar-card" href="#" onclick="activateScreensaver('mystify'); return false;">
+        <div class="sidebar-card-thumb" style="background:#000; color:#fff; font-size:18px;">🔷</div>
+        <div class="sidebar-card-label">Mystify</div>
+      </a>
+      <a class="sidebar-card" href="#" onclick="activateScreensaver('starfield'); return false;">
+        <div class="sidebar-card-thumb" style="background:#000; color:#fff; font-size:18px;">✨</div>
+        <div class="sidebar-card-label">Estrellas</div>
+      </a>
+      <a class="sidebar-card" href="#" onclick="activateScreensaver('matrix'); return false;">
+        <div class="sidebar-card-thumb" style="background:#000; color:#00ff41; font-size:11px; font-weight:700;">MATRIX</div>
+        <div class="sidebar-card-label">Matrix</div>
+      </a>
+    </div>
+  </aside>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <span>© 2025 Estalingrado Corp. - Centro de Control Digital</span>
+  <div class="footer-links">
+    <a href="#">Política de privacidad</a>
+    <a href="#">Términos y condiciones</a>
+    <a href="#">Contacto</a>
+  </div>
+</footer>
+
+<!-- SCREENSAVER OVERLAY -->
+<div id="ss-overlay" style="display:none; position:fixed; inset:0; z-index:8500; background:#000; cursor:none;">
+  <canvas id="ss-canvas" style="display:block; width:100%; height:100%;"></canvas>
+</div>
+
+<!-- PRANK OVERLAYS -->
+<div id="prank-overlay" style="display:none; position:fixed; inset:0; z-index:8000; font-family:'Segoe UI',sans-serif;">
+  <div id="prank-content" style="width:100%; height:100%;"></div>
+</div>
+
+<script>
+  // ══════════════════════════════════════════════════════
+  //  AUDIO ENGINE  (Web Audio API, sin dependencias)
+  // ══════════════════════════════════════════════════════
+  let _ac = null;          // AudioContext (lazy)
+  let _bgNode = null;      // nodo de audio de fondo activo
+  let _bgGain = null;      // GainNode del fondo
+  const _soundEnabled = { v: true };
+
+  function getAC() {
+    if (!_ac) _ac = new (window.AudioContext || window.webkitAudioContext)();
+    if (_ac.state === 'suspended') _ac.resume();
+    return _ac;
+  }
+
+  function stopBg() {
+    if (_bgGain) {
+      try {
+        _bgGain.gain.setTargetAtTime(0, getAC().currentTime, 0.3);
+        setTimeout(() => { try { _bgNode && _bgNode.stop(); } catch(e){} _bgNode = null; _bgGain = null; }, 600);
+      } catch(e) { _bgNode = null; _bgGain = null; }
+    }
+  }
+
+  // ── utilidades de síntesis ──────────────────────────
+  function playTone(freq, type, dur, vol, delay=0, dest=null) {
+    if (!_soundEnabled.v) return;
+    const ac = getAC();
+    const osc = ac.createOscillator();
+    const g   = ac.createGain();
+    osc.type = type;
+    osc.frequency.setValueAtTime(freq, ac.currentTime + delay);
+    g.gain.setValueAtTime(0, ac.currentTime + delay);
+    g.gain.linearRampToValueAtTime(vol, ac.currentTime + delay + 0.01);
+    g.gain.exponentialRampToValueAtTime(0.0001, ac.currentTime + delay + dur);
+    osc.connect(g);
+    g.connect(dest || ac.destination);
+    osc.start(ac.currentTime + delay);
+    osc.stop(ac.currentTime + delay + dur + 0.05);
+  }
+
+  function playNoise(dur, vol, lowHz=200, highHz=4000, delay=0) {
+    if (!_soundEnabled.v) return;
+    const ac = getAC();
+    const bufLen = ac.sampleRate * dur;
+    const buf = ac.createBuffer(1, bufLen, ac.sampleRate);
+    const data = buf.getChannelData(0);
+    for (let i = 0; i < bufLen; i++) data[i] = Math.random() * 2 - 1;
+    const src = ac.createBufferSource();
+    src.buffer = buf;
+    const flt = ac.createBiquadFilter();
+    flt.type = 'bandpass';
+    flt.frequency.value = (lowHz + highHz) / 2;
+    flt.Q.value = 0.5;
+    const g = ac.createGain();
+    g.gain.setValueAtTime(0, ac.currentTime + delay);
+    g.gain.linearRampToValueAtTime(vol, ac.currentTime + delay + 0.02);
+    g.gain.exponentialRampToValueAtTime(0.0001, ac.currentTime + delay + dur);
+    src.connect(flt); flt.connect(g); g.connect(ac.destination);
+    src.start(ac.currentTime + delay);
+  }
+
+  // ── sonidos de UI ──────────────────────────────────
+  function sndClick() {
+    if (!_soundEnabled.v) return;
+    playTone(880, 'sine', 0.06, 0.12);
+    playTone(1320, 'sine', 0.04, 0.07, 0.03);
+  }
+
+  function sndColorChange(hex) {
+    if (!_soundEnabled.v) return;
+    // mapear color a frecuencia
+    const r = parseInt(hex.slice(1,3),16);
+    const g = parseInt(hex.slice(3,5),16);
+    const b = parseInt(hex.slice(5,7),16);
+    const freq = 220 + (r/255)*300 + (g/255)*200 + (b/255)*100;
+    playTone(freq, 'sine', 0.18, 0.15);
+    playTone(freq * 1.5, 'triangle', 0.10, 0.07, 0.05);
+  }
+
+  function sndFullscreen() {
+    if (!_soundEnabled.v) return;
+    [0, 0.08, 0.16].forEach((d, i) => playTone(440 * Math.pow(1.25, i), 'sine', 0.2, 0.12, d));
+  }
+
+  function sndClose() {
+    if (!_soundEnabled.v) return;
+    [0, 0.06, 0.12].forEach((d, i) => playTone(880 / Math.pow(1.3, i), 'triangle', 0.15, 0.1, d));
+  }
+
+  function sndDownload() {
+    if (!_soundEnabled.v) return;
+    [440,554,659,880].forEach((f,i) => playTone(f,'sine',0.18,0.12,i*0.07));
+  }
+
+  // ── sonidos de pantallas prank ─────────────────────
+  function sndBsod() {
+    if (!_soundEnabled.v) return;
+    const ac = getAC();
+    // golpe grave + distorsión
+    playTone(60, 'sawtooth', 0.6, 0.4);
+    playNoise(0.4, 0.35, 50, 300);
+    playTone(55, 'square', 1.2, 0.25, 0.1);
+  }
+
+  function sndHacker() {
+    // loop de teclado retro
+    if (!_soundEnabled.v) return;
+    stopBg();
+    const ac = getAC();
+    function keystroke() {
+      if (!_soundEnabled.v) return;
+      const f = 800 + Math.random() * 600;
+      playTone(f, 'square', 0.04, 0.05 + Math.random() * 0.05);
+      playNoise(0.03, 0.04, 1000, 4000);
+    }
+    const id = setInterval(keystroke, 80 + Math.random() * 80);
+    _bgNode = { stop: () => clearInterval(id) };
+    _bgGain = { gain: { setTargetAtTime: () => {} } };
+    // guardar ref para stopBg
+    const origStop = stopBg;
+    window._hackerSoundId = id;
+  }
+
+  function stopHackerSound() {
+    if (window._hackerSoundId) { clearInterval(window._hackerSoundId); window._hackerSoundId = null; }
+  }
+
+  function sndNoise() {
+    // ruido blanco continuo (TV sin señal)
+    if (!_soundEnabled.v) return;
+    stopBg();
+    const ac = getAC();
+    const bufSec = 2;
+    const buf = ac.createBuffer(1, ac.sampleRate * bufSec, ac.sampleRate);
+    const data = buf.getChannelData(0);
+    for (let i = 0; i < data.length; i++) data[i] = Math.random() * 2 - 1;
+    const src = ac.createBufferSource();
+    src.buffer = buf;
+    src.loop = true;
+    const g = ac.createGain();
+    g.gain.value = 0.18;
+    src.connect(g); g.connect(ac.destination);
+    src.start();
+    _bgNode = src;
+    _bgGain = g;
+  }
+
+  function sndBroken() {
+    if (!_soundEnabled.v) return;
+    playNoise(0.15, 0.5, 20, 800);
+    playTone(80, 'sawtooth', 0.3, 0.3);
+    [0.15, 0.3, 0.5].forEach(d => playNoise(0.1, 0.3, 20, 500, d));
+  }
+
+  function sndWinUpdate() {
+    if (!_soundEnabled.v) return;
+    // jingle de inicio de Windows (imitación)
+    const notes = [
+      {f:392,d:0.18,t:0}, {f:523,d:0.18,t:0.2}, {f:659,d:0.22,t:0.4},
+      {f:784,d:0.35,t:0.65}, {f:523,d:0.18,t:1.05}, {f:784,d:0.5,t:1.28}
+    ];
+    notes.forEach(n => playTone(n.f, 'sine', n.d, 0.14, n.t));
+    notes.forEach(n => playTone(n.f*2, 'triangle', n.d*0.6, 0.04, n.t+0.01));
+  }
+
+  function sndMacBoot() {
+    if (!_soundEnabled.v) return;
+    // el bong característico de Mac
+    playTone(220, 'sine', 2.5, 0.35);
+    playTone(440, 'sine', 2.0, 0.18, 0.02);
+    playTone(880, 'sine', 1.2, 0.08, 0.04);
+    // fade natural
+    const ac = getAC();
+  }
+
+  function sndUbuntu() {
+    if (!_soundEnabled.v) return;
+    // drum + beep estilo linux
+    playNoise(0.12, 0.3, 60, 200);
+    playTone(180, 'sine', 0.3, 0.2);
+    setTimeout(() => { playTone(360, 'square', 0.08, 0.1); }, 250);
+    setTimeout(() => { playTone(720, 'square', 0.06, 0.08); }, 380);
+  }
+
+  function sndDvdBounce() {
+    if (!_soundEnabled.v) return;
+    playTone(660, 'triangle', 0.12, 0.18);
+    playTone(990, 'sine', 0.08, 0.1, 0.05);
+  }
+
+  function sndClockTick() {
+    if (!_soundEnabled.v) return;
+    stopBg();
+    let lastSec = -1;
+    const id = setInterval(() => {
+      const s = new Date().getSeconds();
+      if (s !== lastSec) {
+        lastSec = s;
+        playNoise(0.03, 0.2, 2000, 6000);
+        playTone(1200, 'square', 0.025, 0.1);
+      }
+    }, 200);
+    window._clockSoundId = id;
+  }
+
+  function stopClockSound() {
+    if (window._clockSoundId) { clearInterval(window._clockSoundId); window._clockSoundId = null; }
+  }
+
+  function sndWinXP() {
+    if (!_soundEnabled.v) return;
+    // startup XP imitación
+    const melody = [
+      {f:330,t:0,d:0.25},{f:415,t:0.28,d:0.25},{f:494,t:0.56,d:0.25},
+      {f:622,t:0.84,d:0.5},{f:494,t:1.38,d:0.25},{f:622,t:1.65,d:0.7}
+    ];
+    melody.forEach(n => {
+      playTone(n.f, 'sine', n.d, 0.15, n.t);
+      playTone(n.f * 1.5, 'triangle', n.d * 0.7, 0.05, n.t + 0.01);
+    });
+  }
+
+  // ── sonidos de protectores de pantalla ──────────────
+  function sndPipes() {
+    if (!_soundEnabled.v) return;
+    stopBg();
+    const ac = getAC();
+    // drone ambiental metálico
+    function makeClank() {
+      if (!_soundEnabled.v) return;
+      const f = [120, 180, 240, 320][Math.floor(Math.random()*4)];
+      playTone(f, 'sawtooth', 0.3, 0.06 + Math.random()*0.06);
+      playNoise(0.08, 0.04, f, f*3);
+    }
+    const id = setInterval(makeClank, 600 + Math.random() * 800);
+    window._pipesSoundId = id;
+  }
+  function stopPipesSound() {
+    if (window._pipesSoundId) { clearInterval(window._pipesSoundId); window._pipesSoundId = null; }
+  }
+
+  function sndMystify() {
+    if (!_soundEnabled.v) return;
+    stopBg();
+    // tono etéreo pulsante
+    const ac = getAC();
+    let hue = 0;
+    function pulse() {
+      if (!_soundEnabled.v) return;
+      hue = (hue + 15) % 360;
+      const f = 200 + Math.sin(hue * Math.PI / 180) * 120;
+      playTone(f, 'sine', 0.5, 0.04);
+      playTone(f * 1.333, 'sine', 0.4, 0.025, 0.05);
+    }
+    const id = setInterval(pulse, 500);
+    window._mystifySoundId = id;
+  }
+  function stopMystifySound() {
+    if (window._mystifySoundId) { clearInterval(window._mystifySoundId); window._mystifySoundId = null; }
+  }
+
+  function sndStarfield() {
+    if (!_soundEnabled.v) return;
+    stopBg();
+    // swoosh espacial continuo
+    const ac = getAC();
+    const buf = ac.createBuffer(1, ac.sampleRate * 3, ac.sampleRate);
+    const data = buf.getChannelData(0);
+    for (let i = 0; i < data.length; i++) data[i] = (Math.random() * 2 - 1) * (1 - i/data.length);
+    const src = ac.createBufferSource();
+    src.buffer = buf;
+    src.loop = true;
+    const flt = ac.createBiquadFilter();
+    flt.type = 'lowpass';
+    flt.frequency.value = 800;
+    const g = ac.createGain();
+    g.gain.value = 0.06;
+    src.connect(flt); flt.connect(g); g.connect(ac.destination);
+    src.start();
+    _bgNode = src;
+    _bgGain = g;
+    // destellos ocasionales
+    const id = setInterval(() => {
+      if (!_soundEnabled.v) return;
+      playTone(2000 + Math.random()*2000, 'sine', 0.08, 0.03);
+    }, 800 + Math.random()*1200);
+    window._starfieldSoundId = id;
+  }
+  function stopStarfieldSound() {
+    if (window._starfieldSoundId) { clearInterval(window._starfieldSoundId); window._starfieldSoundId = null; }
+    stopBg();
+  }
+
+  function sndBeziers() {
+    if (!_soundEnabled.v) return;
+    stopBg();
+    let phase = 0;
+    const id = setInterval(() => {
+      if (!_soundEnabled.v) return;
+      phase += 0.18;
+      const f = 180 + Math.sin(phase) * 80 + Math.cos(phase * 0.7) * 60;
+      playTone(f, 'sine', 0.35, 0.035);
+      playTone(f * 2.01, 'sine', 0.25, 0.015, 0.04);
+    }, 350);
+    window._beziersSoundId = id;
+  }
+  function stopBeziersSound() {
+    if (window._beziersSoundId) { clearInterval(window._beziersSoundId); window._beziersSoundId = null; }
+  }
+
+  function sndFlying() {
+    if (!_soundEnabled.v) return;
+    stopBg();
+    // jingle Win98 loop suave + whoosh de logos
+    const ac = getAC();
+    let t = 0;
+    const id = setInterval(() => {
+      if (!_soundEnabled.v) return;
+      t++;
+      if (t % 8 === 0) {
+        const notes = [392, 494, 587, 784];
+        notes.forEach((f, i) => playTone(f, 'triangle', 0.3, 0.06, i*0.08));
+      }
+      // whoosh random
+      if (Math.random() < 0.3) {
+        const f = 300 + Math.random() * 400;
+        playTone(f, 'sine', 0.15, 0.04);
+      }
+    }, 250);
+    window._flyingSoundId = id;
+  }
+  function stopFlyingSound() {
+    if (window._flyingSoundId) { clearInterval(window._flyingSoundId); window._flyingSoundId = null; }
+  }
+
+  function sndMatrix() {
+    if (!_soundEnabled.v) return;
+    stopBg();
+    // tecleo digital denso + zumbido bajo
+    const ac = getAC();
+    // sub-drone
+    const osc = ac.createOscillator();
+    const g = ac.createGain();
+    osc.type = 'sawtooth';
+    osc.frequency.value = 55;
+    g.gain.value = 0.06;
+    osc.connect(g); g.connect(ac.destination);
+    osc.start();
+    _bgNode = osc;
+    _bgGain = g;
+
+    const id = setInterval(() => {
+      if (!_soundEnabled.v) return;
+      const f = 600 + Math.random() * 1400;
+      playTone(f, 'square', 0.03, 0.03 + Math.random()*0.04);
+    }, 40 + Math.random()*30);
+    window._matrixSoundId = id;
+  }
+  function stopMatrixSound() {
+    if (window._matrixSoundId) { clearInterval(window._matrixSoundId); window._matrixSoundId = null; }
+    stopBg();
+  }
+
+  // ── stop ALL background sounds ──────────────────────
+  function stopAllSounds() {
+    stopBg();
+    stopHackerSound();
+    stopClockSound();
+    stopPipesSound();
+    stopMystifySound();
+    stopStarfieldSound();
+    stopBeziersSound();
+    stopFlyingSound();
+    stopMatrixSound();
+  }
+
+  // ── botón mute en UI ─────────────────────────────────
+  function toggleSound() {
+    _soundEnabled.v = !_soundEnabled.v;
+    const icon = _soundEnabled.v ? '🔊' : '🔇';
+    ['sound-toggle-btn','ss-mute-btn'].forEach(id => {
+      const btn = document.getElementById(id);
+      if (btn) btn.textContent = icon;
+    });
+    // también sincronizar botón dentro del prank overlay si existe
+    const prankMute = document.getElementById('prank-mute-btn');
+    if (prankMute) prankMute.textContent = icon;
+    if (!_soundEnabled.v) stopAllSounds();
+  }
+
+  // ══════════════════════════════════════════════════════
+  //  LÓGICA PRINCIPAL (original, sin cambios)
+  // ══════════════════════════════════════════════════════
+  let currentColor = '#ffffff';
+  let currentName = 'white';
+  let hackerInterval = null;
+  let noiseInterval = null;
+  let dvdInterval = null;
+  let clockInterval = null;
+
+  function setColor(hex, name, title, navEl) {
+    currentColor = hex;
+    currentName = name;
+    document.getElementById('screen-preview').style.background = hex;
+    document.getElementById('page-title').textContent = title;
+    document.getElementById('color-name-label').textContent = name;
+    document.getElementById('color-picker').value = hex;
+    document.getElementById('hex-input').value = hex;
+    document.getElementById('fullscreen-overlay').style.background = hex;
+    if (navEl) {
+      document.querySelectorAll('.left-nav a').forEach(a => a.classList.remove('active'));
+      navEl.classList.add('active');
+    }
+    sndColorChange(hex);
+  }
+
+  function onColorPick(val) {
+    currentColor = val;
+    document.getElementById('screen-preview').style.background = val;
+    document.getElementById('hex-input').value = val;
+    document.getElementById('fullscreen-overlay').style.background = val;
+  }
+
+  function onHexInput(val) {
+    if (/^#[0-9a-fA-F]{6}$/.test(val)) {
+      currentColor = val;
+      document.getElementById('color-picker').value = val;
+      document.getElementById('screen-preview').style.background = val;
+      document.getElementById('fullscreen-overlay').style.background = val;
+    }
+  }
+
+  function openCustomColor() {
+    document.getElementById('color-picker').click();
+  }
+
+  function setResolution(w, h) {
+    document.getElementById('width-input').value = w;
+    document.getElementById('height-input').value = h;
+    showToast('Resolución: ' + w + '×' + h);
+  }
+
+  function downloadImage() {
+    const w = parseInt(document.getElementById('width-input').value) || 1920;
+    const h = parseInt(document.getElementById('height-input').value) || 1080;
+    const canvas = document.createElement('canvas');
+    canvas.width = w; canvas.height = h;
+    const ctx = canvas.getContext('2d');
+    ctx.fillStyle = currentColor;
+    ctx.fillRect(0, 0, w, h);
+    const a = document.createElement('a');
+    a.download = 'pantalla-' + currentName + '-' + w + 'x' + h + '.png';
+    a.href = canvas.toDataURL();
+    a.click();
+    showToast('¡Imagen descargada!');
+    sndDownload();
+  }
+
+  function openFullscreen() {
+    const ov = document.getElementById('fullscreen-overlay');
+    ov.style.background = currentColor;
+    ov.classList.add('active');
+    ov.requestFullscreen && ov.requestFullscreen();
+    sndFullscreen();
+    setTimeout(() => {
+      document.getElementById('fullscreen-exit-hint').style.opacity = '0';
+    }, 3000);
+  }
+
+  function closeFullscreen() {
+    document.getElementById('fullscreen-overlay').classList.remove('active');
+    document.getElementById('fullscreen-exit-hint').style.opacity = '1';
+    document.exitFullscreen && document.exitFullscreen();
+    sndClose();
+  }
+
+  function openAllScreens() { showToast('Función disponible en múltiples ventanas'); }
+  function closeAllScreens() { showToast('Función disponible en múltiples ventanas'); }
+
+  function showToast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 2500);
+  }
+
+  // PRANK SCREENS
+  function activatePrank(type) {
+    clearPrankIntervals();
+    stopAllSounds();
+    const overlay = document.getElementById('prank-overlay');
+    const content = document.getElementById('prank-content');
+    overlay.style.display = 'block';
+
+    if (type === 'noise') {
+      sndNoise();
+      content.innerHTML = '<canvas id="noise-canvas" style="width:100%;height:100%;display:block;"></canvas>';
+      overlay.style.background = '#000';
+      setTimeout(() => {
+        const c = document.getElementById('noise-canvas');
+        c.width = window.innerWidth; c.height = window.innerHeight;
+        const ctx = c.getContext('2d');
+        noiseInterval = setInterval(() => {
+          const img = ctx.createImageData(c.width, c.height);
+          for (let i = 0; i < img.data.length; i += 4) {
+            const v = Math.random() * 255;
+            img.data[i] = img.data[i+1] = img.data[i+2] = v;
+            img.data[i+3] = 255;
+          }
+          ctx.putImageData(img, 0, 0);
+        }, 60);
+      }, 50);
+
+    } else if (type === 'broken') {
+      sndBroken();
+      overlay.style.background = '#000';
+      content.innerHTML = `<div style="width:100%;height:100%;background:#000;position:relative;overflow:hidden;">
+        <svg width="100%" height="100%" style="position:absolute;inset:0;" viewBox="0 0 800 600" preserveAspectRatio="xMidYMid slice">
+          <polygon points="400,300 120,50 0,200" fill="#111" stroke="#555" stroke-width="1"/>
+          <polygon points="400,300 680,80 800,0 800,300" fill="#0a0a0a" stroke="#444" stroke-width="1"/>
+          <polygon points="400,300 0,200 0,600 200,600" fill="#181818" stroke="#333" stroke-width="1"/>
+          <polygon points="400,300 200,600 500,600 800,500 800,300" fill="#0d0d0d" stroke="#555" stroke-width="1"/>
+          <line x1="400" y1="300" x2="120" y2="50" stroke="#666" stroke-width="2"/>
+          <line x1="400" y1="300" x2="680" y2="80" stroke="#555" stroke-width="1.5"/>
+          <line x1="400" y1="300" x2="800" y2="300" stroke="#444" stroke-width="2"/>
+          <line x1="400" y1="300" x2="0" y2="400" stroke="#555" stroke-width="1"/>
+          <line x1="400" y1="300" x2="500" y2="600" stroke="#666" stroke-width="1.5"/>
+          <circle cx="400" cy="300" r="18" fill="#fff" opacity="0.7"/>
+          <circle cx="400" cy="300" r="8" fill="#ff4444" opacity="0.9"/>
+        </svg>
+        <div style="position:absolute;bottom:30px;left:50%;transform:translateX(-50%);color:#555;font-size:14px;letter-spacing:2px;">HARDWARE FAILURE</div>
+      </div>`;
+
+    } else if (type === 'bsod') {
+      sndBsod();
+      overlay.style.background = '#0078d7';
+      content.innerHTML = `<div style="width:100%;height:100%;background:#0078d7;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#fff;font-family:'Segoe UI',sans-serif;padding:60px;">
+        <div style="font-size:100px;margin-bottom:20px;">:(</div>
+        <div style="font-size:22px;font-weight:300;margin-bottom:30px;text-align:center;">Tu PC tuvo un problema y necesita reiniciarse.<br>Estamos recopilando información del error.</div>
+        <div style="font-size:18px;font-weight:300;margin-bottom:40px;" id="bsod-pct">0% completado</div>
+        <div style="font-size:13px;opacity:0.8;text-align:center;">Para más información sobre este error y cómo solucionarlo, visita<br>https://www.windows.com/stopcode</div>
+        <div style="margin-top:30px;font-size:13px;opacity:0.7;">Código de detención: CRITICAL_PROCESS_DIED</div>
+      </div>`;
+      let p = 0;
+      const bsodI = setInterval(() => {
+        p = Math.min(100, p + Math.random() * 3);
+        const el = document.getElementById('bsod-pct');
+        if (el) el.textContent = Math.floor(p) + '% completado';
+        if (p >= 100) clearInterval(bsodI);
+      }, 300);
+
+    } else if (type === 'hacker') {
+      sndHacker();
+      overlay.style.background = '#0d1117';
+      content.innerHTML = `<div style="width:100%;height:100%;background:#0d1117;overflow:hidden;padding:20px;font-family:'Courier New',monospace;font-size:14px;color:#00ff41;line-height:1.5;" id="hacker-out"></div>`;
+      const lines = [
+        'Iniciando sistema ESTALINGRADO v3.14...',
+        'Conectando a servidor seguro... OK',
+        'Bypassing firewall... [████████] DONE',
+        'Accediendo a base de datos gubernamental...',
+        'sudo rm -rf /var/log/*',
+        'Descargando archivos clasificados... 2.4GB',
+        'ssh root@192.168.1.1 -p 22',
+        'Ejecutando exploit CVE-2024-1337...',
+        'Instalando backdoor... éxito',
+        'Limpiando rastros digitales...',
+        'nmap -sV -O 10.0.0.0/24',
+        'Extrayendo contraseñas... md5: 4f3a9...',
+        'python3 payload.py --target=all --stealth',
+        'Transmitiendo datos... 100%',
+        'Operación completada. Sin rastros.',
+      ];
+      let li = 0;
+      const out = document.getElementById('hacker-out');
+      hackerInterval = setInterval(() => {
+        if (!document.getElementById('hacker-out')) return;
+        const line = lines[li % lines.length];
+        out.innerHTML += '<div>> ' + line + '</div>';
+        out.scrollTop = out.scrollHeight;
+        li++;
+      }, 400);
+
+    } else if (type === 'win10') {
+      sndWinUpdate();
+      overlay.style.background = '#0078D7';
+      content.innerHTML = `
+      <style>
+        .win10-spinner-wrap { position: relative; width: 44px; height: 44px; margin-bottom: 30px; }
+        .win10-dot { position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0; transform: rotate(225deg); animation: win10-spin 4s infinite; }
+        .win10-dot::after { content: ''; position: absolute; top: 0; left: 50%; width: 5px; height: 5px; background: #fff; border-radius: 50%; transform: translateX(-50%); }
+        .win10-dot:nth-child(1) { animation-delay: 0.15s; }
+        .win10-dot:nth-child(2) { animation-delay: 0.3s; }
+        .win10-dot:nth-child(3) { animation-delay: 0.45s; }
+        .win10-dot:nth-child(4) { animation-delay: 0.6s; }
+        .win10-dot:nth-child(5) { animation-delay: 0.75s; }
+        @keyframes win10-spin {
+          0% { transform: rotate(225deg); opacity: 1; animation-timing-function: ease-out; }
+          7% { transform: rotate(345deg); animation-timing-function: linear; }
+          30% { transform: rotate(455deg); animation-timing-function: ease-in-out; }
+          39% { transform: rotate(690deg); animation-timing-function: linear; }
+          70% { transform: rotate(815deg); opacity: 1; animation-timing-function: ease-out; }
+          75% { transform: rotate(945deg); animation-timing-function: ease-out; }
+          76% { transform: rotate(945deg); opacity: 0; }
+          100% { transform: rotate(945deg); opacity: 0; }
+        }
+      </style>
+      <div style="width:100%;height:100%;background:#0078D7;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#fff;font-family:'Segoe UI',-apple-system,sans-serif;cursor:none;text-align:center;">
+        <div class="win10-spinner-wrap">
+          <div class="win10-dot"></div><div class="win10-dot"></div><div class="win10-dot"></div><div class="win10-dot"></div><div class="win10-dot"></div>
+        </div>
+        <div style="font-size:24px;font-weight:300;margin-bottom:4px;">Trabajando en las actualizaciones</div>
+        <div style="font-size:24px;font-weight:300;margin-bottom:4px;"><span id="w10pct">0</span>% completado.</div>
+        <div style="font-size:24px;font-weight:300;">No apagues el equipo.</div>
+      </div>`;
+      
+      let p = 0;
+      let hang = 0;
+      const wi = setInterval(() => {
+        // Simular que la actualización se queda "pegada" a veces (como en la vida real)
+        if (hang > 0) {
+          hang -= 400;
+          return;
+        }
+        if (Math.random() < 0.15) {
+          hang = 1000 + Math.random() * 4000; // Congelarse entre 1 y 5 segundos
+          return;
+        }
+        
+        p += Math.random() * 4; // Avanzar a saltos
+        if (p > 100) p = 100;
+        
+        const pt = document.getElementById('w10pct');
+        if (pt) pt.textContent = Math.floor(p);
+        
+        // Al llegar al 100%, apagar la pantalla para simular reinicio
+        if (p === 100) {
+          clearInterval(wi);
+          setTimeout(() => {
+            if (document.getElementById('prank-overlay').style.display !== 'none') {
+              document.getElementById('prank-content').innerHTML = '<div style="background:#000;width:100%;height:100%;cursor:none;"></div>';
+            }
+          }, 1500);
+        }
+      }, 400);
+
+    } else if (type === 'macos') {
+      sndMacBoot();
+      overlay.style.background = '#1c1c1e';
+      content.innerHTML = `<div style="width:100%;height:100%;background:linear-gradient(135deg,#1c1c1e,#2c2c2e);display:flex;flex-direction:column;align-items:center;justify-content:center;color:#fff;font-family:-apple-system,BlinkMacSystemFont,'San Francisco',sans-serif;">
+        <div style="font-size:80px;margin-bottom:30px;">🍎</div>
+        <div style="width:200px;height:5px;background:rgba(255,255,255,0.2);border-radius:5px;overflow:hidden;">
+          <div id="macbar" style="height:100%;width:0%;background:#fff;border-radius:5px;transition:width 0.5s;"></div>
+        </div>
+        <div style="margin-top:16px;font-size:13px;opacity:0.6;" id="macpct">Iniciando...</div>
+      </div>`;
+      let mp = 0;
+      const mi = setInterval(() => {
+        mp = Math.min(100, mp + Math.random() * 1.2);
+        const mb = document.getElementById('macbar');
+        const mt = document.getElementById('macpct');
+        if (mb) mb.style.width = mp + '%';
+        if (mt) mt.textContent = Math.floor(mp) < 100 ? 'Actualizando macOS...' : 'Reiniciando...';
+        if (mp >= 100) clearInterval(mi);
+      }, 250);
+
+    } else if (type === 'ubuntu') {
+      sndUbuntu();
+      overlay.style.background = '#300a24';
+      content.innerHTML = `<div style="width:100%;height:100%;background:#300a24;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#fff;font-family:'Ubuntu',sans-serif;">
+        <div style="font-size:60px;margin-bottom:20px;">🐧</div>
+        <div style="font-size:18px;font-weight:300;margin-bottom:8px;">Ubuntu 22.04 LTS</div>
+        <div style="font-size:13px;opacity:0.7;margin-bottom:24px;">Instalando actualizaciones del sistema...</div>
+        <div style="width:280px;height:8px;background:rgba(255,255,255,0.15);border-radius:4px;overflow:hidden;">
+          <div id="ubar" style="height:100%;width:0%;background:#dd4814;transition:width 0.4s;border-radius:4px;"></div>
+        </div>
+        <div style="margin-top:12px;font-size:13px;opacity:0.6;" id="upct">0%</div>
+      </div>`;
+      let up = 0;
+      const ui = setInterval(() => {
+        up = Math.min(100, up + Math.random() * 1.5);
+        const ub = document.getElementById('ubar');
+        const ut = document.getElementById('upct');
+        if (ub) ub.style.width = up + '%';
+        if (ut) ut.textContent = Math.floor(up) + '%';
+        if (up >= 100) clearInterval(ui);
+      }, 200);
+
+    } else if (type === 'dvd') {
+      overlay.style.background = '#000';
+      content.innerHTML = `<canvas id="dvd-canvas" style="width:100%;height:100%;display:block;"></canvas>`;
+      setTimeout(() => {
+        const c = document.getElementById('dvd-canvas');
+        c.width = window.innerWidth; c.height = window.innerHeight;
+        const ctx = c.getContext('2d');
+        let x = 100, y = 100, dx = 2, dy = 2;
+        const colors = ['#ff4444','#44ff44','#4444ff','#ffff44','#ff44ff','#44ffff'];
+        let ci = 0;
+        dvdInterval = setInterval(() => {
+          ctx.fillStyle = '#000';
+          ctx.fillRect(0, 0, c.width, c.height);
+          ctx.fillStyle = colors[ci];
+          ctx.font = 'bold 48px Arial';
+          ctx.fillText('DVD', x, y);
+          x += dx; y += dy;
+          if (x < 0 || x > c.width - 90) { dx = -dx; ci = (ci+1)%colors.length; sndDvdBounce(); }
+          if (y < 30 || y > c.height - 10) { dy = -dy; ci = (ci+1)%colors.length; sndDvdBounce(); }
+        }, 16);
+      }, 50);
+
+    } else if (type === 'clock') {
+      sndClockTick();
+      overlay.style.background = '#111';
+      content.innerHTML = `<div style="width:100%;height:100%;background:#111;display:flex;align-items:center;justify-content:center;" id="flip-clock-wrap">
+        <div id="flip-display" style="font-family:'Courier New',monospace;font-size:96px;color:#ff6b00;font-weight:700;letter-spacing:8px;"></div>
+      </div>`;
+      const update = () => {
+        const now = new Date();
+        const el = document.getElementById('flip-display');
+        if (el) el.textContent = now.toTimeString().slice(0,8);
+      };
+      update();
+      clockInterval = setInterval(update, 1000);
+
+    } else if (type === 'winxp') {
+      sndWinXP();
+      overlay.style.background = '#245edb';
+      content.innerHTML = `<div style="width:100%;height:100%;background:linear-gradient(180deg,#1a47b8 0%,#245edb 40%,#1a47b8 100%);display:flex;flex-direction:column;align-items:center;justify-content:center;color:#fff;font-family:Tahoma,sans-serif;">
+        <div style="font-size:32px;font-weight:700;margin-bottom:8px;">Windows <span style="color:#ff6b00;">XP</span></div>
+        <div style="font-size:13px;opacity:0.8;margin-bottom:30px;">Instalando Service Pack 3...</div>
+        <div style="width:300px;height:18px;background:#1a3d9e;border:1px solid #4a7ae0;border-radius:2px;overflow:hidden;position:relative;">
+          <div id="xpbar" style="height:100%;width:0%;background:repeating-linear-gradient(90deg,#4488ff 0px,#66aaff 8px,#4488ff 16px);transition:width 0.4s;"></div>
+        </div>
+        <div style="margin-top:14px;font-size:12px;opacity:0.7;" id="xppct">Copiando archivos... 0%</div>
+      </div>`;
+      let xp = 0;
+      const xi = setInterval(() => {
+        xp = Math.min(100, xp + Math.random() * 1.2);
+        const xb = document.getElementById('xpbar');
+        const xt = document.getElementById('xppct');
+        if (xb) xb.style.width = xp + '%';
+        if (xt) xt.textContent = 'Copiando archivos... ' + Math.floor(xp) + '%';
+        if (xp >= 100) clearInterval(xi);
+      }, 200);
+    }
+  }
+
+  function clearPrankIntervals() {
+    if (hackerInterval) { clearInterval(hackerInterval); hackerInterval = null; }
+    if (noiseInterval) { clearInterval(noiseInterval); noiseInterval = null; }
+    if (dvdInterval) { clearInterval(dvdInterval); dvdInterval = null; }
+    if (clockInterval) { clearInterval(clockInterval); clockInterval = null; }
+  }
+
+  function closePrank() {
+    clearPrankIntervals();
+    stopAllSounds();
+    document.getElementById('prank-overlay').style.display = 'none';
+    document.getElementById('prank-content').innerHTML = '';
+  }
+
+  // ESC key closes overlays
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') {
+      closeFullscreen();
+      closePrank();
+      closeScreensaver();
+    }
+  });
+
+  // ── SCREENSAVERS ──────────────────────────────────────────────
+  let ssAnimId = null;
+
+  function closeScreensaver() {
+    stopAllSounds();
+    if (ssAnimId) { cancelAnimationFrame(ssAnimId); ssAnimId = null; }
+    document.getElementById('ss-overlay').style.display = 'none';
+    const cv = document.getElementById('ss-canvas');
+    const ctx = cv.getContext('2d');
+    ctx.clearRect(0, 0, cv.width, cv.height);
+  }
+
+  function activateScreensaver(type) {
+    closeScreensaver();
+    stopAllSounds();
+    const overlay = document.getElementById('ss-overlay');
+    overlay.style.display = 'block';
+    const canvas = document.getElementById('ss-canvas');
+    canvas.width  = window.innerWidth;
+    canvas.height = window.innerHeight;
+    const ctx = canvas.getContext('2d');
+    const W = canvas.width, H = canvas.height;
+
+    if (type === 'pipes') {
+      sndPipes();
+      // Classic 3D Pipes screensaver
+      const CELL = 40;
+      const COLS = Math.ceil(W / CELL);
+      const ROWS = Math.ceil(H / CELL);
+      const DIRS = [{dx:1,dy:0},{dx:-1,dy:0},{dx:0,dy:1},{dx:0,dy:-1}];
+      const COLORS = ['#ff4444','#44aaff','#44ff88','#ffcc00','#ff88ff','#00ffcc','#ff8844'];
+      const pipes = [];
+      ctx.fillStyle = '#001';
+      ctx.fillRect(0, 0, W, H);
+
+      function newPipe() {
+        return {
+          x: Math.floor(Math.random() * COLS),
+          y: Math.floor(Math.random() * ROWS),
+          dir: DIRS[Math.floor(Math.random() * 4)],
+          color: COLORS[Math.floor(Math.random() * COLORS.length)],
+          age: 0,
+          maxAge: 40 + Math.floor(Math.random() * 120)
+        };
+      }
+      for (let i = 0; i < 6; i++) pipes.push(newPipe());
+
+      function drawCap(px, py, color) {
+        ctx.fillStyle = color;
+        ctx.beginPath();
+        ctx.arc(px * CELL + CELL/2, py * CELL + CELL/2, CELL*0.38, 0, Math.PI*2);
+        ctx.fill();
+        // highlight
+        ctx.fillStyle = 'rgba(255,255,255,0.35)';
+        ctx.beginPath();
+        ctx.arc(px * CELL + CELL/2 - 4, py * CELL + CELL/2 - 4, CELL*0.14, 0, Math.PI*2);
+        ctx.fill();
+      }
+
+      function tick() {
+        for (let p of pipes) {
+          const px = p.x, py = p.y;
+          const nx = px + p.dir.dx, ny = py + p.dir.dy;
+          // draw segment
+          const x1 = px * CELL + CELL/2, y1 = py * CELL + CELL/2;
+          const x2 = nx * CELL + CELL/2, y2 = ny * CELL + CELL/2;
+          ctx.strokeStyle = p.color;
+          ctx.lineWidth = CELL * 0.55;
+          ctx.lineCap = 'round';
+          ctx.beginPath();
+          ctx.moveTo(x1, y1);
+          ctx.lineTo(x2, y2);
+          ctx.stroke();
+          // shading
+          ctx.strokeStyle = 'rgba(0,0,0,0.25)';
+          ctx.lineWidth = CELL * 0.55;
+          ctx.beginPath();
+          ctx.moveTo(x1 + 3, y1 + 3);
+          ctx.lineTo(x2 + 3, y2 + 3);
+          ctx.stroke();
+          // highlight
+          ctx.strokeStyle = 'rgba(255,255,255,0.18)';
+          ctx.lineWidth = CELL * 0.18;
+          ctx.beginPath();
+          ctx.moveTo(x1 - 4, y1 - 4);
+          ctx.lineTo(x2 - 4, y2 - 4);
+          ctx.stroke();
+
+          p.x = ((nx % COLS) + COLS) % COLS;
+          p.y = ((ny % ROWS) + ROWS) % ROWS;
+          p.age++;
+
+          // elbow cap on turn
+          if (Math.random() < 0.18 || p.age >= p.maxAge) {
+            drawCap(p.x, p.y, p.color);
+            // turn or reset
+            if (p.age >= p.maxAge) {
+              Object.assign(p, newPipe());
+            } else {
+              const turns = DIRS.filter(d => d !== p.dir && !(d.dx === -p.dir.dx && d.dy === -p.dir.dy));
+              p.dir = turns[Math.floor(Math.random() * turns.length)];
+            }
+          }
+        }
+        ssAnimId = requestAnimationFrame(tick);
+      }
+      tick();
+
+    } else if (type === 'mystify') {
+      sndMystify();
+      // Classic Mystify Your Mind - bouncing polygons Win98
+      const shapes = [];
+      for (let s = 0; s < 2; s++) {
+        const pts = [];
+        const n = 4;
+        const vels = [];
+        for (let i = 0; i < n; i++) {
+          pts.push({ x: Math.random() * W, y: Math.random() * H });
+          vels.push({ vx: (Math.random()-0.5)*4, vy: (Math.random()-0.5)*4 });
+        }
+        shapes.push({ pts, vels, hue: Math.random()*360, trail: [] });
+      }
+
+      function tick() {
+        ctx.fillStyle = 'rgba(0,0,0,0.04)';
+        ctx.fillRect(0, 0, W, H);
+        for (let sh of shapes) {
+          // move
+          for (let i = 0; i < sh.pts.length; i++) {
+            sh.pts[i].x += sh.vels[i].vx;
+            sh.pts[i].y += sh.vels[i].vy;
+            if (sh.pts[i].x < 0 || sh.pts[i].x > W) sh.vels[i].vx *= -1;
+            if (sh.pts[i].y < 0 || sh.pts[i].y > H) sh.vels[i].vy *= -1;
+          }
+          sh.hue = (sh.hue + 0.5) % 360;
+          // draw polygon
+          ctx.strokeStyle = `hsl(${sh.hue},100%,60%)`;
+          ctx.lineWidth = 1.5;
+          ctx.shadowColor = `hsl(${sh.hue},100%,60%)`;
+          ctx.shadowBlur = 6;
+          ctx.beginPath();
+          ctx.moveTo(sh.pts[0].x, sh.pts[0].y);
+          for (let i = 1; i < sh.pts.length; i++) ctx.lineTo(sh.pts[i].x, sh.pts[i].y);
+          ctx.closePath();
+          ctx.stroke();
+          ctx.shadowBlur = 0;
+        }
+        ssAnimId = requestAnimationFrame(tick);
+      }
+      ctx.fillStyle = '#000';
+      ctx.fillRect(0,0,W,H);
+      tick();
+
+    } else if (type === 'starfield') {
+      sndStarfield();
+      // Classic Windows Starfield
+      const stars = Array.from({length: 300}, () => ({
+        x: (Math.random()-0.5) * W,
+        y: (Math.random()-0.5) * H,
+        z: Math.random() * W,
+        pz: 0
+      }));
+      const cx = W/2, cy = H/2;
+      ctx.fillStyle = '#000';
+      ctx.fillRect(0,0,W,H);
+
+      function tick() {
+        ctx.fillStyle = 'rgba(0,0,0,0.25)';
+        ctx.fillRect(0,0,W,H);
+        for (let s of stars) {
+          s.pz = s.z;
+          s.z -= 6;
+          if (s.z <= 0) {
+            s.x = (Math.random()-0.5)*W;
+            s.y = (Math.random()-0.5)*H;
+            s.z = W;
+            s.pz = s.z;
+          }
+          const sx = (s.x / s.z) * W + cx;
+          const sy = (s.y / s.z) * H + cy;
+          const px = (s.x / s.pz) * W + cx;
+          const py = (s.y / s.pz) * H + cy;
+          const size = Math.max(0.5, (1 - s.z/W) * 3);
+          const bright = Math.floor((1 - s.z/W) * 255);
+          ctx.strokeStyle = `rgb(${bright},${bright},${bright})`;
+          ctx.lineWidth = size;
+          ctx.beginPath();
+          ctx.moveTo(px, py);
+          ctx.lineTo(sx, sy);
+          ctx.stroke();
+        }
+        ssAnimId = requestAnimationFrame(tick);
+      }
+      tick();
+
+    } else if (type === 'beziers') {
+      sndBeziers();
+      // Classic Win95 Bezier curves screensaver
+      let pts = Array.from({length:4}, () => ({
+        x: Math.random()*W, y: Math.random()*H,
+        vx: (Math.random()-0.5)*4, vy: (Math.random()-0.5)*3
+      }));
+      let hue = 0;
+      const trail = [];
+      ctx.fillStyle = '#000';
+      ctx.fillRect(0,0,W,H);
+
+      function tick() {
+        ctx.fillStyle = 'rgba(0,0,0,0.018)';
+        ctx.fillRect(0,0,W,H);
+        for (let p of pts) {
+          p.x += p.vx; p.y += p.vy;
+          if (p.x < 0 || p.x > W) p.vx *= -1;
+          if (p.y < 0 || p.y > H) p.vy *= -1;
+        }
+        hue = (hue + 0.7) % 360;
+        ctx.strokeStyle = `hsl(${hue},100%,60%)`;
+        ctx.lineWidth = 1.5;
+        ctx.shadowColor = `hsl(${hue},100%,55%)`;
+        ctx.shadowBlur = 8;
+        ctx.beginPath();
+        ctx.moveTo(pts[0].x, pts[0].y);
+        ctx.bezierCurveTo(pts[1].x, pts[1].y, pts[2].x, pts[2].y, pts[3].x, pts[3].y);
+        ctx.stroke();
+        ctx.shadowBlur = 0;
+        ssAnimId = requestAnimationFrame(tick);
+      }
+      tick();
+
+    } else if (type === 'flying') {
+      sndFlying();
+      // Flying Windows logo (classic Win98 screensaver)
+      ctx.fillStyle = '#008080';
+      ctx.fillRect(0,0,W,H);
+      const logos = Array.from({length: 14}, () => ({
+        x: Math.random()*W, y: Math.random()*H,
+        vx: (Math.random()-0.5)*3.5, vy: (Math.random()-0.5)*3.5,
+        size: 30 + Math.random()*40,
+        alpha: 0.5 + Math.random()*0.5
+      }));
+
+      function drawWinLogo(x, y, size, alpha) {
+        const s = size;
+        const gap = s * 0.06;
+        ctx.globalAlpha = alpha;
+        // Red top-left
+        ctx.fillStyle = '#ff3333';
+        ctx.fillRect(x, y, s/2-gap, s/2-gap);
+        // Green top-right
+        ctx.fillStyle = '#33cc33';
+        ctx.fillRect(x+s/2+gap, y, s/2-gap, s/2-gap);
+        // Blue bottom-left
+        ctx.fillStyle = '#3366ff';
+        ctx.fillRect(x, y+s/2+gap, s/2-gap, s/2-gap);
+        // Yellow bottom-right
+        ctx.fillStyle = '#ffcc00';
+        ctx.fillRect(x+s/2+gap, y+s/2+gap, s/2-gap, s/2-gap);
+        ctx.globalAlpha = 1;
+      }
+
+      function tick() {
+        ctx.fillStyle = '#008080';
+        ctx.fillRect(0,0,W,H);
+        for (let l of logos) {
+          l.x += l.vx; l.y += l.vy;
+          if (l.x < -l.size) l.x = W + l.size;
+          else if (l.x > W + l.size) l.x = -l.size;
+          if (l.y < -l.size) l.y = H + l.size;
+          else if (l.y > H + l.size) l.y = -l.size;
+          drawWinLogo(l.x - l.size/2, l.y - l.size/2, l.size, l.alpha);
+        }
+        ssAnimId = requestAnimationFrame(tick);
+      }
+      tick();
+
+    } else if (type === 'matrix') {
+      sndMatrix();
+      // Matrix digital rain
+      ctx.fillStyle = '#000';
+      ctx.fillRect(0,0,W,H);
+      const fontSize = 14;
+      const cols = Math.floor(W / fontSize);
+      const drops = Array.from({length: cols}, () => Math.random() * -H);
+      const chars = 'アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン0123456789ABCDEF';
+
+      function tick() {
+        ctx.fillStyle = 'rgba(0,0,0,0.05)';
+        ctx.fillRect(0,0,W,H);
+        for (let i = 0; i < drops.length; i++) {
+          const ch = chars[Math.floor(Math.random()*chars.length)];
+          const y = drops[i];
+          // bright head
+          ctx.fillStyle = '#ccffcc';
+          ctx.font = fontSize + 'px monospace';
+          ctx.fillText(ch, i * fontSize, y);
+          // trail
+          ctx.fillStyle = '#00cc44';
+          ctx.fillText(chars[Math.floor(Math.random()*chars.length)], i*fontSize, y - fontSize);
+          if (y > H && Math.random() > 0.975) drops[i] = 0;
+          drops[i] += fontSize;
+        }
+        ssAnimId = requestAnimationFrame(tick);
+      }
+      tick();
+    }
+  }
+</script>
+</body>
+</html>
