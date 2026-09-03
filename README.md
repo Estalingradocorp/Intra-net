@@ -45,9 +45,27 @@ GitHub Pages regenera el sitio en aproximadamente 1 minuto.
 ## 📁 Estructura
 
 ```
-index.html   → Portal principal (todo el contenido en un solo archivo)
-README.md    → Este documento
+index.html           → Portal principal retro (todo el contenido en un solo archivo)
+index2.html          → Subpágina "data-wiki" (Centro de Control Digital, estilo moderno)
+Buscador retro.html  → Subpágina buscador retro (IDEX, metabuscador)
+K27.html             → Subpágina K27 (DarkWeb Terminal Store, estilo terminal)
+README.md            → Este documento
 ```
+
+Las páginas se navegan entre sí mediante enlaces en cada cabecera/menú:
+
+| Desde | Enlaces a |
+|-------|-----------|
+| **index.html** | index2.html (🎛️ Centro de Control), Buscador retro.html (🔍 Buscar), K27.html (🖥️ K27) |
+| **index2.html** | index.html (⬅️ Portal Retro), Buscador retro.html (🔍 Buscador), K27.html (🖥️ K27) |
+| **Buscador retro.html** | index.html, index2.html, K27.html (menú Empresa) |
+| **K27.html** | Menú separado `[RED_ESTALINGRADO]` con enlaces a los otros 3 portales |
+
+**URLs:**
+- Portal retro: `https://estalingradocorp.github.io/Intra-net/`
+- data-wiki: `https://estalingradocorp.github.io/Intra-net/index2.html`
+- Buscador retro: `https://estalingradocorp.github.io/Intra-net/Buscador%20retro.html`
+- K27: `https://estalingradocorp.github.io/Intra-net/K27.html`
 
 ---
 
@@ -58,19 +76,19 @@ README.md    → Este documento
 | **HERO BANNER** | Atardecer synthwave con logo corporativo |
 | **BUSCADOR INTERNO** | Búsqueda en vivo con resaltado de coincidencias |
 | **MEGA PROMO** | Portal central, red de sitios y redes sociales |
-| **LEARN FOR FREE** | 36 recursos educativos gratuitos (HTML, Python, IA, etc.) |
+| **LEARN FOR FREE** | 37 recursos educativos gratuitos (HTML, Python, IA, IBM Quantum, etc.) |
 | **GAME ROM LAUNCHER** | Lanzador de juegos y proyectos del Software Lab |
 | **SNAKE_95** | Minijuego retro interactivo |
 | **VIDEOTECA** | Archivos de video corporativos embebidos |
 | **RECURSOS ONLINE** | Empleo, salud, educación e inteligencia |
-| **SISTEMAS OPERATIVOS** | Descargas de Windows y Linux |
+| **DISTRIBUCIONES LINUX** | Sitios de distribuciones de Linux (Ubuntu, Arch, Kali...) y otros sistemas (FreeBSD, ReactOS, Haiku...) |
 | **TERMINAL CMD** | Herramientas (Rufus, WinRAR, Safety Scanner) |
 | **ACTIVADOR WIN10** | Métodos de activación y claves |
 | **INTERNET ARCHIVE** | Biblioteca digital |
 | **THE BLACK MARKET** | Sección promocional especial |
 | **JUEGOS ONLINE** | Juegos jugables en el navegador |
 | **LINKS ESTALINGRADO** | Todos los enlaces corporativos, grupos y páginas |
-| **PUBLICIDADES** | Banner animados con enlace al Market |
+| **PUBLICIDADES** | Banner animados con enlace al Market (incl. promos de ECOS PRO) |
 | **AI ASSISTANT** | Asistente virtual retro (CRT) |
 | **WINAMP** | Reproductor de música funcional |
 | **NOTEPAD** | Bloc de notas con guardado local |
@@ -83,6 +101,19 @@ README.md    → Este documento
 ## 🛠️ Recursos educativos incluidos (Learn for Free)
 
 HTML, CSS, JavaScript, React, Vue, Angular, Git, Web3, Python, SQL, Blockchain, Next.js, IA, PHP, API, Go, Rust, Design Patterns, TypeScript, C++, Java, C#, Swift, Django, Flask, Docker, Kubernetes, Linux, Ciberseguridad, DevOps, Cloud (AWS/GCP/Azure) e IBM Quantum Cloud.
+
+---
+
+## 📄 Subpáginas
+
+### `index2.html` — data-wiki (Centro de Control Digital)
+Estilo moderno (Inter font, tema claro/azul). Permite cambiar el color de pantalla (blanco, negro, rojo, verde, etc.), funciona como panel de control digital y reproductor de pantallas de color. Incluye selector de idioma y botón de sonido.
+
+### `Buscador retro.html` — IDEX (Buscador Retro)
+Metabuscador con estética retro que integra múltiples motores (Bing, Yahoo, DuckDuckGo, Yandex, Brave, Baidu, Startpage, Qwant, Ecosia, Wikipedia, Internet Archive, SearXNG), herramientas de IA (DeepSeek, Qwen, ChatGPT, Géminis, Copilot...), creador de PDF, privacidad y más. Soporta búsqueda por voz y exportación.
+
+### `K27.html` — DarkWeb Terminal Store
+Tienda/terminal con estética de "dark web" (fondo negro, texto verde, fuente monoespaciada). Incluye buscador, tienda, terminal root, información del sistema, estado de cifrado AES-256-GCM y modo de pantalla completa. Su menú de navegación entre portales aparece como `[RED_ESTALINGRADO]` bajo el header.
 
 ---
 
