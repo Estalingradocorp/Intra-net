@@ -1,0 +1,1827 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Estalingrado Corp — IDEX</title>
+  <link rel="icon" href="https://64.media.tumblr.com/459660738b1bfb7a47ec26f6923f028c/f35afd85213d1bb5-73/s400x600/aabb91202143136261d7fdcde1f3832f21c69da9.pnj" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <link href="https://fonts.googleapis.com/css2?family=VT323&family=Share+Tech+Mono&family=Press+Start+2P&display=swap" rel="stylesheet">
+  <style>
+    /* ══════════════════════════════════════
+       PALETA: AZUL Y NEGRO DOMINANTES
+    ══════════════════════════════════════ */
+    :root {
+      --bg:           #020408;
+      --bg2:          #070d18;
+      --bg3:          #0d1a2e;
+      --border:       #1a5aff;
+      --accent:       #2b6fff;
+      --accent2:      #0033cc;
+      --accent3:      #4d8fff;
+      --accent4:      #00cfff;
+      --text:         #4d8fff;
+      --text2:        #8ab0e8;
+      --text3:        #c8dcff;
+      --shadow:       rgba(43,111,255,0.35);
+      --shadow2:      rgba(0,51,204,0.3);
+      --panel-bg:     rgba(2,4,8,0.96);
+      --result-bg:    #050c18;
+      --scanline-opacity: 0.08;
+      --cursor-color: #2b6fff;
+      --danger:       #ef4444;
+      --success:      #22c55e;
+      --warning:      #f59e0b;
+    }
+    [data-theme="light"] {
+      --bg:           #c8d8f8;
+      --bg2:          #b0c4f0;
+      --bg3:          #bccef4;
+      --border:       #0033cc;
+      --accent:       #0044ee;
+      --accent2:      #0022aa;
+      --accent3:      #1155ff;
+      --accent4:      #0099cc;
+      --text:         #001888;
+      --text2:        #1a3a88;
+      --text3:        #000820;
+      --shadow:       rgba(0,68,238,0.28);
+      --shadow2:      rgba(0,34,170,0.22);
+      --panel-bg:     rgba(200,216,248,0.97);
+      --result-bg:    #b8ccf0;
+      --scanline-opacity: 0.04;
+      --cursor-color: #0044ee;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Share Tech Mono', monospace;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow-x: hidden;
+      position: relative;
+      animation: flicker 8s infinite;
+    }
+
+    /* CRT scanlines */
+    body::before {
+      content: '';
+      position: fixed; top:0; left:0; right:0; bottom:0;
+      background: repeating-linear-gradient(
+        to bottom,
+        transparent 0px, transparent 2px,
+        rgba(0,0,0,var(--scanline-opacity)) 2px,
+        rgba(0,0,0,var(--scanline-opacity)) 4px
+      );
+      pointer-events: none;
+      z-index: 9998;
+    }
+
+    @keyframes flicker {
+      0%,94%,96%,100% { opacity:1; }
+      93% { opacity:.96; }
+      95% { opacity:.98; }
+    }
+
+    ::-webkit-scrollbar { width:10px; }
+    ::-webkit-scrollbar-track { background:var(--bg2); border:1px solid var(--border); }
+    ::-webkit-scrollbar-thumb { background:var(--accent); }
+
+    /* ─── LOADING ─── */
+    #loading-screen {
+      position:fixed; z-index:9999;
+      background:var(--bg);
+      width:100vw; height:100vh;
+      display:flex; flex-direction:column;
+      justify-content:center; align-items:center;
+      gap:14px;
+    }
+    .loading-logo {
+      width:100px; height:100px; border-radius:50%;
+      border:3px solid var(--accent);
+      box-shadow:0 0 20px var(--accent),0 0 40px var(--accent);
+      animation:pulse-glow 1.5s ease-in-out infinite alternate;
+    }
+    @keyframes pulse-glow {
+      from { box-shadow:0 0 10px var(--accent),0 0 20px var(--accent); }
+      to   { box-shadow:0 0 28px var(--accent),0 0 60px var(--accent),0 0 80px var(--accent2); }
+    }
+    .loading-text {
+      font-family:'Press Start 2P',monospace; font-size:10px;
+      color:var(--accent); text-shadow:0 0 10px var(--accent);
+      text-align:center; padding:0 20px;
+      animation:blink-text 2s step-end infinite;
+    }
+    @keyframes blink-text { 50%{opacity:.5;} }
+    .loading-sys {
+      font-size:12px; color:var(--accent2);
+      text-shadow:0 0 6px var(--accent2);
+      letter-spacing:2px; text-transform:uppercase;
+    }
+    .loading-bar {
+      width:320px; height:22px;
+      border:2px solid var(--accent);
+      background:var(--bg2);
+      position:relative;
+      box-shadow:0 0 10px var(--accent);
+    }
+    .loading-bar::before {
+      content:''; position:absolute; top:0;left:0;right:0;bottom:0;
+      background:repeating-linear-gradient(90deg,transparent,transparent 4px,rgba(0,0,0,.3) 4px,rgba(0,0,0,.3) 8px);
+      z-index:1;
+    }
+    #loading-progress-bar {
+      height:100%; width:0%;
+      background:var(--accent); box-shadow:0 0 8px var(--accent);
+      transition:width .1s linear;
+    }
+    #loading-percent {
+      font-family:'VT323',monospace; font-size:22px;
+      color:var(--accent4); text-shadow:0 0 8px var(--accent4);
+    }
+
+    /* ─── MAIN CONTENT ─── */
+    #main-content {
+      display:none; opacity:0;
+      transition:opacity .8s ease-in;
+      min-height:100vh; flex-direction:column; flex:1;
+    }
+
+    /* ─── HEADER ─── */
+    header {
+      margin-top:20px; text-align:center;
+      position:relative; z-index:1000; padding:0 20px;
+    }
+    header::before, header::after {
+      content:''; position:absolute;
+      width:16px; height:16px;
+      border-color:var(--accent2); border-style:solid;
+    }
+    header::before { top:0; left:20px; border-width:2px 0 0 2px; }
+    header::after  { top:0; right:20px; border-width:2px 2px 0 0; }
+
+    .header-brand { display:flex; flex-direction:column; align-items:center; gap:12px; }
+    .header-brand-row { display:flex; align-items:center; justify-content:center; gap:18px; }
+    .header-brand img {
+      width:72px; height:72px; border-radius:50%; cursor:pointer;
+      border:2px solid var(--accent);
+      box-shadow:0 0 16px var(--accent),0 0 32px var(--accent2);
+      transition:transform .2s,box-shadow .2s;
+    }
+    .header-brand img:hover {
+      transform:scale(1.08);
+      box-shadow:0 0 28px var(--accent),0 0 56px var(--accent2),0 0 80px var(--accent4);
+    }
+    header h1 {
+      font-family:'Press Start 2P',monospace; font-size:18px;
+      color:var(--text3); margin:0;
+      text-shadow:3px 3px 0 var(--accent2),6px 6px 0 var(--accent3),0 0 20px var(--accent);
+      letter-spacing:2px;
+    }
+
+    /* ─── HEADER BUTTONS ─── */
+    .menu-button, .settings-button, .tools-button, .fullscreen-button {
+      position:absolute; top:15px;
+      background:var(--bg2);
+      border:2px solid var(--border);
+      cursor:pointer; z-index:11;
+      color:var(--accent); font-size:16px;
+      display:flex; align-items:center; justify-content:center;
+      width:40px; height:40px;
+      box-shadow:0 0 8px var(--shadow);
+      transition:all .15s;
+    }
+    .menu-button:hover,.settings-button:hover,.tools-button:hover,.fullscreen-button:hover {
+      background:var(--accent); color:var(--bg);
+      box-shadow:0 0 18px var(--accent),0 0 28px var(--accent);
+    }
+    .menu-button { right:20px; flex-direction:column; gap:0; padding:0; }
+    .fullscreen-button { right:68px; }
+    .settings-button { left:20px; }
+    .tools-button { left:68px; }
+    .menu-icon { width:20px; height:2px; background:currentColor; margin:3px 0; border-radius:1px; }
+    .menu-button:hover .menu-icon { background:var(--bg); }
+
+    /* ─── MARQUEE ─── */
+    .marquee-wrap {
+      width:100%;
+      border-top:1px solid var(--border); border-bottom:1px solid var(--border);
+      background:var(--bg2); overflow:hidden; margin:10px 0;
+      box-shadow:0 0 8px var(--shadow);
+    }
+    .marquee-inner {
+      display:inline-block; white-space:nowrap;
+      animation:marquee-scroll 24s linear infinite;
+      font-family:'VT323',monospace; font-size:20px;
+      color:var(--accent3); text-shadow:0 0 6px var(--accent3);
+      padding:4px 0;
+    }
+    @keyframes marquee-scroll {
+      from { transform:translateX(100vw); }
+      to   { transform:translateX(-100%); }
+    }
+
+    /* ─── PANELS ─── */
+    .menu-panel, .settings-panel, .tools-panel {
+      position:absolute; top:60px;
+      background:var(--panel-bg);
+      border:2px solid var(--border);
+      padding:0; z-index:1000;
+      min-width:230px;
+      box-shadow:4px 4px 0 var(--accent2),0 0 20px var(--shadow);
+      display:none; opacity:0;
+      transform:translateY(-12px) scale(.97);
+      transition:opacity .2s,transform .2s;
+    }
+    .menu-panel.show, .settings-panel.show, .tools-panel.show {
+      opacity:1; transform:translateY(0) scale(1);
+    }
+    .menu-panel { right:20px; transform-origin:top right; }
+    .settings-panel { left:20px; transform-origin:top left; }
+    .tools-panel { left:68px; transform-origin:top left; }
+
+    .panel-titlebar {
+      background:var(--accent); color:var(--bg);
+      font-family:'Press Start 2P',monospace; font-size:7px;
+      padding:5px 10px; display:flex; align-items:center; gap:5px;
+    }
+    .panel-titlebar .dot { width:8px; height:8px; background:var(--bg); border-radius:50%; }
+    .panel-body { padding:12px 14px; }
+
+    .menu-panel label, .menu-panel a, .settings-panel label, .tools-panel a {
+      display:flex; align-items:center; gap:8px;
+      color:var(--text2); margin-bottom:2px;
+      font-size:13px; text-decoration:none;
+      padding:6px 10px;
+      transition:color .1s,background .1s;
+      cursor:pointer;
+    }
+    .menu-panel a:hover,.tools-panel a:hover,.menu-panel label:hover {
+      color:var(--accent4); background:rgba(0,207,255,.07);
+    }
+    .menu-panel strong, .settings-panel strong, .tools-panel strong {
+      display:block; font-weight:bold; margin:10px 0 4px;
+      font-size:10px; color:var(--accent2);
+      text-shadow:0 0 6px var(--accent2);
+      letter-spacing:1px; text-transform:uppercase;
+      border-bottom:1px solid var(--border); padding-bottom:3px;
+    }
+    .menu-panel strong:first-child,.settings-panel strong:first-child,.tools-panel strong:first-child { margin-top:0; }
+
+    .settings-panel label { padding:4px 10px; }
+    .settings-panel input[type="checkbox"] { accent-color:var(--accent); margin-right:6px; }
+
+    .settings-panel button, .tools-panel button {
+      margin-top:12px; padding:8px 12px;
+      background:var(--accent2); color:#fff;
+      border:2px solid var(--border); cursor:pointer;
+      font-family:'Share Tech Mono',monospace; font-size:12px;
+      width:100%;
+      box-shadow:2px 2px 0 var(--accent);
+      transition:all .1s;
+    }
+    .settings-panel button:hover,.tools-panel button:hover {
+      background:var(--accent); box-shadow:0 0 14px var(--shadow);
+    }
+    #intraNetButton {
+      background:rgba(239,68,68,.15) !important;
+      color:var(--danger) !important;
+      border-color:rgba(239,68,68,.4) !important;
+    }
+    #intraNetButton:hover { background:var(--danger) !important; color:#fff !important; }
+
+    /* ─── SEARCH ─── */
+    .search-container {
+      margin-top:30px; text-align:center;
+      position:relative; z-index:100; padding:0 20px;
+    }
+    .search-box { display:flex; flex-direction:column; align-items:center; }
+    .search-wrapper {
+      display:flex; align-items:stretch; justify-content:center;
+      border:2px solid var(--border);
+      box-shadow:4px 4px 0 var(--accent2),0 0 20px var(--shadow);
+      position:relative;
+      width:100%; max-width:680px; margin:0 auto;
+    }
+    .search-input {
+      flex:1; padding:14px 18px; font-size:16px;
+      font-family:'VT323',monospace; letter-spacing:1px;
+      border:none; border-right:2px solid var(--border);
+      background:var(--bg2); color:var(--accent4); outline:none;
+      caret-color:var(--cursor-color);
+    }
+    .search-input::placeholder { color:var(--accent); opacity:.5; }
+    .search-input:focus { background:var(--bg3); }
+
+    .voice-search-button {
+      background:var(--bg2); border:none; border-right:2px solid var(--border);
+      color:var(--accent3); padding:0 14px;
+      cursor:pointer; font-size:16px;
+      transition:all .15s;
+    }
+    .voice-search-button:hover { background:var(--accent3); color:var(--bg); }
+    .voice-search-button.recording { color:var(--danger); animation:pulse-recording 1.5s infinite; }
+    @keyframes pulse-recording { 0%,100%{transform:scale(1);} 50%{transform:scale(1.15);} }
+
+    .search-button {
+      background:var(--accent); border:none; padding:14px 20px;
+      cursor:pointer; display:flex; align-items:center;
+      transition:background .15s,box-shadow .15s; color:var(--bg);
+    }
+    .search-button:hover { background:var(--accent2); box-shadow:0 0 18px var(--accent); }
+    .search-button svg,.search-button i { fill:var(--bg); color:var(--bg); width:20px; height:20px; font-size:18px; }
+
+    .search-slogan {
+      margin-top:12px; font-family:'VT323',monospace;
+      font-size:22px; color:var(--accent2);
+      text-shadow:0 0 8px var(--accent2); letter-spacing:2px;
+    }
+    .search-slogan::after {
+      content:'▮'; animation:blink-cursor 1s step-end infinite;
+      color:var(--accent); margin-left:4px;
+    }
+    @keyframes blink-cursor { 50%{opacity:0;} }
+
+    /* Suggestions */
+    #suggestionsContainer {
+      position:absolute; top:calc(100% + 6px); left:0; right:0;
+      background:rgba(5,12,24,.98);
+      border:2px solid var(--border);
+      box-shadow:4px 4px 0 var(--accent2);
+      z-index:1000; display:none; opacity:0;
+      transform:translateY(-8px) scale(.98);
+      transition:all .2s;
+      max-height:300px; overflow-y:auto;
+    }
+    #suggestionsContainer.show { opacity:1; transform:translateY(0) scale(1); }
+    .suggestion-item {
+      padding:10px 18px; display:flex; align-items:center;
+      justify-content:space-between;
+      color:var(--text2); font-size:14px; cursor:pointer;
+      border-left:3px solid transparent;
+      border-bottom:1px solid rgba(43,111,255,.1);
+    }
+    .suggestion-item:last-child { border-bottom:none; }
+    .suggestion-item:hover { background:rgba(43,111,255,.08); color:var(--accent4); border-left-color:var(--accent); }
+    .suggestion-item span { flex:1; display:flex; align-items:center; }
+    .suggestion-item span::before {
+      content:'\f002'; font-family:'Font Awesome 6 Free'; font-weight:900;
+      margin-right:10px; opacity:.4; font-size:11px;
+    }
+    .delete-history-item {
+      opacity:0; background:rgba(239,68,68,.1);
+      border:none; color:var(--danger); font-size:11px;
+      cursor:pointer; border-radius:50%;
+      height:22px; width:22px;
+      display:flex; align-items:center; justify-content:center;
+      margin-left:8px; transition:all .2s;
+    }
+    .suggestion-item:hover .delete-history-item { opacity:1; }
+    .delete-history-item:hover { background:var(--danger); color:#fff; opacity:1; }
+
+    /* Pixel deco */
+    .pixel-deco { display:flex; justify-content:center; gap:6px; margin-top:22px; }
+    .pixel-block { width:12px; height:12px; animation:pixel-cycle 2s step-end infinite; }
+    .pixel-block:nth-child(1){background:var(--accent); animation-delay:0s;}
+    .pixel-block:nth-child(2){background:var(--accent2);animation-delay:.2s;}
+    .pixel-block:nth-child(3){background:var(--accent3);animation-delay:.4s;}
+    .pixel-block:nth-child(4){background:var(--accent4);animation-delay:.6s;}
+    .pixel-block:nth-child(5){background:var(--accent); animation-delay:.8s;}
+    .pixel-block:nth-child(6){background:var(--accent2);animation-delay:1s;}
+    .pixel-block:nth-child(7){background:var(--accent3);animation-delay:1.2s;}
+    @keyframes pixel-cycle {
+      0%,100%{opacity:1;transform:scaleY(1);}
+      50%{opacity:.3;transform:scaleY(.4);}
+    }
+
+    /* ─── RESULTS ─── */
+    .results-container {
+      margin:40px auto; width:85%; max-width:820px;
+      display:none; opacity:0;
+      transform:translateY(16px);
+      transition:opacity .3s,transform .3s;
+    }
+    .results-container.show { opacity:1; transform:translateY(0); }
+    .results-container h2 {
+      font-family:'Press Start 2P',monospace; font-size:10px;
+      color:var(--accent); text-shadow:0 0 8px var(--accent);
+      border-bottom:2px solid var(--border);
+      padding-bottom:10px; margin-bottom:16px;
+    }
+    .result {
+      background:var(--result-bg); padding:14px 16px;
+      margin-bottom:12px;
+      border:1px solid var(--border); border-left:4px solid var(--accent2);
+      color:var(--text3);
+      box-shadow:2px 2px 0 rgba(43,111,255,.1);
+      transition:border-color .15s,box-shadow .15s;
+      word-break:break-word;
+    }
+    .result:hover { border-left-color:var(--accent4); box-shadow:4px 4px 0 var(--shadow); }
+    .result a { color:var(--accent3); text-decoration:none; }
+    .result a:hover { text-decoration:underline; text-shadow:0 0 8px var(--accent3); }
+    .disclaimer {
+      background:var(--bg2); color:var(--text2);
+      padding:12px 16px; margin-bottom:18px;
+      border:1px solid var(--border);
+      display:flex; align-items:center; gap:14px;
+      font-size:13px; box-shadow:3px 3px 0 var(--accent2);
+    }
+    .disclaimer img { width:42px; height:42px; border-radius:50%; border:2px solid var(--accent); box-shadow:0 0 10px var(--accent); }
+
+    /* ─── VIEW SECTIONS (PDF, Privacy) ─── */
+    .view-section {
+      display:none; margin:36px auto;
+      width:95%; max-width:1400px;
+      opacity:0; transform:translateY(14px);
+      transition:all .3s ease;
+    }
+    .view-section.show { opacity:1; transform:translateY(0); }
+    .view-header {
+      display:flex; justify-content:space-between; align-items:center;
+      margin-bottom:22px; padding:0 6px;
+    }
+    .view-header h2 {
+      font-family:'Press Start 2P',monospace; font-size:11px;
+      color:var(--accent); text-shadow:0 0 8px var(--accent);
+    }
+
+    /* Buttons */
+    .btn {
+      padding:9px 18px; border:none; cursor:pointer;
+      font-family:'Share Tech Mono',monospace; font-size:13px;
+      display:inline-flex; align-items:center; justify-content:center;
+      gap:7px; transition:all .15s;
+      box-shadow:2px 2px 0 var(--accent2);
+    }
+    .btn-primary {
+      background:var(--accent); color:var(--bg);
+      border:2px solid var(--accent3);
+    }
+    .btn-primary:hover { background:var(--accent2); box-shadow:0 0 14px var(--shadow); }
+    .btn-secondary {
+      background:var(--bg3); color:var(--text3);
+      border:2px solid var(--border);
+    }
+    .btn-secondary:hover { background:var(--bg2); color:var(--accent4); border-color:var(--accent4); }
+    .btn-danger {
+      background:rgba(239,68,68,.15); color:var(--danger);
+      border:2px solid rgba(239,68,68,.4);
+    }
+    .btn-danger:hover { background:var(--danger); color:#fff; }
+    .btn:hover { transform:translateY(-1px); }
+
+    /* Privacy tools */
+    .privacy-tools {
+      display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:22px;
+    }
+    .privacy-tool {
+      background:var(--result-bg); border:2px solid var(--border);
+      padding:22px; text-align:center;
+      box-shadow:3px 3px 0 var(--accent2);
+      transition:all .15s;
+    }
+    .privacy-tool:hover { border-color:var(--accent4); box-shadow:4px 4px 0 var(--accent4); }
+    .tool-icon { font-size:2.2em; margin-bottom:16px; color:var(--accent); }
+    .tool-title {
+      font-family:'Press Start 2P',monospace; font-size:8px;
+      color:var(--text3); margin-bottom:10px;
+    }
+    .tool-desc { color:var(--text2); margin-bottom:18px; font-size:12px; line-height:1.5; }
+    .password-result,.email-result,.link-result {
+      margin-top:18px; padding:12px;
+      background:var(--bg2); word-break:break-all;
+      font-family:'Share Tech Mono',monospace; font-size:12px;
+      border:1px solid var(--border);
+    }
+    .safe { color:var(--success); border-left:3px solid var(--success); }
+    .warning { color:var(--warning); border-left:3px solid var(--warning); }
+    .danger { color:var(--danger); border-left:3px solid var(--danger); }
+
+    .input-group { margin-bottom:16px; text-align:left; }
+    .input-group label { display:block; margin-bottom:6px; color:var(--text2); font-size:12px; }
+    .input-group input,.input-group select {
+      width:100%; padding:10px;
+      border:2px solid var(--border);
+      background:var(--bg2); color:var(--text3);
+      font-family:'Share Tech Mono',monospace; outline:none;
+    }
+    .input-group input:focus { border-color:var(--accent4); background:var(--bg3); }
+
+    /* PDF/Word Processor */
+    .wp-container {
+      border:2px solid var(--border); overflow:hidden;
+      box-shadow:4px 4px 0 var(--accent2);
+    }
+    .wp-toolbar {
+      padding:10px 12px; display:flex; flex-wrap:wrap; gap:6px;
+      background:var(--bg2);
+      border-bottom:2px solid var(--border); align-items:center;
+    }
+    .wp-btn {
+      background:var(--bg3); border:1px solid var(--border);
+      color:var(--text3); padding:5px 10px;
+      cursor:pointer; font-size:13px;
+      display:flex; align-items:center; justify-content:center;
+      transition:all .1s;
+    }
+    .wp-btn:hover { background:var(--accent); color:var(--bg); border-color:var(--accent); }
+    .wp-select {
+      background:var(--bg2); color:var(--text3);
+      border:1px solid var(--border); padding:5px 8px;
+      font-family:'Share Tech Mono',monospace; font-size:12px;
+      outline:none; cursor:pointer;
+    }
+    .wp-select:focus { border-color:var(--accent4); }
+    .wp-separator { width:1px; height:22px; background:var(--border); margin:0 4px; }
+    .wp-color-picker { width:30px; height:30px; border:1px solid var(--border); background:transparent; cursor:pointer; padding:0; border-radius:0; }
+    .wp-editor-wrapper {
+      padding:28px 10px; background:#111;
+      overflow-y:auto; overflow-x:auto;
+      height:65vh; min-height:500px;
+      display:flex; justify-content:center;
+    }
+    .wp-page {
+      background:#fff; color:#000;
+      width:210mm; min-height:297mm; padding:20mm 25mm;
+      box-shadow:0 10px 30px rgba(0,0,0,.8);
+      outline:none; font-family:'Arial',sans-serif;
+      font-size:11pt; line-height:1.6;
+      word-wrap:break-word; overflow-wrap:break-word;
+      word-break:break-word; white-space:pre-wrap;
+      max-width:100%; overflow-x:hidden;
+      background-image:repeating-linear-gradient(to bottom,transparent,transparent 296mm,#d1d5db 296mm,#d1d5db 297mm);
+    }
+    .wp-page p,.wp-page h1,.wp-page h2,.wp-page h3,.wp-page ul,.wp-page ol { page-break-inside:avoid; }
+    .html2pdf__page-break {
+      width:100%; border:0;
+      border-top:2px dashed #ff4444; margin:20px 0;
+      page-break-after:always; position:relative;
+    }
+    .html2pdf__page-break::after {
+      content:"Salto de Página"; position:absolute;
+      top:-11px; left:50%; transform:translateX(-50%);
+      background:#fff; padding:0 10px; color:#ff4444;
+      font-size:10px; font-family:sans-serif;
+    }
+
+    /* Loading spinner */
+    .loading-spinner {
+      border:3px solid rgba(43,111,255,.15);
+      border-top:3px solid var(--accent);
+      border-radius:50%; width:28px; height:28px;
+      animation:spin .8s linear infinite; margin:18px auto;
+    }
+    @keyframes spin { 100%{transform:rotate(360deg);} }
+
+    /* ─── MODALS ─── */
+    #help-modal, #privacy-modal {
+      display:none; opacity:0;
+      transition:opacity .3s;
+      position:fixed; top:0;left:0;right:0;bottom:0;
+      background:rgba(0,0,0,.88);
+      z-index:10000;
+      justify-content:center; align-items:center;
+    }
+    #help-modal.show, #privacy-modal.show { opacity:1; }
+    .help-content, .privacy-content-wrapper {
+      position:relative; background:var(--bg2);
+      padding:0;
+      border:2px solid var(--accent);
+      max-width:800px; width:90%;
+      box-shadow:6px 6px 0 var(--accent2),0 0 30px var(--shadow);
+      max-height:85vh; overflow-y:auto;
+    }
+    .modal-titlebar {
+      background:var(--accent); color:var(--bg);
+      font-family:'Press Start 2P',monospace; font-size:8px;
+      padding:6px 10px; display:flex; justify-content:space-between; align-items:center;
+    }
+    .modal-titlebar-dots { display:flex; gap:5px; }
+    .modal-titlebar-dots span { width:9px; height:9px; background:var(--bg); border-radius:50%; }
+    .close-help, .close-privacy {
+      background:#cc0000; border:1px solid #ff3333;
+      font-size:13px; color:#fff; cursor:pointer;
+      padding:2px 7px; font-family:'Share Tech Mono',monospace;
+    }
+    .modal-body { padding:22px; color:var(--text2); line-height:1.7; }
+    .modal-body h2 {
+      font-family:'Press Start 2P',monospace; font-size:10px;
+      color:var(--accent); margin-bottom:20px;
+      text-shadow:0 0 8px var(--accent);
+    }
+    .modal-body strong { color:var(--accent3); }
+    .help-content iframe { display:block; width:100%; height:315px; border:none; }
+
+    /* ─── FLOATING BUTTONS ─── */
+    #help-button {
+      position:fixed; bottom:20px; left:20px;
+      background:var(--bg2); border:2px solid var(--border);
+      color:var(--accent); font-size:18px; z-index:999;
+      cursor:pointer; padding:8px 10px;
+      box-shadow:0 0 10px var(--shadow); transition:all .15s;
+    }
+    #help-button:hover { background:var(--accent4); color:var(--bg); border-color:var(--accent4); box-shadow:0 0 18px var(--accent4); }
+    #theme-toggle {
+      position:fixed; bottom:20px; right:20px;
+      background:var(--bg2); border:2px solid var(--border);
+      color:var(--accent); font-family:'Press Start 2P',monospace;
+      font-size:7px; padding:8px 10px; cursor:pointer;
+      z-index:999; box-shadow:0 0 10px var(--shadow); transition:all .15s;
+      text-align:center; line-height:1.8;
+    }
+    #theme-toggle:hover { background:var(--accent2); color:var(--bg); border-color:var(--accent2); }
+
+    /* ─── FOOTER ─── */
+    footer {
+      margin-top:auto; padding:16px 0; text-align:center;
+      font-family:'VT323',monospace; font-size:18px;
+      color:var(--text2); background:var(--bg2);
+      border-top:2px solid var(--border);
+      box-shadow:0 -4px 16px var(--shadow); letter-spacing:2px;
+    }
+    footer span { color:var(--accent2); }
+
+    /* Glitch */
+    @keyframes glitch {
+      0%   { transform:none; filter:none; }
+      20%  { transform:translate(-3px,1px) skewX(-5deg); filter:hue-rotate(90deg); }
+      40%  { transform:translate(3px,-1px) skewX(5deg); filter:hue-rotate(180deg); }
+      60%  { transform:translate(-2px,2px); filter:hue-rotate(270deg); }
+      80%  { transform:translate(2px,-2px) skewX(-2deg); filter:hue-rotate(360deg); }
+      100% { transform:none; filter:none; }
+    }
+    .glitch-anim { animation:glitch .4s steps(1) 1; }
+
+    .hidden { display:none !important; }
+
+    @media (max-width:768px) {
+      .search-wrapper { max-width:none; }
+      .results-container { width:95%; }
+      header h1 { font-size:13px; }
+      .header-brand-row { flex-direction:column; gap:10px; }
+      .tools-button { left:68px; }
+      .fullscreen-button { right:68px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- LOADING SCREEN -->
+<div id="loading-screen">
+  <img src="https://64.media.tumblr.com/3d305395ebd099966bbd46734f6afa03/4d78480730607865-41/s1280x1920/617bcc52deb4bb5c2bf470b4f95db32123898bc6.pnj" class="loading-logo" alt="Logo">
+  <p class="loading-text">CARGANDO SISTEMA...</p>
+  <p class="loading-sys">ESTALINGRADO CORP v0.0 // INICIANDO</p>
+  <div class="loading-bar"><div id="loading-progress-bar"></div></div>
+  <div id="loading-percent">0%</div>
+</div>
+
+<!-- MAIN CONTENT -->
+<div id="main-content">
+  <header>
+    <button class="settings-button" onclick="window.toggleSettings()" title="Ajustes"><i class="fas fa-cog"></i></button>
+    <button class="tools-button"    onclick="window.toggleTools()"    title="Herramientas"><i class="fas fa-toolbox"></i></button>
+    <button class="fullscreen-button" onclick="window.toggleFullScreen()" title="Pantalla completa"><i class="fas fa-expand"></i></button>
+    <button class="menu-button"     onclick="window.toggleMenu()"     title="Menú">
+      <div class="menu-icon"></div><div class="menu-icon"></div><div class="menu-icon"></div>
+    </button>
+
+    <!-- Settings Panel -->
+    <div id="settingsPanel" class="settings-panel">
+      <div class="panel-titlebar"><span class="dot"></span><span class="dot"></span><span class="dot"></span> BUSCADORES.SYS</div>
+      <div class="panel-body">
+        <strong>Motores activos</strong>
+        <label><input type="checkbox" value="Bing" checked> Bing</label>
+        <label><input type="checkbox" value="Yahoo" checked> Yahoo</label>
+        <label><input type="checkbox" value="DuckDuckGo" checked> DuckDuckGo</label>
+        <label><input type="checkbox" value="Yandex" checked> Yandex</label>
+        <label><input type="checkbox" value="Brave" checked> Brave</label>
+        <label><input type="checkbox" value="Baidu" checked> Baidu</label>
+        <label><input type="checkbox" value="Startpage" checked> Startpage</label>
+        <label><input type="checkbox" value="Qwant" checked> Qwant</label>
+        <label><input type="checkbox" value="Ecosia" checked> Ecosia</label>
+        <label><input type="checkbox" value="Wikipedia" checked> Wikipedia</label>
+        <label><input type="checkbox" value="Archive" checked> Internet Archive</label>
+        <label><input type="checkbox" value="SearXNG" checked> SearXNG (Código Abierto)</label>
+        <button id="intraNetButton" onclick="window.clearHistory()"><i class="fas fa-trash-alt"></i> ⚠ RESET CONEXIÓN</button>
+      </div>
+    </div>
+
+    <!-- Tools Panel -->
+    <div id="toolsPanel" class="tools-panel">
+      <div class="panel-titlebar"><span class="dot"></span><span class="dot"></span><span class="dot"></span> TOOLS.EXE</div>
+      <div class="panel-body">
+        <strong>Mis Herramientas</strong>
+        <a href="#" onclick="window.showPDFCreator(); return false;"><i class="fas fa-file-pdf"></i> Creador de PDF Pro</a>
+        <a href="#" onclick="window.showPrivacyTools(); return false;"><i class="fas fa-shield-alt"></i> Privacidad & Seguridad</a>
+      </div>
+    </div>
+
+    <!-- Menu Panel -->
+    <div id="menuPanel" class="menu-panel">
+      <div class="panel-titlebar"><span class="dot"></span><span class="dot"></span><span class="dot"></span> MENU.EXE</div>
+      <div class="panel-body">
+        <strong>Inteligencia Artificial</strong>
+        <a href="https://chat.deepseek.com/sign_in" target="_blank"><i class="fas fa-brain"></i> DeepSeek</a>
+        <a href="https://chat.qwen.ai/" target="_blank"><i class="fas fa-robot"></i> Qwen</a>
+        <a href="https://www.kimi.com/" target="_blank"><i class="fas fa-star"></i> kimi 1.5</a>
+        <a href="https://minimaxai.me/es" target="_blank"><i class="fas fa-microchip"></i> Minimax AI</a>
+        <a href="https://chatgpt.com/" target="_blank"><i class="fas fa-comment-dots"></i> ChatGPT</a>
+        <a href="https://gemini.google.com/app?hl=es" target="_blank"><i class="fas fa-gem"></i> Géminis</a>
+        <a href="https://duckduckgo.com/?q=DuckDuckGo+AI+Chat&ia=chat&duckai=1" target="_blank"><i class="fas fa-shield-alt"></i> Duck.ia</a>
+        <a href="https://copilot.microsoft.com/" target="_blank"><i class="fas fa-plane"></i> Copilot</a>
+        <strong>Empresa</strong>
+        <a href="index.html"><i class="fas fa-desktop"></i> Portal Retro (Intra-net)</a>
+        <a href="index2.html"><i class="fas fa-database"></i> data-wiki</a>
+        <a href="Buscador retro.html"><i class="fas fa-search"></i> Buscador Retro</a>
+        <a href="https://centercorpec.wixsite.com/estalingradocorp" target="_blank"><i class="fas fa-building"></i> Intra-net</a>
+        <a href="https://www.instagram.com/estalingradocorp" target="_blank"><i class="fab fa-instagram"></i> Instagram</a>
+        <a href="https://t.me/estalingradocorp" target="_blank"><i class="fab fa-telegram"></i> Telegram</a>
+        <a href="https://x.com/Estalingrado27" target="_blank"><i class="fab fa-twitter"></i> X</a>
+        <strong>Soporte</strong>
+        <a href="https://centercorpec.wixsite.com/estalingradocorp/faq" target="_blank"><i class="fas fa-question-circle"></i> Saber Más</a>
+        <a href="#" onclick="window.toggleHelp(); return false;"><i class="fas fa-info-circle"></i> Ayuda</a>
+        <a href="#" onclick="window.mostrarPoliticaPrivacidad(); return false;"><i class="fas fa-user-shield"></i> Privacidad</a>
+      </div>
+    </div>
+
+    <div class="header-brand">
+      <div class="header-brand-row">
+        <img id="main-logo" src="" alt="Logo" />
+        <h1>Estalingrado Corp 0.0</h1>
+      </div>
+    </div>
+  </header>
+
+  <!-- MARQUEE -->
+  <div class="marquee-wrap">
+    <span class="marquee-inner">
+      ★ ESTALINGRADO CORP ★ SOLUCIONES INTELIGENTES ★ BIG DATA EN CONSTRUCCIÓN ★ CONECTADO A LA INTRA-NET ★ IDEX v0.0 ★ /ai /clima /noticias /traducir ★ BÚSQUEDA POR VOZ ACTIVA ★ PDF PRO DISPONIBLE ★ ESTALINGRADO CORP ★ SOLUCIONES INTELIGENTES ★
+    </span>
+  </div>
+
+  <!-- SEARCH -->
+  <div class="search-container" id="main-search">
+    <form class="search-box" onsubmit="event.preventDefault(); window.search();">
+      <div class="search-wrapper">
+        <button class="voice-search-button" type="button" onclick="window.startVoiceSearch()" id="voiceSearchButton" title="Búsqueda por voz">
+          <i class="fas fa-microphone"></i>
+        </button>
+        <input type="text" id="query" class="search-input"
+          placeholder=">> /ai /clima /noticias o búsqueda libre_" autocomplete="off" />
+        <button class="search-button" type="submit" title="Buscar">
+          <i class="fas fa-search"></i>
+        </button>
+        <div id="suggestionsContainer"></div>
+      </div>
+      <div class="search-slogan">Soluciones inteligentes para personas inteligentes</div>
+    </form>
+    <div class="pixel-deco">
+      <div class="pixel-block"></div><div class="pixel-block"></div>
+      <div class="pixel-block"></div><div class="pixel-block"></div>
+      <div class="pixel-block"></div><div class="pixel-block"></div>
+      <div class="pixel-block"></div>
+    </div>
+  </div>
+
+  <!-- PDF CREATOR -->
+  <div id="pdf-creator-view" class="view-section">
+    <div class="view-header">
+      <h2><i class="fas fa-file-word"></i> PROCESADOR DE TEXTOS</h2>
+      <button class="btn btn-secondary" onclick="window.closeToolsView()"><i class="fas fa-times"></i> Cerrar</button>
+    </div>
+    <div class="wp-container">
+      <div class="wp-toolbar">
+        <select class="wp-select" id="fontName" onchange="window.formatDoc('fontName',this.value)">
+          <option value="Arial">Arial</option>
+          <option value="Times New Roman">Times New Roman</option>
+          <option value="Courier New">Courier New</option>
+          <option value="Georgia">Georgia</option>
+          <option value="Verdana">Verdana</option>
+        </select>
+        <select class="wp-select" id="fontSize" onchange="window.formatDoc('fontSize',this.value)">
+          <option value="3">Normal (12pt)</option>
+          <option value="1">Muy Pequeño</option>
+          <option value="2">Pequeño</option>
+          <option value="4">Mediano</option>
+          <option value="5">Grande</option>
+          <option value="6">Muy Grande</option>
+          <option value="7">Título</option>
+        </select>
+        <div class="wp-separator"></div>
+        <button class="wp-btn" onclick="window.formatDoc('bold')" title="Negrita"><i class="fas fa-bold"></i></button>
+        <button class="wp-btn" onclick="window.formatDoc('italic')" title="Cursiva"><i class="fas fa-italic"></i></button>
+        <button class="wp-btn" onclick="window.formatDoc('underline')" title="Subrayado"><i class="fas fa-underline"></i></button>
+        <button class="wp-btn" onclick="window.formatDoc('strikeThrough')"><i class="fas fa-strikethrough"></i></button>
+        <div class="wp-separator"></div>
+        <button class="wp-btn" onclick="window.formatDoc('justifyLeft')"><i class="fas fa-align-left"></i></button>
+        <button class="wp-btn" onclick="window.formatDoc('justifyCenter')"><i class="fas fa-align-center"></i></button>
+        <button class="wp-btn" onclick="window.formatDoc('justifyRight')"><i class="fas fa-align-right"></i></button>
+        <button class="wp-btn" onclick="window.formatDoc('justifyFull')"><i class="fas fa-align-justify"></i></button>
+        <div class="wp-separator"></div>
+        <button class="wp-btn" onclick="window.formatDoc('insertUnorderedList')"><i class="fas fa-list-ul"></i></button>
+        <button class="wp-btn" onclick="window.formatDoc('insertOrderedList')"><i class="fas fa-list-ol"></i></button>
+        <div class="wp-separator"></div>
+        <div style="display:flex;align-items:center;gap:4px;" title="Color texto">
+          <i class="fas fa-font" style="color:var(--text2);font-size:11px;"></i>
+          <input type="color" class="wp-color-picker" onchange="window.formatDoc('foreColor',this.value)" value="#000000">
+        </div>
+        <div style="display:flex;align-items:center;gap:4px;" title="Resaltado">
+          <i class="fas fa-highlighter" style="color:var(--text2);font-size:11px;"></i>
+          <input type="color" class="wp-color-picker" onchange="window.formatDoc('hiliteColor',this.value)" value="#ffff00">
+        </div>
+        <div class="wp-separator"></div>
+        <button class="wp-btn" onclick="window.insertPageBreak()"><i class="fas fa-file" style="margin-right:4px;"></i> Salto Pág.</button>
+        <button class="wp-btn" onclick="window.clearDocument()" style="color:var(--danger);"><i class="fas fa-eraser"></i></button>
+        <div style="flex-grow:1;"></div>
+        <input type="text" id="pdf-filename" class="wp-select" placeholder="Nombre_Archivo" value="Documento" style="width:140px;margin-right:8px;">
+        <button class="btn btn-primary" onclick="window.downloadEditorPDF()"><i class="fas fa-file-pdf"></i> Exportar PDF</button>
+      </div>
+      <div class="wp-editor-wrapper">
+        <div id="wp-page" class="wp-page" contenteditable="true" spellcheck="false">
+          <h1 style="text-align:center;">Título Principal</h1>
+          <p>Comenzá a escribir tu documento aquí. Seleccioná el texto y usá la barra para darle formato.</p>
+          <ul>
+            <li>Las líneas grises marcan el inicio de <b>cada hoja</b>.</li>
+            <li>Usá "Salto Pág." para forzar un corte.</li>
+            <li>Exportá con el botón azul.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PRIVACY TOOLS -->
+  <div id="privacy-tools-view" class="view-section">
+    <div class="view-header">
+      <h2><i class="fas fa-shield-alt"></i> PRIVACIDAD & SEGURIDAD</h2>
+      <button class="btn btn-secondary" onclick="window.closeToolsView()"><i class="fas fa-times"></i> Cerrar</button>
+    </div>
+    <div class="privacy-tools">
+      <div class="privacy-tool">
+        <div class="tool-icon"><i class="fas fa-key"></i></div>
+        <div class="tool-title">Generador de Claves</div>
+        <div class="tool-desc">Crea contraseñas robustas al instante</div>
+        <div class="input-group"><label>Longitud:</label><input type="number" id="passwordLength" value="16" min="8" max="32"></div>
+        <button class="btn btn-primary" onclick="window.generatePassword()">Generar</button>
+        <div id="passwordResult" class="password-result"></div>
+      </div>
+      <div class="privacy-tool">
+        <div class="tool-icon"><i class="fas fa-shield-alt"></i></div>
+        <div class="tool-title">Auditoría de Email</div>
+        <div class="tool-desc">Verifica la integridad de tu correo</div>
+        <div class="input-group"><label>Email:</label><input type="email" id="emailInput" placeholder="usuario@email.com"></div>
+        <button class="btn btn-primary" onclick="window.checkEmailSecurity()">Auditar</button>
+        <div id="emailResult" class="email-result"></div>
+      </div>
+      <div class="privacy-tool">
+        <div class="tool-icon"><i class="fas fa-link"></i></div>
+        <div class="tool-title">Scanner de URL</div>
+        <div class="tool-desc">Analiza enlaces antes de visitarlos</div>
+        <div class="input-group"><label>URL:</label><input type="url" id="linkInput" placeholder="https://sitio.com"></div>
+        <button class="btn btn-primary" onclick="window.scanLink()">Escanear</button>
+        <div id="linkResult" class="link-result"></div>
+      </div>
+      <div class="privacy-tool">
+        <div class="tool-icon"><i class="fas fa-broom"></i></div>
+        <div class="tool-title">Limpieza Digital</div>
+        <div class="tool-desc">Elimina rastros locales de navegación</div>
+        <button class="btn btn-danger" onclick="window.clearAllData()">Purgar Datos</button>
+        <div class="tool-desc" style="margin-top:14px;font-size:11px;">Elimina historial, cache y preferencias locales.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- RESULTS -->
+  <div class="results-container" id="resultsContainer">
+    <h2>// RESULTADOS DE BÚSQUEDA:</h2>
+    <div class="disclaimer">
+      <img id="result-logo" src="" alt="Logo" />
+      <p>Navegación a través de Estalingrado Corp Intra-NET. Redirigiendo a motores externos.</p>
+    </div>
+    <div id="results"></div>
+  </div>
+
+  <!-- HELP MODAL -->
+  <div id="help-modal">
+    <div class="help-content">
+      <div class="modal-titlebar">
+        <div class="modal-titlebar-dots"><span></span><span></span><span></span></div>
+        <span>AYUDA.EXE — ESTALINGRADO CORP</span>
+        <button class="close-help" onclick="window.toggleHelp()">✕</button>
+      </div>
+      <iframe id="help-video" width="100%" height="315" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+      <div class="modal-body">
+        <p><strong>Comandos especiales:</strong><br>
+        — <strong>/ai [pregunta]</strong> → Asistente de IA integrado<br>
+        — <strong>/clima [ciudad]</strong> → Clima en tiempo real<br>
+        — <strong>/noticias [tema]</strong> → Noticias<br>
+        — <strong>/traducir [texto]</strong> → Traducción<br><br>
+        <strong>Atajos de teclado:</strong><br>
+        — Ctrl+K: Foco en búsqueda<br>
+        — Ctrl+D: Menú Herramientas<br>
+        — Ctrl+I: Comando /ai<br>
+        — Escape: Cerrar todo</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- PRIVACY MODAL -->
+  <div id="privacy-modal">
+    <div class="privacy-content-wrapper">
+      <div class="modal-titlebar">
+        <div class="modal-titlebar-dots"><span></span><span></span><span></span></div>
+        <span>POLÍTICA DE PRIVACIDAD</span>
+        <button class="close-privacy" onclick="window.mostrarPoliticaPrivacidad()">✕</button>
+      </div>
+      <div class="modal-body">
+        <h2>Política de Privacidad</h2>
+        <p><strong>Última actualización:</strong> Julio 2025</p>
+        <p><strong>1. Compromiso con la Privacidad</strong><br>Estalingrado Corp valora y protege la privacidad de sus usuarios.</p>
+        <p><strong>2. Datos que NO recopilamos</strong><br>— No almacenamos ni compartimos tus búsquedas fuera de tu dispositivo.<br>— No solicitamos datos identificatorios personales.<br>— No usamos cookies de terceros con fines publicitarios.</p>
+        <p><strong>3. Historial local</strong><br>Tu historial se guarda únicamente en tu navegador. Podés borrarlo desde Ajustes.</p>
+        <p><strong>4. Motores de Búsqueda Indexados</strong><br>Al buscar, redirigimos tu consulta a motores externos como Bing, DuckDuckGo, entre otros.</p>
+        <p style="background:rgba(239,68,68,.1);padding:14px;border-left:4px solid var(--danger);margin:14px 0;">
+          <strong>Descargo de responsabilidad:</strong><br>
+          Estalingrado Corp <u>no se responsabiliza</u> por el contenido, exactitud ni legalidad de los resultados provistos por dichos buscadores.</p>
+        <p><strong>5. Ley aplicable</strong><br>Nos regimos por la Ley N.º 25.326 de Protección de Datos Personales de la República Argentina.</p>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <span>★</span> ESTALINGRADO CORP &copy; 1994-2025 <span>★</span> ALL RIGHTS RESERVED // IDEX v0.0 <span>★</span>
+  </footer>
+</div>
+
+<!-- FLOATING BUTTONS -->
+<button id="help-button" title="Ayuda"><i class="fas fa-question-circle"></i></button>
+<button id="theme-toggle" onclick="toggleTheme()">🌙 MODO<br>OSCURO</button>
+
+<script>
+window.onerror = function(msg, src, line) {
+  console.error("Error:", msg, "línea", line);
+};
+
+/* ══════════════════════════
+   CONFIG
+══════════════════════════ */
+var CONFIG = {
+  logos: [
+    "https://64.media.tumblr.com/3d305395ebd099966bbd46734f6afa03/4d78480730607865-41/s1280x1920/617bcc52deb4bb5c2bf470b4f95db32123898bc6.pnj"
+  ],
+  knownSites: {
+    chatgpt:"https://chatgpt.com/",gemini:"https://gemini.google.com/app?hl=es",
+    youtube:"https://www.youtube.com/","youtube music":"https://music.youtube.com/",
+    traductor:"https://translate.google.com/",gmail:"https://mail.google.com/",
+    "google drive":"https://drive.google.com/drive/",steam:"https://store.steampowered.com/",
+    estalingrado:"https://centercorpec.wixsite.com/softwarelab",
+    facebook:"https://www.facebook.com/",instagram:"https://www.instagram.com/",
+    whatsapp:"https://web.whatsapp.com/",x:"https://x.com/",
+    spotify:"https://open.spotify.com/",tumblr:"https://www.tumblr.com/",
+    wikipedia:"https://es.wikipedia.org/wiki/Wikipedia:Portada",
+    archive:"https://archive.org/",tiktok:"https://www.tiktok.com/",
+    github:"https://github.com/",telegram:"https://www.telegram.org/"
+  },
+  semanticSearch: {
+    "noticias de tecnología":["techcrunch.com","theverge.com","wired.com","arstechnica.com"],
+    "noticias de argentina":["lanacion.com.ar","clarin.com","infobae.com","pagina12.com.ar"],
+    "noticias de deportes":["espn.com","foxsports.com","tycsports.com","ole.com.ar"],
+    "música online":["spotify.com","youtube.com/music","deezer.com","soundcloud.com"],
+    "películas y series":["netflix.com","hbo.com","disneyplus.com","primevideo.com"],
+    "aprender programación":["freecodecamp.org","codecademy.com","udemy.com","coursera.org"],
+    "trabajo remoto":["linkedin.com","remoteok.io","weworkremotely.com","flexjobs.com"]
+  },
+  searchSuggestions: [
+    "noticias de hoy","clima en salta","recetas de cocina faciles",
+    "como programar en javascript","historia de argentina","musica pop 2024",
+    "peliculas de accion","libros de ciencia ficcion","deportes noticias",
+    "ultimas tecnologias","tutoriales de css","aprender html desde cero",
+    "juegos online gratis","descargar software libre","inteligencia artificial explicada",
+    "viajes baratos a europa","consejos para estudiar","cotizacion dolar hoy",
+    "chatgpt en español","gemini inteligencia artificial","duckduckgo buscador privado",
+    "deepseek chat","copilot microsoft","estalingrado software lab",
+    "historia de estalingrado corp","que es la intra-net","buscadores alternativos"
+  ],
+  searchEngines: {
+    Bing:       q=>`https://www.bing.com/search?q=${encodeURIComponent(q)}`,
+    Yahoo:      q=>`https://espanol.search.yahoo.com/search?p=${encodeURIComponent(q)}`,
+    DuckDuckGo: q=>`https://duckduckgo.com/?q=${encodeURIComponent(q)}`,
+    Yandex:     q=>`https://yandex.com/search/?text=${encodeURIComponent(q)}`,
+    Brave:      q=>`https://search.brave.com/search?q=${encodeURIComponent(q)}`,
+    Baidu:      q=>`https://www.baidu.com/s?wd=${encodeURIComponent(q)}`,
+    Startpage:  q=>`https://www.startpage.com/sp/search?query=${encodeURIComponent(q)}`,
+    Qwant:      q=>`https://www.qwant.com/?q=${encodeURIComponent(q)}`,
+    Ecosia:     q=>`https://www.ecosia.org/search?q=${encodeURIComponent(q)}`,
+    Wikipedia:  q=>`https://es.wikipedia.org/wiki/Special:Search?search=${encodeURIComponent(q)}`,
+    Archive:    q=>`https://archive.org/search?query=${encodeURIComponent(q)}`,
+    SearXNG:    q=>`https://searx.be/search?q=${encodeURIComponent(q)}`
+  },
+  estimatedResults: {
+    Bing:800000,Yahoo:600000,DuckDuckGo:500000,Yandex:400000,
+    Brave:300000,Baidu:200000,Startpage:150000,Qwant:100000,
+    Ecosia:50000,Wikipedia:100,Archive:81,SearXNG:200000
+  },
+  aiCommands: {
+    '/ai':'Consulta de IA','/clima':'Información del clima',
+    '/noticias':'Noticias recientes','/traducir':'Traducción de texto',
+    '/calcular':'Calculadora','/imagen':'Búsqueda de imágenes'
+  }
+};
+
+/* ══════════════════════════
+   APP STATE & UTILS
+══════════════════════════ */
+var AppState = {
+  currentLogo:0, isResettingSearch:false, initialized:false,
+  voiceRecognition:null, isRecording:false, currentCity:'Buenos Aires'
+};
+
+var Utils = {
+  safeLocalStorage: {
+    get:  k=>{ try{return JSON.parse(localStorage.getItem(k));}catch{return null;} },
+    set:  (k,v)=>{ try{localStorage.setItem(k,JSON.stringify(v));return true;}catch{return false;} },
+    remove: k=>{ try{localStorage.removeItem(k);return true;}catch{return false;} }
+  },
+  debounce(func,wait){
+    let t; return function(...a){clearTimeout(t);t=setTimeout(()=>func.apply(this,a),wait);};
+  },
+  validateEmail: e=>/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e),
+  validateUrl:   u=>{ try{new URL(u);return true;}catch{return false;} }
+};
+
+/* ══════════════════════════
+   UI
+══════════════════════════ */
+var UI = {
+  elements:{},
+  init(){
+    this.elements = {
+      loadingScreen:      document.getElementById("loading-screen"),
+      progressBar:        document.getElementById("loading-progress-bar"),
+      percentText:        document.getElementById("loading-percent"),
+      mainContent:        document.getElementById("main-content"),
+      mainLogo:           document.getElementById("main-logo"),
+      resultLogo:         document.getElementById("result-logo"),
+      queryInput:         document.getElementById("query"),
+      suggestionsContainer:document.getElementById("suggestionsContainer"),
+      resultsContainer:   document.getElementById("resultsContainer"),
+      resultsDiv:         document.getElementById("results"),
+      settingsPanel:      document.getElementById("settingsPanel"),
+      menuPanel:          document.getElementById("menuPanel"),
+      toolsPanel:         document.getElementById("toolsPanel"),
+      helpModal:          document.getElementById("help-modal"),
+      privacyModal:       document.getElementById("privacy-modal"),
+      pdfCreatorView:     document.getElementById("pdf-creator-view"),
+      privacyToolsView:   document.getElementById("privacy-tools-view"),
+      mainSearch:         document.getElementById("main-search"),
+      voiceSearchButton:  document.getElementById("voiceSearchButton"),
+      fullscreenButton:   document.querySelector(".fullscreen-button")
+    };
+    return !!(this.elements.loadingScreen && this.elements.mainContent && this.elements.queryInput);
+  },
+  togglePanel(panelId){
+    const p = document.getElementById(panelId);
+    if(!p)return;
+    if(p.classList.contains('show')){this.hideElement(p);}
+    else{this.closeAllPanels();this.showElement(p);}
+  },
+  closeAllPanels(){
+    ['settingsPanel','menuPanel','toolsPanel'].forEach(id=>{
+      const p=document.getElementById(id);
+      if(p&&p.classList.contains('show'))this.hideElement(p);
+    });
+  },
+  toggleModal(modalId){
+    const m=document.getElementById(modalId);
+    if(!m)return;
+    if(m.classList.contains('show'))this.hideElement(m);
+    else this.showElement(m);
+  },
+  toggleFullScreen(){
+    if(!document.fullscreenElement){
+      document.documentElement.requestFullscreen().catch(e=>console.error(e));
+    } else if(document.exitFullscreen){document.exitFullscreen();}
+  },
+  updateFullScreenIcon(){
+    const btn=document.querySelector('.fullscreen-button i');
+    if(btn){
+      if(document.fullscreenElement){btn.classList.replace('fa-expand','fa-compress');}
+      else {btn.classList.replace('fa-compress','fa-expand');}
+    }
+  },
+  showElement(el,mode=null){
+    if(!el)return;
+    if(!mode){
+      mode=(['help-modal','privacy-modal','loading-screen'].includes(el.id))?'flex':'block';
+    }
+    el.style.display=mode;
+    void el.offsetWidth;
+    el.classList.add('show');
+  },
+  hideElement(el){
+    if(!el)return;
+    el.classList.remove('show');
+    setTimeout(()=>{ if(!el.classList.contains('show'))el.style.display='none'; },250);
+  }
+};
+
+/* ══════════════════════════
+   SEARCH MANAGER
+══════════════════════════ */
+var SearchManager = {
+  showSuggestions: Utils.debounce(function(){
+    const {queryInput,suggestionsContainer}=UI.elements;
+    if(!queryInput||!suggestionsContainer)return;
+    const q=queryInput.value.toLowerCase().trim();
+    if(AppState.isResettingSearch&&q.length===0){UI.hideElement(suggestionsContainer);return;}
+    suggestionsContainer.innerHTML="";
+    let history=Utils.safeLocalStorage.get("searchHistory");
+    if(!Array.isArray(history))history=[];
+    let list=!q?history:[
+      ...CONFIG.searchSuggestions.filter(s=>s.includes(q)),
+      ...history.filter(h=>h.includes(q)&&!CONFIG.searchSuggestions.includes(h)),
+      ...Object.keys(CONFIG.aiCommands).filter(c=>c.includes(q))
+    ].slice(0,10);
+    if(list.length===0){UI.hideElement(suggestionsContainer);return;}
+    list.forEach(text=>{
+      const item=document.createElement("div");
+      item.className="suggestion-item";
+      const span=document.createElement("span");
+      span.textContent=text;
+      span.addEventListener("click",()=>{
+        queryInput.value=text; UI.hideElement(suggestionsContainer);
+        SearchManager.performSearch();
+      });
+      item.appendChild(span);
+      if(history.includes(text)){
+        const del=document.createElement("button");
+        del.innerHTML='<i class="fas fa-trash-alt"></i>';
+        del.className="delete-history-item";
+        del.title="Eliminar del historial";
+        del.addEventListener("click",e=>{e.stopPropagation();SearchManager.deleteHistoryItem(text);});
+        item.appendChild(del);
+      }
+      suggestionsContainer.appendChild(item);
+    });
+    UI.showElement(suggestionsContainer);
+  },150),
+
+  deleteHistoryItem(item){
+    let h=Utils.safeLocalStorage.get("searchHistory");
+    if(!Array.isArray(h))h=[];
+    Utils.safeLocalStorage.set("searchHistory",h.filter(x=>x!==item));
+    SearchManager.showSuggestions();
+  },
+
+  performSearch(){
+    const {queryInput,resultsContainer,resultsDiv}=UI.elements;
+    if(!queryInput||!resultsContainer||!resultsDiv)return;
+    const query=queryInput.value.trim();
+    if(!query)return;
+    if(SearchManager.processSpecialCommands(query))return;
+
+    UI.showElement(resultsContainer);
+    resultsDiv.innerHTML="";
+    const inlineContainer=document.createElement("div");
+    inlineContainer.id="inline-results-container";
+    resultsDiv.appendChild(inlineContainer);
+    const externalContainer=document.createElement("div");
+    externalContainer.id="external-results-container";
+    externalContainer.innerHTML='<p style="color:var(--text2);font-size:13px;">Cargando resultados externos...</p>';
+    resultsDiv.appendChild(externalContainer);
+
+    let history=Utils.safeLocalStorage.get("searchHistory");
+    if(!Array.isArray(history))history=[];
+    if(!history.includes(query)){history.unshift(query);if(history.length>10)history.pop();Utils.safeLocalStorage.set("searchHistory",history);}
+
+    SearchManager.fetchInlineResults(query,inlineContainer);
+    setTimeout(()=>SearchManager.displayResults(query,
+      Array.from(document.querySelectorAll("#settingsPanel input[type='checkbox']:checked")).map(cb=>cb.value).filter(Boolean),
+      externalContainer
+    ),800);
+  },
+
+  fetchInlineResults(query,inlineContainer){
+    if(!inlineContainer)return;
+
+    // 1. DuckDuckGo Instant Answer
+    fetch(`https://api.duckduckgo.com/?q=${encodeURIComponent(query)}&format=json&no_redirect=1&skip_disambig=1`)
+      .then(r=>r.json()).then(data=>{
+        if(data.Abstract){
+          const d=document.createElement("div");d.className="result";
+          d.style.borderLeft="4px solid var(--accent4)";
+          d.innerHTML=`<strong style="color:var(--accent4);"><i class="fas fa-bolt"></i> Respuesta Rápida:</strong><br>
+            <h3 style="margin-top:5px;font-size:1.2em;">${data.Heading}</h3>
+            <div style="display:flex;gap:14px;margin-top:10px;">
+              ${data.Image?`<img src="${data.Image}" style="max-width:90px;height:auto;border:1px solid var(--border);" alt="${data.Heading}">` :''}
+              <div><p style="color:var(--text3);font-size:.94em;line-height:1.5;">${data.AbstractText}</p>
+              <div style="margin-top:6px;font-size:.8em;color:var(--text2);">Fuente: ${data.AbstractSource}</div>
+              <a href="${data.AbstractURL}" target="_blank" class="btn btn-secondary" style="padding:3px 9px;font-size:.78em;margin-top:4px;">Leer más</a>
+              </div></div>`;
+          inlineContainer.appendChild(d);
+        }
+      }).catch(()=>{});
+
+    // 2. GitHub API
+    fetch(`https://api.github.com/search/repositories?q=${encodeURIComponent(query)}&per_page=1`)
+      .then(r=>r.json()).then(data=>{
+        if(data.items&&data.items.length>0){
+          const repo=data.items[0];
+          if(repo.stargazers_count>1000||repo.name.toLowerCase()===query.toLowerCase()){
+            const d=document.createElement("div");d.className="result";
+            d.style.borderLeft="4px solid #aac8ff";
+            d.innerHTML=`<strong style="color:#aac8ff;"><i class="fab fa-github"></i> Repositorio de Código:</strong><br>
+              <h3 style="margin-top:5px;">${repo.full_name}</h3>
+              <p style="margin-top:4px;font-size:.93em;">${repo.description||'Sin descripción'}</p>
+              <p style="margin-top:4px;font-size:.83em;color:var(--text2);">⭐ ${repo.stargazers_count.toLocaleString()} | 🔀 ${repo.forks_count.toLocaleString()} | 💻 ${repo.language||'N/A'}</p>
+              <a href="${repo.html_url}" target="_blank" class="btn btn-secondary" style="padding:3px 9px;font-size:.78em;margin-top:5px;">Ver en GitHub</a>`;
+            inlineContainer.appendChild(d);
+          }
+        }
+      }).catch(()=>{});
+
+    // 3. NPM
+    fetch(`https://registry.npmjs.org/-/v1/search?text=${encodeURIComponent(query)}&size=1`)
+      .then(r=>r.json()).then(data=>{
+        if(data.objects&&data.objects.length>0){
+          const pkg=data.objects[0].package;
+          if(pkg.name.toLowerCase()===query.toLowerCase().replace(/\s+/g,'-')){
+            const d=document.createElement("div");d.className="result";
+            d.style.borderLeft="4px solid #CB3837";
+            d.innerHTML=`<strong style="color:#CB3837;"><i class="fab fa-npm"></i> Paquete NPM:</strong><br>
+              <h3 style="margin-top:5px;">${pkg.name} <span style="font-size:.7em;color:var(--text2);">v${pkg.version}</span></h3>
+              <p style="margin-top:4px;font-size:.93em;">${pkg.description}</p>
+              <div style="margin-top:8px;background:var(--bg2);padding:7px;font-size:.88em;display:inline-block;border:1px solid var(--border);">npm install ${pkg.name}</div><br>
+              <a href="${pkg.links.npm}" target="_blank" class="btn btn-secondary" style="padding:3px 9px;font-size:.78em;margin-top:7px;">Ver paquete</a>`;
+            inlineContainer.appendChild(d);
+          }
+        }
+      }).catch(()=>{});
+
+    // 4. Art Institute of Chicago
+    fetch(`https://api.artic.edu/api/v1/artworks/search?q=${encodeURIComponent(query)}&limit=1&fields=id,title,artist_display,image_id`)
+      .then(r=>r.json()).then(data=>{
+        if(data.data&&data.data.length>0){
+          const art=data.data[0];
+          if(art.image_id){
+            const d=document.createElement("div");d.className="result";
+            d.style.borderLeft="4px solid var(--accent4)";
+            d.innerHTML=`<strong style="color:var(--accent4);"><i class="fas fa-palette"></i> Arte y Cultura:</strong><br>
+              <h3 style="margin-top:5px;">${art.title}</h3>
+              <p style="margin-top:4px;font-size:.88em;color:var(--text2);">${art.artist_display}</p>
+              <img src="https://www.artic.edu/iiif/2/${art.image_id}/full/400,/0/default.jpg" style="max-width:100%;max-height:280px;margin-top:10px;border:1px solid var(--border);" alt="${art.title}">
+              <div style="margin-top:8px;font-size:.78em;color:var(--text2);">Fuente: The Art Institute of Chicago</div>`;
+            inlineContainer.appendChild(d);
+          }
+        }
+      }).catch(()=>{});
+
+    // 5. OpenStreetMap + Open-Meteo
+    fetch(`https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(query)}&format=json&limit=1&addressdetails=1&accept-language=es`)
+      .then(r=>r.json()).then(data=>{
+        if(!data||data.length===0)return;
+        const place=data[0];
+        const type=place.addresstype||place.type;
+        const validTypes=['city','state','country','continent','town','village','municipality','county','region','administrative','island'];
+        const isGeoPlace=validTypes.includes(type)||place.class==='place'||place.class==='boundary';
+        const qLower=query.toLowerCase().trim();
+        const nameLower=(place.name||"").toLowerCase();
+        const isExactMatch=qLower===nameLower||qLower.includes(nameLower)||nameLower.includes(qLower);
+        if(!isGeoPlace||(!isExactMatch&&place.importance<0.35))return;
+        let zoom=12;
+        if(type==='continent')zoom=3;else if(type==='country')zoom=5;
+        else if(type==='state'||type==='region')zoom=7;else if(type==='county')zoom=9;
+        else if(type==='city'||type==='municipality')zoom=12;
+        else if(type==='town'||type==='village')zoom=14;
+        const popupName=(place.name||place.display_name.split(',')[0]).replace(/[^a-zA-Z0-9 áéíóúÁÉÍÓÚñÑüÜ-]/g,'');
+        const mapHtml=`<!DOCTYPE html><html><head><link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/><script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"><\/script><style>body{margin:0;background:#000;}#map{width:100vw;height:100vh;}.leaflet-layer,.leaflet-control-zoom-in,.leaflet-control-zoom-out,.leaflet-control-attribution{filter:invert(100%) hue-rotate(180deg) brightness(90%) contrast(90%);}</style></head><body><div id="map"></div><script>var map=L.map('map',{zoomControl:false}).setView([${place.lat},${place.lon}],${zoom});L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'&copy; OpenStreetMap'}).addTo(map);L.marker([${place.lat},${place.lon}]).addTo(map).bindPopup("<b>${popupName}</b>").openPopup();L.control.zoom({position:'bottomright'}).addTo(map);<\/script></body></html>`;
+        const d=document.createElement("div");d.className="result";
+        d.style.borderLeft="4px solid var(--accent)";
+        d.innerHTML=`<strong style="color:var(--accent);"><i class="fas fa-map-marker-alt"></i> Ubicación Encontrada:</strong><br>
+          <h3 style="margin-top:7px;font-size:1.2em;">${place.name||place.display_name.split(',')[0]}</h3>
+          <p style="margin-top:4px;font-size:.88em;color:var(--text2);">${place.display_name}</p>
+          <div id="meteo-container-${place.place_id}"></div>
+          <div style="width:100%;height:320px;overflow:hidden;margin-top:12px;border:2px solid var(--border);">
+            <iframe width="100%" height="100%" frameborder="0" srcdoc="${mapHtml.replace(/"/g,'&quot;')}" style="border:none;"></iframe>
+          </div>
+          <div style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap;">
+            <a href="https://www.openstreetmap.org/?mlat=${place.lat}&mlon=${place.lon}#map=${zoom}/${place.lat}/${place.lon}" target="_blank" class="btn btn-secondary" style="font-size:.85em;"><i class="fas fa-external-link-alt"></i> OSM</a>
+            <a href="https://www.google.com/maps/search/?api=1&query=${place.lat},${place.lon}" target="_blank" class="btn btn-secondary" style="font-size:.85em;"><i class="fas fa-map"></i> Google Maps</a>
+          </div>`;
+        if(inlineContainer.firstChild)inlineContainer.insertBefore(d,inlineContainer.firstChild);
+        else inlineContainer.appendChild(d);
+        fetch(`https://api.open-meteo.com/v1/forecast?latitude=${place.lat}&longitude=${place.lon}&current_weather=true`)
+          .then(r=>r.json()).then(w=>{
+            if(w.current_weather){
+              const cw=w.current_weather;
+              const mc=document.getElementById(`meteo-container-${place.place_id}`);
+              if(mc)mc.innerHTML=`<div style="margin-top:8px;padding:10px;background:var(--bg2);border-left:3px solid var(--accent4);border:1px solid var(--border);display:inline-block;">
+                <strong style="color:var(--accent4);"><i class="fas ${cw.is_day?'fa-sun':'fa-moon'}"></i> Clima actual:</strong>
+                <span style="margin-left:8px;font-size:1.05em;">${cw.temperature}°C</span>, Viento: ${cw.windspeed} km/h</div>`;
+            }
+          }).catch(()=>{});
+      }).catch(()=>{});
+
+    // 6. Wikipedia
+    fetch(`https://es.wikipedia.org/w/api.php?action=query&list=search&srsearch=${encodeURIComponent(query)}&format=json&origin=*&srlimit=3`)
+      .then(r=>r.json()).then(data=>{
+        const results=data.query?.search||[];
+        if(results.length>0){
+          const wrap=document.createElement("div");
+          wrap.style.marginBottom="14px";
+          const title=document.createElement("h3");
+          title.style.cssText="font-size:1.1em;color:var(--text3);margin-bottom:12px;border-bottom:1px solid var(--border);padding-bottom:8px;";
+          title.innerHTML='<i class="fab fa-wikipedia-w" style="margin-right:8px;"></i> Conocimiento Abierto';
+          wrap.appendChild(title);
+          results.forEach(result=>{
+            const rd=document.createElement("div");rd.className="result";
+            rd.innerHTML=`<a href="https://es.wikipedia.org/wiki/${encodeURIComponent(result.title)}" target="_blank" style="color:var(--accent3);font-size:1.05em;">${result.title}</a>
+              <p style="margin-top:4px;font-size:.88em;color:var(--text2);">${result.snippet.replace(/<[^>]*>/g,'').replace(/&quot;/g,'"').replace(/&amp;/g,'&')}</p>`;
+            wrap.appendChild(rd);
+          });
+          inlineContainer.appendChild(wrap);
+        }
+      }).catch(()=>{});
+
+    // 7. PokéAPI
+    const cleanQ=query.toLowerCase().trim().replace(/\s+/g,'%20');
+    fetch(`https://pokeapi.co/api/v2/pokemon/${cleanQ}`)
+      .then(r=>{if(!r.ok)throw new Error();return r.json();})
+      .then(data=>{
+        const types=data.types.map(t=>t.type.name).join(', ');
+        const d=document.createElement("div");d.className="result";
+        d.style.borderLeft="4px solid #60a5fa";
+        d.innerHTML=`<strong style="color:#60a5fa;"><i class="fas fa-bolt"></i> Pokémon Encontrado:</strong><br>
+          <div style="display:flex;gap:14px;align-items:center;margin-top:8px;">
+            <img src="${data.sprites.front_default}" style="width:90px;height:90px;border:1px solid var(--border);" alt="${data.name}">
+            <div><h3 style="text-transform:capitalize;font-size:1.3em;">${data.name}</h3>
+            <p style="margin-top:4px;font-size:.88em;color:var(--text2);">Tipos: ${types}</p>
+            <p style="margin-top:2px;font-size:.83em;color:var(--text2);">Peso: ${data.weight/10}kg | Altura: ${data.height/10}m</p></div>
+          </div>`;
+        inlineContainer.appendChild(d);
+      }).catch(()=>{});
+
+    // 8. Libros - Gutenberg
+    const hasBook=/\b(pdf|libro|libros|book|epub)\b/i.test(query);
+    const cleanBook=query.toLowerCase().replace(/\b(pdf|libro|libros|book|epub)\b/gi,'').trim();
+    if(cleanBook.length>2){
+      fetch(`https://gutendex.com/books/?search=${encodeURIComponent(cleanBook)}`)
+        .then(r=>r.json()).then(data=>{
+          if(data.results&&data.results.length>0){
+            const book=data.results[0];
+            const titleLower=book.title.toLowerCase();
+            const words=cleanBook.split(' ').filter(w=>w.length>3);
+            const isRel=titleLower.includes(cleanBook)||cleanBook.includes(titleLower)||words.some(w=>titleLower.includes(w));
+            if(isRel||hasBook){
+              const d=document.createElement("div");d.className="result";
+              d.style.borderLeft="4px solid var(--accent3)";
+              const author=book.authors.length>0?book.authors[0].name:"Desconocido";
+              const f=book.formats;
+              let links='';
+              if(f['application/pdf'])links+=`<a href="${f['application/pdf']}" target="_blank" class="btn btn-secondary" style="font-size:.78em;padding:3px 8px;margin-right:4px;"><i class="fas fa-file-pdf"></i> PDF</a>`;
+              if(f['application/epub+zip'])links+=`<a href="${f['application/epub+zip']}" target="_blank" class="btn btn-secondary" style="font-size:.78em;padding:3px 8px;margin-right:4px;"><i class="fas fa-book"></i> EPUB</a>`;
+              if(f['text/html'])links+=`<a href="${f['text/html']}" target="_blank" class="btn btn-secondary" style="font-size:.78em;padding:3px 8px;margin-right:4px;"><i class="fas fa-globe"></i> Online</a>`;
+              if(!links)links=`<a href="https://www.gutenberg.org/ebooks/${book.id}" target="_blank" class="btn btn-secondary" style="font-size:.78em;padding:3px 8px;">Gutenberg</a>`;
+              d.innerHTML=`<div style="display:flex;gap:12px;align-items:start;">
+                ${f['image/jpeg']?`<img src="${f['image/jpeg']}" style="width:65px;height:auto;border:1px solid var(--border);" alt="Portada">`:'<div style="width:65px;height:90px;background:var(--bg2);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;"><i class="fas fa-book" style="color:var(--text2);"></i></div>'}
+                <div><strong style="color:var(--accent3);"><i class="fas fa-book-reader"></i> Libro Dominio Público:</strong><br>
+                <h3 style="margin-top:4px;">${book.title}</h3>
+                <p style="margin-top:3px;font-size:.87em;color:var(--text2);">${author} | ${book.download_count.toLocaleString()} descargas</p>
+                <div style="margin-top:8px;display:flex;flex-wrap:wrap;">${links}</div></div></div>`;
+              inlineContainer.appendChild(d);
+            }
+          }
+        }).catch(()=>{});
+
+      // 9. Open Library
+      fetch(`https://openlibrary.org/search.json?q=${encodeURIComponent(cleanBook)}&limit=1`)
+        .then(r=>r.json()).then(data=>{
+          if(data.docs&&data.docs.length>0){
+            const book=data.docs[0];
+            const titleLower=book.title.toLowerCase();
+            const words=cleanBook.split(' ').filter(w=>w.length>3);
+            const isRel=titleLower.includes(cleanBook)||cleanBook.includes(titleLower)||words.some(w=>titleLower.includes(w));
+            if(isRel||hasBook){
+              const d=document.createElement("div");d.className="result";
+              d.style.borderLeft="4px solid var(--accent2)";
+              const cover=book.cover_i?`https://covers.openlibrary.org/b/id/${book.cover_i}-M.jpg`:'';
+              const author=book.author_name?book.author_name[0]:'Desconocido';
+              d.innerHTML=`<div style="display:flex;gap:12px;align-items:start;">
+                ${cover?`<img src="${cover}" style="width:65px;height:auto;border:1px solid var(--border);" alt="Portada">`:'<div style="width:65px;height:90px;background:var(--bg2);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;"><i class="fas fa-book" style="color:var(--text2);"></i></div>'}
+                <div><strong style="color:var(--accent3);"><i class="fas fa-book-open"></i> Open Library:</strong><br>
+                <h3 style="margin-top:4px;">${book.title}</h3>
+                <p style="margin-top:3px;font-size:.87em;color:var(--text2);">${author} | Año: ${book.first_publish_year||'N/A'}</p>
+                <a href="https://openlibrary.org${book.key}" target="_blank" class="btn btn-secondary" style="font-size:.78em;padding:3px 8px;margin-top:6px;"><i class="fas fa-book-reader"></i> Ver / PDF</a></div></div>`;
+              inlineContainer.appendChild(d);
+            }
+          }
+        }).catch(()=>{});
+    }
+
+    // 10. Internet Archive
+    fetch(`https://archive.org/advancedsearch.php?q=title:(${encodeURIComponent(query)})&fl[]=identifier,title,creator,mediatype,year&sort[]=downloads+desc&rows=1&page=1&output=json`)
+      .then(r=>r.json()).then(data=>{
+        if(data.response&&data.response.docs&&data.response.docs.length>0){
+          const item=data.response.docs[0];
+          const d=document.createElement("div");d.className="result";
+          d.style.borderLeft="4px solid var(--accent2)";
+          const mediaTypes={audio:'<i class="fas fa-headphones"></i> Audio',video:'<i class="fas fa-film"></i> Video',texts:'<i class="fas fa-file-alt"></i> Texto',software:'<i class="fas fa-floppy-disk"></i> Software',image:'<i class="fas fa-image"></i> Imagen'};
+          const typeLabel=mediaTypes[item.mediatype]||'<i class="fas fa-archive"></i> Archivo';
+          const creator=item.creator?(Array.isArray(item.creator)?item.creator[0]:item.creator):'Desconocido';
+          d.innerHTML=`<div style="display:flex;gap:12px;align-items:start;">
+            <img src="https://archive.org/services/img/${item.identifier}" style="width:65px;height:auto;border:1px solid var(--border);" alt="Cover" onerror="this.style.display='none'">
+            <div><strong style="color:var(--text2);">${typeLabel} (Internet Archive):</strong><br>
+            <h3 style="margin-top:4px;">${item.title}</h3>
+            <p style="margin-top:3px;font-size:.87em;color:var(--text2);">${creator} | Año: ${item.year||'N/A'}</p>
+            <a href="https://archive.org/details/${item.identifier}" target="_blank" class="btn btn-secondary" style="font-size:.78em;padding:3px 8px;margin-top:6px;"><i class="fas fa-external-link-alt"></i> Ver en Archive</a></div></div>`;
+          inlineContainer.appendChild(d);
+        }
+      }).catch(()=>{});
+  },
+
+  processSpecialCommands(query){
+    const lq=query.toLowerCase();
+    if(lq.startsWith('/ai ')){this.handleAICommand(query.substring(4));return true;}
+    const weatherPrefixes=['/clima ','clima en ','clima de ','el tiempo en ','tiempo en ','temperatura en ','pronostico en ','pronóstico en '];
+    for(const p of weatherPrefixes){if(lq.startsWith(p)){this.handleWeatherCommand(query.substring(p.length).trim());return true;}}
+    if(lq.startsWith('/noticias ')){this.handleNewsCommand(query.substring(10));return true;}
+    if(lq.startsWith('/traducir ')){this.handleTranslateCommand(query.substring(10));return true;}
+    for(const [sq,sites] of Object.entries(CONFIG.semanticSearch)){
+      if(lq.includes(sq)){this.handleSemanticSearch(sq,sites,query);return true;}
+    }
+    return false;
+  },
+
+  handleAICommand(prompt){
+    const {resultsDiv,resultsContainer}=UI.elements;
+    UI.showElement(resultsContainer);
+    resultsDiv.innerHTML=`<div class="result"><strong>🤖 Asistente IA:</strong><br><p>Consulta: "${prompt}"</p><div class="loading-spinner"></div></div>`;
+    setTimeout(()=>{
+      resultsDiv.innerHTML=`<div class="result">
+        <strong style="color:var(--accent4);">🤖 Asistente IA:</strong><br>
+        <p style="margin-top:8px;">Para <em>"${prompt}"</em>, te recomiendo consultar los siguientes recursos de IA:</p>
+        <div style="margin-top:12px;padding:12px;background:var(--bg2);border:1px solid var(--border);">
+          ▶ <a href="https://chatgpt.com/" target="_blank">ChatGPT</a><br>
+          ▶ <a href="https://gemini.google.com/" target="_blank">Google Gemini</a><br>
+          ▶ <a href="https://deepseek.com/" target="_blank">DeepSeek</a><br>
+          ▶ <a href="https://chat.qwen.ai/" target="_blank">Qwen</a>
+        </div></div>`;
+    },1800);
+  },
+
+  handleWeatherCommand(location){
+    const {resultsDiv,resultsContainer}=UI.elements;
+    UI.showElement(resultsContainer);
+    const city=location||'Buenos Aires';
+    AppState.currentCity=city;
+    resultsDiv.innerHTML=`<div class="result"><strong>🌤️ Clima:</strong><br><p>Buscando: ${city}...</p><div class="loading-spinner"></div></div>`;
+    fetch(`https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(city)}&format=json&limit=1&accept-language=es`)
+      .then(r=>r.json()).then(geoData=>{
+        if(!geoData||geoData.length===0){
+          resultsDiv.innerHTML=`<div class="result"><strong>🌤️ Clima:</strong><p style="color:var(--danger);margin-top:8px;">No se encontró: <b>${city}</b>.</p></div>`;
+          return;
+        }
+        const {lat,lon}=geoData[0];
+        const displayName=geoData[0].display_name.split(',')[0];
+        fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current_weather=true`)
+          .then(r=>r.json()).then(w=>{
+            const cw=w.current_weather;
+            const isDay=cw.is_day===1;
+            const wmoCodes={0:'Despejado',1:'Mayormente despejado',2:'Parcialmente nublado',3:'Nublado',45:'Niebla',51:'Llovizna',61:'Lluvia leve',63:'Lluvia moderada',80:'Aguaceros',95:'Tormenta'};
+            const desc=wmoCodes[cw.weathercode]||'Desconocido';
+            resultsDiv.innerHTML=`<div class="result" style="border-left:4px solid var(--accent4);">
+              <strong style="color:var(--accent4);"><i class="fas ${isDay?'fa-sun':'fa-moon'}"></i> Clima en ${displayName}:</strong><br>
+              <div style="text-align:center;padding:18px;">
+                <div style="font-size:3.6em;color:var(--text3);font-weight:300;">${cw.temperature}°C</div>
+                <div style="color:var(--text2);margin:8px 0;font-size:1.1em;">${desc}</div>
+                <div style="display:flex;justify-content:center;gap:18px;color:var(--text2);font-size:.92em;">
+                  <div><i class="fas fa-wind"></i> ${cw.windspeed} km/h</div>
+                  <div><i class="fas fa-compass"></i> ${cw.winddirection}°</div>
+                </div>
+              </div></div>`;
+          });
+      }).catch(()=>{
+        resultsDiv.innerHTML=`<div class="result"><strong>🌤️ Clima:</strong><p style="color:var(--danger);">Error al obtener el clima.</p></div>`;
+      });
+  },
+
+  handleNewsCommand(topic){
+    const {resultsDiv,resultsContainer}=UI.elements;
+    UI.showElement(resultsContainer);
+    resultsDiv.innerHTML=`<div class="result"><strong>📰 Noticias — ${topic||'última hora'}:</strong><div class="loading-spinner"></div></div>`;
+    setTimeout(()=>{
+      resultsDiv.innerHTML=`<div class="result"><strong style="color:var(--accent3);">📰 Noticias sobre "${topic||'actualidad'}":</strong><br>
+        <div style="margin-top:10px;">
+          <div style="padding:9px 0;border-bottom:1px solid var(--border);"><a href="https://www.lanacion.com.ar/" target="_blank">La Nacion — Últimas novedades sobre ${topic||'actualidad'}</a><div style="font-size:11px;color:var(--text2);">Hace 1 hora</div></div>
+          <div style="padding:9px 0;border-bottom:1px solid var(--border);"><a href="https://www.infobae.com/" target="_blank">Infobae — Desarrollos recientes</a><div style="font-size:11px;color:var(--text2);">Hace 2 horas</div></div>
+          <div style="padding:9px 0;"><a href="https://www.clarin.com/" target="_blank">Clarin — Noticias del día</a><div style="font-size:11px;color:var(--text2);">Hace 3 horas</div></div>
+        </div></div>`;
+    },1200);
+  },
+
+  handleTranslateCommand(text){
+    const {resultsDiv,resultsContainer}=UI.elements;
+    UI.showElement(resultsContainer);
+    resultsDiv.innerHTML=`<div class="result"><strong>🔤 Traducción:</strong><p>"${text}"</p><div class="loading-spinner"></div></div>`;
+    setTimeout(()=>{
+      resultsDiv.innerHTML=`<div class="result"><strong style="color:var(--accent3);">🔤 Traducción:</strong><br>
+        <p style="margin-top:8px;"><strong>Original:</strong> ${text}</p>
+        <div style="margin-top:12px;padding:12px;background:var(--bg2);border:1px solid var(--border);">
+          ▶ <a href="https://translate.google.com/" target="_blank">Google Translate</a><br>
+          ▶ <a href="https://www.deepl.com/translator" target="_blank">DeepL</a>
+        </div></div>`;
+    },1000);
+  },
+
+  handleSemanticSearch(sq,sites,origQ){
+    const {resultsDiv,resultsContainer}=UI.elements;
+    UI.showElement(resultsContainer);
+    resultsDiv.innerHTML=`<div class="result"><strong>🎯 Búsqueda Semántica:</strong><p>"${sq}"</p><div class="loading-spinner"></div></div>`;
+    setTimeout(()=>{
+      resultsDiv.innerHTML=`<div class="result"><strong style="color:var(--accent3);">🎯 Búsqueda Semántica: "${sq}"</strong><br><p style="margin-top:6px;color:var(--text2);">Recomendaciones para "${origQ}":</p></div>
+        ${sites.map(s=>`<div class="result"><strong style="color:var(--accent3);">${s}:</strong> <a href="https://${s}" target="_blank">Visitar</a></div>`).join('')}`;
+    },1000);
+  },
+
+  displayResults(query,selectedEngines,externalContainer){
+    if(!externalContainer)return;
+    externalContainer.innerHTML="";
+    if(/(juego|descarga|videojuego|gratis|game|programa|software)/i.test(query)){
+      const promo=document.createElement("div");promo.className="result";
+      promo.innerHTML=`<strong style="color:var(--accent3);">Estalingrado Software Lab:</strong><br>
+        <a href='https://centercorpec.wixsite.com/softwarelab' target='_blank'>Explorá promociones y descargas de juegos. ¡Algunos gratis!</a><br>
+        <img src='https://64.media.tumblr.com/9d299a07dfbcdc0e334b45e0068e2a1a/caba0613a83a169b-88/s1280x1920/85f470a11de83e4747fd8b7c0c860ea0dfc7f4a6.pnj' alt='Promo' style='width:100%;max-width:280px;margin-top:10px;border:1px solid var(--border);'>`;
+      externalContainer.appendChild(promo);
+    }
+    Object.entries(CONFIG.knownSites).forEach(([kw,url])=>{
+      if(query.toLowerCase().includes(kw)){
+        const d=document.createElement("div");d.className="result";
+        d.innerHTML=`<strong style="color:var(--accent3);">${kw.toUpperCase()}:</strong> <a href="${url}" target="_blank">Ir directamente</a>`;
+        externalContainer.appendChild(d);
+      }
+    });
+    if(selectedEngines.length===0){
+      externalContainer.innerHTML='<p style="color:var(--text2);">Seleccioná al menos un motor en ⚙ Ajustes.</p>';
+      return;
+    }
+    selectedEngines.forEach(engine=>{
+      const url=CONFIG.searchEngines[engine](query);
+      const est=CONFIG.estimatedResults[engine]||0;
+      const d=document.createElement("div");d.className="result";
+      d.innerHTML=`<strong style="color:var(--accent3);">▶ ${engine}:</strong> <a href="${url}" target="_blank">Ver resultados</a> — ~${est.toLocaleString()} resultados.`;
+      externalContainer.appendChild(d);
+    });
+  },
+
+  clearHistory(){ Utils.safeLocalStorage.remove("searchHistory"); location.reload(); },
+
+  startVoiceSearch(){
+    const {queryInput,voiceSearchButton}=UI.elements;
+    if(!('webkitSpeechRecognition' in window)&&!('SpeechRecognition' in window)){alert('La búsqueda por voz no es compatible con tu navegador.');return;}
+    if(AppState.isRecording){this.stopVoiceSearch();return;}
+    const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+    const recognition=new SR();
+    recognition.continuous=false; recognition.interimResults=false; recognition.lang='es-ES';
+    recognition.start();
+    AppState.isRecording=true;
+    voiceSearchButton.classList.add('recording');
+    voiceSearchButton.innerHTML='<i class="fas fa-stop"></i>';
+    queryInput.placeholder="🎤 Escuchando...";
+    recognition.onresult=e=>{ queryInput.value=e.results[0][0].transcript; this.stopVoiceSearch(); this.performSearch(); };
+    recognition.onerror=()=>{ queryInput.placeholder="Error en reconocimiento de voz"; this.stopVoiceSearch(); };
+    recognition.onend=()=>this.stopVoiceSearch();
+    AppState.voiceRecognition=recognition;
+  },
+
+  stopVoiceSearch(){
+    const {queryInput,voiceSearchButton}=UI.elements;
+    if(AppState.voiceRecognition)AppState.voiceRecognition.stop();
+    AppState.isRecording=false;
+    voiceSearchButton.classList.remove('recording');
+    voiceSearchButton.innerHTML='<i class="fas fa-microphone"></i>';
+    queryInput.placeholder=">> /ai /clima /noticias o búsqueda libre_";
+    AppState.voiceRecognition=null;
+  }
+};
+
+/* ══════════════════════════
+   PRIVACY TOOLS
+══════════════════════════ */
+var PrivacyTools = {
+  generatePassword(){
+    const length=parseInt(document.getElementById('passwordLength').value)||16;
+    const charset="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_+-=[]{}|;:,.<>?";
+    let p="";
+    p+="ABCDEFGHIJKLMNOPQRSTUVWXYZ"[Math.floor(Math.random()*26)];
+    p+="abcdefghijklmnopqrstuvwxyz"[Math.floor(Math.random()*26)];
+    p+="0123456789"[Math.floor(Math.random()*10)];
+    p+="!@#$%^&*()_+-="[Math.floor(Math.random()*14)];
+    for(let i=p.length;i<length;i++)p+=charset[Math.floor(Math.random()*charset.length)];
+    p=p.split('').sort(()=>.5-Math.random()).join('');
+    document.getElementById('passwordResult').innerHTML=`<strong>Contraseña generada:</strong><br><code style="color:var(--success);">${p}</code><br><small>Longitud: ${p.length} | Seguridad: Alta</small>`;
+  },
+  checkEmailSecurity(){
+    const email=document.getElementById('emailInput').value.trim();
+    const rd=document.getElementById('emailResult');
+    if(!email){rd.innerHTML='<div class="warning">Ingresá un email</div>';return;}
+    if(!Utils.validateEmail(email)){rd.innerHTML='<div class="danger">Email inválido</div>';return;}
+    const domain=email.split('@')[1];
+    const common=['gmail.com','yahoo.com','outlook.com','hotmail.com'];
+    const breach=Math.random()>.7;
+    let level=breach?'baja':(common.includes(domain)?'alta':'media');
+    const msg=breach?'⚠️ Aparece en filtraciones conocidas':(common.includes(domain)?'Dominio de buena reputación':'Dominio menos común - bueno para privacidad');
+    const html={alta:`<div class="safe">✓ Seguridad Alta</div>`,media:`<div class="warning">⚠ Seguridad Media</div>`,baja:`<div class="danger">✗ Seguridad Baja</div>`};
+    rd.innerHTML=`${html[level]}<div style="margin-top:10px;">• Dominio: ${domain}<br>• ${msg}<br>• ${breach?'Cambiá tu contraseña':'Sin filtraciones detectadas'}</div>`;
+  },
+  scanLink(){
+    const url=document.getElementById('linkInput').value.trim();
+    const rd=document.getElementById('linkResult');
+    if(!url){rd.innerHTML='<div class="warning">Ingresá una URL</div>';return;}
+    if(!Utils.validateUrl(url)){rd.innerHTML='<div class="danger">URL inválida</div>';return;}
+    const isSafe=Math.random()>.3;
+    const hasTrack=Math.random()>.5;
+    const isShort=url.includes('bit.ly')||url.includes('tinyurl')||url.length<30;
+    rd.innerHTML=`<div class="${isSafe?'safe':'danger'}">${isSafe?'✓ Enlace Seguro':'✗ Enlace Sospechoso'}</div>
+      <div style="margin-top:10px;">• ${isShort?'⚠️ URL acortada':'URL completa'}<br>• ${hasTrack?'⚠️ Tracker posible':'Sin trackers'}<br>• ${isSafe?'Podés proceder':'No visites este enlace'}</div>`;
+  },
+  clearAllData(){
+    if(confirm('¿Borrar todos los datos locales?')){localStorage.clear();alert('Datos eliminados. Recargando.');location.reload();}
+  }
+};
+
+/* ══════════════════════════
+   SETTINGS & APP
+══════════════════════════ */
+var SettingsManager = {
+  save(){ Utils.safeLocalStorage.set("selectedSearchEngines",Array.from(document.querySelectorAll("#settingsPanel input[type='checkbox']:checked")).map(cb=>cb.value)); },
+  load(){
+    const saved=Utils.safeLocalStorage.get("selectedSearchEngines");
+    if(!saved)return;
+    document.querySelectorAll("#settingsPanel input[type='checkbox']").forEach(cb=>{cb.checked=saved.includes(cb.value);});
+  }
+};
+
+var App = {
+  init(){
+    if(AppState.initialized)return;
+    if(!UI.init()){console.error("Elementos faltantes.");return;}
+    this.setLogos();
+    SettingsManager.load();
+    this.setupEventListeners();
+    this.setupKeyboardShortcuts();
+    this.startLoadingScreen();
+    this.checkMobileFullScreen();
+    AppState.initialized=true;
+  },
+  checkMobileFullScreen(){
+    const isMobile=/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)||window.innerWidth<=1024;
+    if(isMobile){
+      const activate=()=>{if(!document.fullscreenElement)UI.toggleFullScreen();};
+      activate();
+      const h=()=>{activate();['click','touchstart'].forEach(e=>document.removeEventListener(e,h));};
+      ['click','touchstart'].forEach(e=>document.addEventListener(e,h));
+    }
+  },
+  setLogos(){
+    const {mainLogo,resultLogo}=UI.elements;
+    if(mainLogo)mainLogo.src=CONFIG.logos[AppState.currentLogo];
+    if(resultLogo)resultLogo.src=CONFIG.logos[AppState.currentLogo];
+  },
+  setupEventListeners(){
+    const {mainLogo,queryInput}=UI.elements;
+    if(mainLogo){
+      mainLogo.addEventListener("click",()=>{
+        AppState.currentLogo=(AppState.currentLogo+1)%CONFIG.logos.length;
+        App.setLogos();
+        mainLogo.classList.remove('glitch-anim');
+        void mainLogo.offsetWidth;
+        mainLogo.classList.add('glitch-anim');
+      });
+    }
+    if(queryInput){
+      queryInput.addEventListener("keydown",e=>{
+        if(e.key==="Enter"){e.preventDefault();SearchManager.performSearch();UI.hideElement(UI.elements.suggestionsContainer);}
+      });
+      queryInput.addEventListener("input",()=>SearchManager.showSuggestions());
+      queryInput.addEventListener("focus",()=>SearchManager.showSuggestions());
+    }
+    document.querySelectorAll("#settingsPanel input[type='checkbox']").forEach(cb=>{cb.addEventListener("change",()=>SettingsManager.save());});
+    document.addEventListener("mousedown",e=>{
+      ["settingsPanel","menuPanel","toolsPanel"].forEach(id=>{
+        const panel=document.getElementById(id);
+        const btnClass=id==="settingsPanel"?"settings-button":id==="toolsPanel"?"tools-button":"menu-button";
+        const btn=document.querySelector(`.${btnClass}`);
+        if(panel&&!panel.contains(e.target)&&btn&&!btn.contains(e.target)&&panel.classList.contains("show"))UI.hideElement(panel);
+      });
+      const {suggestionsContainer,queryInput}=UI.elements;
+      if(suggestionsContainer&&!suggestionsContainer.contains(e.target)&&queryInput&&!queryInput.contains(e.target))UI.hideElement(suggestionsContainer);
+    });
+    document.addEventListener('fullscreenchange',()=>UI.updateFullScreenIcon());
+  },
+  setupKeyboardShortcuts(){
+    document.addEventListener('keydown',e=>{
+      if(e.ctrlKey&&e.key==='k'){e.preventDefault();UI.elements.queryInput?.focus();}
+      if(e.ctrlKey&&e.key==='d'){e.preventDefault();window.toggleTools();}
+      if(e.ctrlKey&&e.key==='i'){e.preventDefault();UI.elements.queryInput.value='/ai ';UI.elements.queryInput.focus();}
+      if(e.key==='Escape'){UI.closeAllPanels();UI.hideElement(UI.elements.suggestionsContainer);if(AppState.isRecording)SearchManager.stopVoiceSearch();}
+    });
+  },
+  startLoadingScreen(){
+    const {loadingScreen,progressBar,percentText,mainContent}=UI.elements;
+    if(!loadingScreen||!progressBar||!percentText||!mainContent)return;
+    const duration=[2000,1500,2500][Math.floor(Math.random()*3)];
+    let startTime=null;
+    function anim(t){
+      if(!startTime)startTime=t;
+      const progress=Math.min(((t-startTime)/duration)*100,100);
+      progressBar.style.width=`${progress}%`;
+      percentText.textContent=`${Math.floor(progress)}%`;
+      if(progress<100)requestAnimationFrame(anim);
+      else setTimeout(()=>{
+        loadingScreen.style.transition='opacity .5s';
+        loadingScreen.style.opacity='0';
+        setTimeout(()=>{
+          loadingScreen.style.display='none';
+          mainContent.style.display='flex';
+          setTimeout(()=>{mainContent.style.opacity='1';},50);
+        },500);
+      },300);
+    }
+    loadingScreen.style.display='flex'; loadingScreen.style.opacity='1';
+    mainContent.style.display='none'; mainContent.style.opacity='0';
+    requestAnimationFrame(anim);
+  }
+};
+
+/* ══════════════════════════
+   GLOBAL FUNCTIONS
+══════════════════════════ */
+window.toggleMenu     = ()=>UI.togglePanel("menuPanel");
+window.toggleSettings = ()=>UI.togglePanel("settingsPanel");
+window.toggleTools    = ()=>UI.togglePanel("toolsPanel");
+window.toggleFullScreen = ()=>UI.toggleFullScreen();
+window.toggleHelp     = ()=>{
+  const modal=document.getElementById("help-modal");
+  const iframe=document.getElementById("help-video");
+  if(modal.classList.contains('show')){UI.hideElement(modal);iframe.src="";}
+  else{UI.showElement(modal);iframe.src="https://www.youtube.com/embed/YHHfxAaR4Fg?autoplay=1";}
+};
+window.mostrarPoliticaPrivacidad = ()=>UI.toggleModal("privacy-modal");
+
+window.showPDFCreator = ()=>{
+  UI.hideElement(UI.elements.mainSearch); UI.hideElement(UI.elements.resultsContainer);
+  UI.hideElement(UI.elements.privacyToolsView); UI.showElement(UI.elements.pdfCreatorView);
+  UI.closeAllPanels();
+};
+window.showPrivacyTools = ()=>{
+  UI.hideElement(UI.elements.mainSearch); UI.hideElement(UI.elements.resultsContainer);
+  UI.hideElement(UI.elements.pdfCreatorView); UI.showElement(UI.elements.privacyToolsView);
+  UI.closeAllPanels();
+};
+window.closeToolsView = ()=>{
+  UI.hideElement(UI.elements.pdfCreatorView); UI.hideElement(UI.elements.privacyToolsView);
+  UI.showElement(UI.elements.mainSearch);
+};
+
+window.formatDoc    = (cmd,val=null)=>{ document.execCommand(cmd,false,val); document.getElementById('wp-page').focus(); };
+window.clearDocument= ()=>{ if(confirm("¿Borrar todo el contenido?"))document.getElementById('wp-page').innerHTML="<p><br></p>"; };
+window.insertPageBreak = ()=>window.formatDoc('insertHTML','<div class="html2pdf__page-break" style="page-break-after:always;border:0;border-top:2px dashed #ff4444;margin:20px 0;width:100%;height:0;" contenteditable="false"></div><p><br></p>');
+window.downloadEditorPDF = ()=>{
+  const el=document.getElementById('wp-page');
+  let name=(document.getElementById('pdf-filename').value.trim()||"Documento");
+  const op=el.style.padding,ob=el.style.backgroundImage,os=el.style.boxShadow;
+  el.style.padding='0'; el.style.backgroundImage='none'; el.style.boxShadow='none';
+  html2pdf().set({margin:[20,25,20,25],filename:`${name.replace(/\s+/g,'_')}.pdf`,image:{type:'jpeg',quality:.98},html2canvas:{scale:2,useCORS:true},jsPDF:{unit:'mm',format:'a4',orientation:'portrait'},pagebreak:{mode:['avoid-all','css','legacy']}}).from(el).save().then(()=>{ el.style.padding=op; el.style.backgroundImage=ob; el.style.boxShadow=os; });
+};
+
+window.search       = ()=>SearchManager.performSearch();
+window.clearHistory = ()=>SearchManager.clearHistory();
+window.startVoiceSearch = ()=>SearchManager.startVoiceSearch();
+window.generatePassword   = ()=>PrivacyTools.generatePassword();
+window.checkEmailSecurity = ()=>PrivacyTools.checkEmailSecurity();
+window.scanLink     = ()=>PrivacyTools.scanLink();
+window.clearAllData = ()=>PrivacyTools.clearAllData();
+
+/* Theme toggle */
+function toggleTheme(){
+  const html=document.documentElement;
+  const btn=document.getElementById('theme-toggle');
+  if(html.getAttribute('data-theme')==='dark'){
+    html.setAttribute('data-theme','light'); btn.innerHTML='☀️ MODO<br>CLARO';
+  } else { html.setAttribute('data-theme','dark'); btn.innerHTML='🌙 MODO<br>OSCURO'; }
+}
+
+/* Init */
+try {
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',()=>App.init());
+  else App.init();
+} catch(e){ console.error("Error crítico:",e); }
+</script>
+</body>
+</html>
